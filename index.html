@@ -34,9 +34,6 @@
             --transition-speed: 0.3s;
         }
 
-        /* --- Dark Mode Variables --- */
-   
-
         /* --- Base Styles --- */
         body {
             font-family: 'Noto Sans', sans-serif;
@@ -75,18 +72,10 @@
         .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
         h1 { color: var(--header-bg); font-weight: 700; margin: 0; }
         .controls-container { display: flex; align-items: center; gap: 16px; }
-        .action-button { background-color: var(--primary-color); color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: 500; transition: background-color 0.2s; }
+        .action-button { background-color: var(--primary-color); color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: 500; transition: background-color 0.2s; white-space: nowrap; }
         .action-button:hover { background-color: #0b5ed7; }
+        .name-input { padding: 9px 14px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9em; background-color: var(--surface-color); color: var(--text-color); }
         
-        /* --- Theme Switch --- */
-        .theme-switch-label { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 5px; border-radius: 8px; }
-        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--primary-color); }
-        input:checked + .slider:before { transform: translateX(20px); }
-
         /* --- Filters --- */
         .filter-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
         .filter-btn { background-color: var(--surface-color); color: var(--text-color); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85em; transition: background-color 0.2s, color 0.2s; }
@@ -114,8 +103,19 @@
         @media (max-width: 768px) {
             .content-wrapper { padding-top: 70px; }
             .sticky-header { padding: 8px 12px; }
-            .stats-bar { justify-content: space-between; gap: 4px; }
-            .stat-card { gap: 4px; }
+            /* --- MODIFIED: Compact Stats Bar for Mobile --- */
+            .stats-bar { 
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                justify-content: flex-start;
+                gap: 16px;
+                padding-bottom: 8px; /* For scrollbar */
+            }
+            .stat-card { 
+                gap: 4px; 
+                flex-shrink: 0; /* Prevent items from shrinking */
+            }
             .stat-card svg { width: 14px; height: 14px; }
             .stat-card .stat-content span { font-size: 0.65em; }
             .stat-card .stat-content b { font-size: 0.9em; }
@@ -130,9 +130,7 @@
         }
         
         @media (max-width: 480px) {
-            .stats-bar { flex-wrap: wrap; justify-content: space-around; row-gap: 8px; }
             .content-wrapper { padding-top: 100px; }
-            .stat-card { flex-basis: 45%; justify-content: center; }
         }
 
         /* --- Final Print Styles --- */
@@ -140,10 +138,24 @@
             body { font-size: 9pt; padding: 1cm; margin: 0; background-color: #fff; color: #000; }
             .sticky-header, .page-header, .filter-container { display: none !important; }
             .content-wrapper { padding-top: 0; }
-            .print-header { display: block !important; text-align: center; margin-bottom: 16px; border-bottom: 2px solid #333; padding-bottom: 12px; }
-            .print-header h1 { font-size: 16pt; }
+            .print-header { display: block !important; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 12px; }
+            .print-header h1 { font-size: 16pt; margin-bottom: 12px; }
             .print-header .stats-container { display: flex; width: 100%; justify-content: space-around; align-items: center; border: 1px solid #ccc; border-radius: 6px; padding: 8px 0; }
             .print-header .stat-card { padding: 6px 10px; }
+            /* --- NEW: Stylish Name for Print --- */
+            #print-student-name {
+                display: block !important;
+                text-align: right;
+                margin-top: 16px;
+                padding-right: 5px;
+                font-size: 12pt;
+            }
+            #print-student-name span {
+                font-weight: bold;
+                border-bottom: 2px solid #444;
+                padding: 4px 0px;
+            }
+
             .table-container { box-shadow: none; border-radius: 0; }
             .test-table { width: 100%; border-collapse: collapse; }
             .test-table thead { display: table-header-group !important; }
@@ -196,7 +208,8 @@
     <div class="container">
         <div class="page-header">
             <h1>4th Grade 2nd Shift Analysis</h1>
-            
+            <div class="controls-container">
+                <input type="text" id="student-name-input" class="name-input" placeholder="यहाँ अपना नाम लिखें">
                 <button class="action-button" id="print-btn">Print Sheet</button>
             </div>
         </div>
@@ -211,6 +224,7 @@
         <div class="print-header">
             <h1>4th Grade 2nd Shift Analysis</h1>
             <div class="stats-container" id="stats-container-print"></div>
+            <div id="print-student-name"></div>
         </div>
 
         <div class="table-container">
@@ -251,7 +265,7 @@ let currentSort = { column: null, direction: 'asc' };
 
 // --- 3. DOM ELEMENTS ---
 const tableBody = document.getElementById('table-body');
-
+const studentNameInput = document.getElementById('student-name-input'); // NEW
 
 // --- 4. CORE FUNCTIONS ---
 
@@ -388,9 +402,8 @@ function filterTable(filter) {
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
 }
 
-
-
 function loadSavedState() {
+    // Load answers
     tableBody.querySelectorAll('tr').forEach(row => {
         const qSno = row.dataset.questionSno;
         const savedAnswer = localStorage.getItem(`q${qSno}_answer`);
@@ -399,10 +412,16 @@ function loadSavedState() {
             if (radio) { radio.checked = true; updateAnswer(radio); }
         }
     });
+    // Load paper numbers
     tableBody.querySelectorAll('.editable-cell span').forEach(span => {
         const savedValue = localStorage.getItem(`myPaper_sno_${span.dataset.sno}`);
         if (savedValue) span.textContent = savedValue;
     });
+    // Load student name - NEW
+    const savedName = localStorage.getItem('studentName');
+    if (savedName) {
+        studentNameInput.value = savedName;
+    }
     updateSummaryAndScore();
 }
 
@@ -415,7 +434,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.tagName === 'SPAN' && e.target.closest('.editable-cell')) editCell(e.target);
     });
     
-  
     document.getElementById('filter-container').addEventListener('click', e => {
         if (e.target.classList.contains('filter-btn')) filterTable(e.target.dataset.filter);
     });
@@ -424,10 +442,20 @@ document.addEventListener('DOMContentLoaded', () => {
         header.addEventListener('click', () => sortTable(header, parseInt(header.dataset.columnIndex)));
     });
 
+    // --- MODIFIED: Print button listener ---
     document.getElementById('print-btn').addEventListener('click', () => {
         const mainStats = document.getElementById('stats-bar');
         const printStats = document.getElementById('stats-container-print');
         printStats.innerHTML = mainStats.innerHTML;
+
+        // NEW: Add student name to print header
+        const studentName = studentNameInput.value.trim();
+        const printNameContainer = document.getElementById('print-student-name');
+        if (studentName) {
+            printNameContainer.innerHTML = `अभ्यर्थी का नाम: <span>${studentName}</span>`;
+        } else {
+            printNameContainer.innerHTML = ''; // Clear if no name is entered
+        }
 
         tableBody.querySelectorAll('tr').forEach(row => {
             if (row.style.display === 'none') {
@@ -441,6 +469,11 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.querySelectorAll('tr.hide-in-print').forEach(row => {
             row.classList.remove('hide-in-print');
         });
+    });
+
+    // --- NEW: Save student name as they type ---
+    studentNameInput.addEventListener('input', () => {
+        localStorage.setItem('studentName', studentNameInput.value);
     });
 });
 </script>
