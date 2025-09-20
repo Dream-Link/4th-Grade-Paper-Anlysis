@@ -3,713 +3,345 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4th Grade 2nd Shift - Final Version</title>
-    
-    <meta name="theme-color" content="#343a40"/>
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="manifest" href="manifest.json">
-
+    <title>फाइनल प्रश्न पत्र</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* --- General Variables --- */
         :root {
-            --primary-color: #0d6efd;
-            --text-color: #212529;
-            --text-light: #6c757d;
-            --bg-color: #f8f9fa;
-            --surface-color: #ffffff;
-            --border-color: #dee2e6;
-            --header-bg: #343a40;
-
-            --correct-color: #198754;
-            --correct-light: #d1e7dd;
-            --incorrect-color: #dc3545;
-            --incorrect-light: #f8d7da;
-            --skipped-color: #0dcaf0;
-            --skipped-light: #cff4fc;
-
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
-            --transition-speed: 0.3s;
+            --primary-bg: #f4f7f8; --container-bg: #ffffff; --header-color: #1a2533;
+            --text-color: #334155; --light-text: #64748b; --border-color: #e2e8f0;
+            --accent-color: #2563eb; --accent-light: #eff6ff; --shadow-color: rgba(0, 0, 0, 0.08);
+            --correct-bg: #f0fdf4; --correct-border: #bbf7d0; --correct-text: #16a34a;
+            --incorrect-bg: #fef2f2; --incorrect-border: #fecaca; --incorrect-text: #ef4444;
+            --special-bg: #eff6ff; --special-border: #bfdbfe; --special-text: #3b82f6;
+            --skipped-bg: #f8fafc; --skipped-border: #e2e8f0; --skipped-text: #475569;
         }
 
-        /* --- Base Styles --- */
         body {
-            font-family: 'Noto Sans', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--primary-bg);
             color: var(--text-color);
-            transition: background-color var(--transition-speed), color var(--transition-speed);
+            margin: 0;
+            line-height: 1.6;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
-        .content-wrapper { padding-top: 80px; }
 
-        /* --- Sticky Header & Stats Bar --- */
-        .sticky-header {
+        /* --- नया मॉडर्न और कलरफुल टॉप बार --- */
+        .summary-bar {
+            background-color: var(--container-bg);
+            padding: 15px 10px;
+            box-shadow: 0 4px 12px var(--shadow-color);
             position: sticky;
             top: 0;
-            z-index: 1000;
-            background-color: var(--surface-color);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 12px 24px;
-            transition: background-color var(--transition-speed);
+            z-index: 100;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
         }
-      
-        .stats-bar { display: flex; justify-content: space-around; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto; }
-        .stat-card { display: flex; align-items: center; gap: 8px; text-align: center; }
-        .stat-card svg { width: 18px; height: 18px; color: var(--text-light); }
-        .stat-card .stat-content span { font-size: 0.75em; font-weight: 500; color: var(--text-light); display: block; white-space: nowrap; }
-        .stat-card .stat-content b { font-size: 1.1em; font-weight: 700; color: var(--text-color); }
-        #correct-count { color: var(--correct-color); }
-        #incorrect-count { color: var(--incorrect-color); }
-        #skipped-count { color: var(--skipped-color); }
-        #final-score-val { color: var(--primary-color); }
-        #final-marks-val { color: #fd7e14; }
+        .summary-item {
+            text-align: center;
+            padding: 10px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .summary-item .count {
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+        .summary-item .label {
+            font-size: 0.8em;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        /* रंग */
+        #total-item { background-color: #f3e8ff; color: #581c87; }
+        #attempted-item { background-color: var(--accent-light); color: var(--accent-color); }
+        #correct-item { background-color: var(--correct-bg); color: var(--correct-text); }
+        #incorrect-item { background-color: var(--incorrect-bg); color: var(--incorrect-text); }
+        #skipped-item { background-color: var(--skipped-bg); color: var(--skipped-text); }
 
-        /* --- Title & Page Controls --- */
-        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
-        h1 { color: var(--header-bg); font-weight: 700; margin: 0; }
-        .controls-container { display: flex; align-items: center; gap: 16px; }
-        .action-button { background-color: var(--primary-color); color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: 500; transition: background-color 0.2s; white-space: nowrap; }
-        .action-button:hover { background-color: #0b5ed7; }
-        .action-button.secondary { background-color: #6c757d; }
-        .action-button.secondary:hover { background-color: #5a6268; }
-        .name-input { padding: 9px 14px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9em; background-color: var(--surface-color); color: var(--text-color); }
+
+        .container {
+            max-width: 900px;
+            margin: 25px auto;
+            background-color: var(--container-bg);
+            padding: 25px 30px;
+            border-radius: 16px;
+            box-shadow: 0 5px 25px var(--shadow-color);
+        }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 15px; margin-bottom: 5px; flex-wrap: wrap;
+        }
+        .header h1 { margin: 0; font-size: 1.7em; color: var(--header-color); }
+        #series-select {
+            padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color);
+            font-size: 1em; cursor: pointer;
+        }
+
+        .controls-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 0; border-bottom: 1px solid var(--border-color);
+            margin-bottom: 25px; flex-wrap: wrap; gap: 10px;
+        }
+        .filter-buttons button {
+            background: none; border: 1px solid var(--border-color); border-radius: 20px;
+            padding: 6px 15px; cursor: pointer; transition: all 0.2s;
+            font-family: inherit; font-size: 0.9em;
+        }
+        .filter-buttons button.active {
+            background-color: var(--accent-light); color: var(--accent-color);
+            border-color: var(--accent-color); font-weight: 500;
+        }
+        #print-btn {
+            background-color: var(--accent-color); color: white; border: none;
+            padding: 8px 18px; border-radius: 8px; cursor: pointer;
+            font-weight: 500; transition: background-color 0.2s;
+        }
+        #print-btn:hover { background-color: #1d4ed8; }
+
+        .question-block {
+            margin-bottom: 20px; border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 20px;
+        }
+        .question-block h3 { margin: 0 0 15px 0; color: var(--header-color); font-size: 1.1em; }
         
-        /* --- Filters --- */
-        .filter-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
-        .filter-btn { background-color: var(--surface-color); color: var(--text-color); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85em; transition: background-color 0.2s, color 0.2s; }
-        .filter-btn.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+        /* --- प्रश्न ट्रैकिंग बार --- */
+        .question-info-bar {
+            font-size: 0.85em; color: var(--light-text); background-color: #f8fafc;
+            padding: 6px 12px; border-radius: 6px; margin-top: 20px; border: 1px solid var(--border-color);
+            display: inline-block;
+        }
 
-        /* --- Table Styles --- */
-        .table-container { background-color: var(--surface-color); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; transition: background-color var(--transition-speed); }
-        .test-table { width: 100%; border-collapse: collapse; }
-        .test-table th, .test-table td { padding: 16px; text-align: center; vertical-align: middle; border-bottom: 1px solid var(--border-color); overflow-wrap: break-word; }
-        .question-col { width: 50%; text-align: left !important; }
-        .test-table th { background-color: var(--bg-color); color: var(--text-light); font-weight: 600; font-size: 0.85em; transition: background-color var(--transition-speed); }
-        .test-table th.sortable { cursor: pointer; user-select: none; }
-        .sort-arrow { display: inline-block; width: 1em; text-align: center; }
-        .question-col p { margin-top: 0; font-weight: 700; margin-bottom: 12px; }
-        .result-icon svg { width: 1.6em; height: 1.6em; vertical-align: middle; }
-        .editable-cell span { cursor: pointer; padding: 5px; border-radius: 4px; }
-        .editable-cell input { width: 60px; text-align: center; border: 1px solid var(--primary-color); border-radius: 4px; padding: 4px; background-color: var(--surface-color); color: var(--text-color); }
-        .options-container label { display: block; margin-bottom: 8px; cursor: pointer; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.05em; transition: background-color 0.2s, border-color 0.2s; }
-        .options-container input[type="radio"] { opacity: 0; width: 0; height: 0; }
-        .options-container label.option-correct { font-weight: 600; border-color: var(--correct-color); background-color: var(--correct-light); }
-        .options-container label.option-incorrect { font-weight: 600; border-color: var(--incorrect-color); background-color: var(--incorrect-light); }
-        .options-container label.option-skipped { font-weight: 600; border-color: var(--skipped-color); background-color: var(--skipped-light); }
+        .options-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+        .options-list li {
+            border: 1px solid var(--border-color); padding: 10px 15px;
+            border-radius: 8px; cursor: pointer; transition: all 0.2s;
+        }
+        .options-list li:hover { border-color: var(--accent-color); background-color: var(--accent-light); }
         
-        /* --- OMR Modal Styles --- */
-        .omr-modal {
-            display: none; position: fixed; z-index: 2000; left: 0; top: 0;
-            width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);
-        }
-        .omr-modal-content {
-            background-color: #fff; margin: 15% auto; padding: 25px; border: 1px solid #888;
-            width: 90%; max-width: 500px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        .omr-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .omr-modal-header h2 { margin: 0; font-size: 1.2em; }
-        .omr-modal-close { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .omr-modal-close:hover, .omr-modal-close:focus { color: black; text-decoration: none; }
-        .omr-modal-body .form-group { margin-bottom: 15px; }
-        .omr-modal-body label { display: block; margin-bottom: 5px; font-weight: 500; }
-        .omr-modal-body input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 6px; }
-        .omr-modal-footer { text-align: right; display: flex; gap: 10px; justify-content: flex-end; }
-
-        /* --- Responsive Styles --- */
-        @media (max-width: 768px) {
-            .content-wrapper { padding-top: 70px; }
-            .sticky-header { padding: 8px 12px; }
-            .stats-bar { 
-                flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
-                justify-content: flex-start; gap: 16px; padding-bottom: 8px;
-            }
-            .stat-card { gap: 4px; flex-shrink: 0; }
-            .stat-card svg { width: 14px; height: 14px; }
-            .stat-card .stat-content span { font-size: 0.65em; }
-            .stat-card .stat-content b { font-size: 0.9em; }
-            .test-table thead { display: none; }
-            .test-table tr { display: block; border-radius: 10px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border-color); overflow: hidden; background-color: var(--surface-color); }
-            .test-table td { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border-color); width: auto !important; }
-            .test-table tr td:last-child { border-bottom: none; }
-            .test-table td::before { content: attr(data-label); font-weight: 600; text-align: left; margin-right: 12px; color: var(--text-light); }
-            .test-table td.question-col { display: block; text-align: left; }
-            .test-table td.question-col::before { display: block; margin-bottom: 8px; }
-        }
-        
-        /* --- FIXED: Android Compact Header --- */
-        @media (max-width: 480px) {
-            .content-wrapper { padding-top: 100px; }
-            .page-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-            }
-            .controls-container {
-                width: 100%;
-                flex-wrap: wrap;
-            }
-        }
-
-        /* --- Final Print Styles --- */
-        .print-header, #omr-print-area { display: none; } 
+        .options-list li.correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-text); font-weight: 500; }
+        .options-list li.incorrect { background-color: var(--incorrect-bg); border-color: var(--incorrect-border); color: var(--incorrect-text); font-weight: 500; }
+        .options-list li.special { background-color: var(--special-bg); border-color: var(--special-border); color: var(--special-text); font-weight: 500; }
 
         @media print {
-            body { font-size: 9pt; padding: 0; margin: 0; background-color: #fff; color: #000; }
-            /* Hide elements not needed in ANY print mode */
-            .sticky-header, .page-header, .filter-container, .omr-modal { display: none !important; }
-
-            /* --- Styles for OMR Print --- */
-            body.printing-omr .content-wrapper { display: none !important; }
-            body.printing-omr #omr-print-area { display: block !important; padding: 0.5cm; }
-            
-            .omr-print-header { text-align: center; margin-bottom: 15px; }
-            .omr-print-header h1 { font-size: 14pt; margin: 0 0 10px 0; }
-            .omr-print-header .stats-bar { font-size: 0.8em; }
-            .omr-print-header .stats-bar .stat-card svg { display: none; }
-            .omr-print-header .stats-bar .stat-card b { font-size: 1.2em; }
-            .omr-student-details { display: flex; justify-content: space-between; margin-top: 10px; padding: 8px; border-top: 1px solid #333; border-bottom: 1px solid #333; font-size: 11pt; }
-            
-            .omr-grid-container {
-                column-count: 4;
-                column-gap: 20px;
-            }
-            .omr-question-row {
-                display: flex;
-                align-items: center;
-                break-inside: avoid;
-                margin-bottom: 5px;
-            }
-            .omr-question-number { font-weight: bold; width: 30px; text-align: right; margin-right: 5px; font-size: 9pt; }
-            .omr-options { display: flex; gap: 4px; }
-            .omr-option { width: 18px; height: 18px; border: 1px solid #555; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 8pt; }
-            
-            /* --- !! CHANGED CODE FOR DARKER OMR BUBBLES !! --- */
-            .omr-option.filled-correct { 
-                background-color: var(--correct-color) !important; 
-                border-color: var(--correct-color) !important; 
-                color: #fff !important; 
-            }
-            .omr-option.filled-incorrect { 
-                background-color: var(--incorrect-color) !important; 
-                border-color: var(--incorrect-color) !important; 
-                color: #fff !important; 
-            }
-            .omr-option.filled-skipped { 
-                background-color: var(--skipped-color) !important; 
-                border-color: var(--skipped-color) !important; 
-                color: #fff !important; 
-            }
-            .omr-option.filled-correct, .omr-option.filled-incorrect, .omr-option.filled-skipped { -webkit-print-color-adjust: exact; color-adjust: exact; }
-
-            /* --- Styles for Regular "Print Sheet" --- */
-            body:not(.printing-omr) #omr-print-area { display: none !important; }
-            body:not(.printing-omr) .content-wrapper { padding-top: 0; }
-            body:not(.printing-omr) .container { padding: 0; } 
-            body:not(.printing-omr) .print-header { display: block !important; text-align: center; margin: 1cm 1cm 0 1cm; border-bottom: 2px solid #333; padding-bottom: 12px; }
-            body:not(.printing-omr) .print-header h1 { font-size: 16pt; margin-bottom: 12px; }
-            body:not(.printing-omr) .print-header .stats-container { display: flex; width: 100%; justify-content: space-around; align-items: center; border: 1px solid #ccc; border-radius: 6px; padding: 8px 0; }
-            body:not(.printing-omr) #print-student-name { display: block !important; text-align: right; margin: 16px 1cm 0 0; padding-right: 5px; font-size: 12pt; }
-            body:not(.printing-omr) #print-student-name span { font-weight: bold; border-bottom: 2px solid #444; padding: 4px 0px; }
-            body:not(.printing-omr) .table-container { display: block !important; box-shadow: none; border-radius: 0; margin: 1cm; }
-            body:not(.printing-omr) .test-table { width: 100%; border-collapse: collapse; }
-            body:not(.printing-omr) .test-table thead { display: table-header-group !important; }
-            body:not(.printing-omr) .test-table tr, body:not(.printing-omr) .test-table td { display: revert !important; }
-            body:not(.printing-omr) tr.hide-in-print { display: none !important; }
-            body:not(.printing-omr) .test-table td::before { display: none !important; }
-            body:not(.printing-omr) .test-table th, body:not(.printing-omr) .test-table td { padding: 4px 5px; border: 1px solid #bbb; text-align: center; }
-            body:not(.printing-omr) .test-table th { background-color: #eee !important; -webkit-print-color-adjust: exact; color-adjust: exact; }
-            body:not(.printing-omr) .question-col { text-align: left !important; width: 62% !important; }
-            body:not(.printing-omr) .test-table tbody tr { page-break-inside: avoid; }
-            body:not(.printing-omr) .options-container { display: block !important; }
-            body:not(.printing-omr) .options-container label { padding: 3px 6px; font-size: 0.9em; margin-bottom: 2px; border-radius: 3px; border: 1px solid #ddd; }
-            body:not(.printing-omr) .options-container label.option-correct, 
-            body:not(.printing-omr) .options-container label.option-incorrect, 
-            body:not(.printing-omr) .options-container label.option-skipped { -webkit-print-color-adjust: exact; color-adjust: exact; color: #000 !important; }
+            body { background-color: #fff; font-size: 12pt; }
+            .summary-bar, .controls-bar, #print-btn, .header-controls { display: none; }
+            .container { margin: 0; padding: 0; box-shadow: none; border: none; }
+            .question-block { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; page-break-inside: avoid; }
+            .options-list li { padding: 8px; }
+            #print-header { display: block !important; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+            #print-summary { display: flex !important; justify-content: space-around; background-color: #f2f2f2; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
         }
     </style>
 </head>
 <body>
 
-<header class="sticky-header">
-    <div class="stats-bar" id="stats-bar">
-        <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM1 6.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/></svg>
-            <div class="stat-content"><span>कुल</span><b id="total-count">0</b></div>
+    <div class="summary-bar">
+        <div id="total-item" class="summary-item">
+            <div id="total-count" class="count">0</div><div class="label">कुल प्रश्न</div>
         </div>
-        <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="color:var(--correct-color)"><path d="M12.736 4.264a.5.5 0 0 1 .708 0l1 1a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7 11.293l6.027-6.027a.5.5 0 0 1 .709-.002z"/></svg>
-            <div class="stat-content"><span>सही</span><b id="correct-count">0</b></div>
+        <div id="attempted-item" class="summary-item">
+            <div id="attempted-count" class="count">0</div><div class="label">प्रयास</div>
         </div>
-        <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="color:var(--incorrect-color)"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708 .708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
-            <div class="stat-content"><span>गलत</span><b id="incorrect-count">0</b></div>
+        <div id="correct-item" class="summary-item">
+            <div id="correct-count" class="count">0</div><div class="label">सही</div>
         </div>
-        <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="color:var(--skipped-color)"><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/></svg>
-            <div class="stat-content"><span>छोड़े</span><b id="skipped-count">0</b></div>
+        <div id="incorrect-item" class="summary-item">
+            <div id="incorrect-count" class="count">0</div><div class="label">गलत</div>
         </div>
-        <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="color:var(--primary-color)"><path d="M4 11.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 2.5 7h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/></svg>
-            <div class="stat-content"><span>Final Que.</span><b id="final-score-val">0.00</b></div>
-        </div>
-        <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="color:#fd7e14"><path d="M8 0l1.669.864 1.858.282.842 1.67 1.12 1.445L15 6.236v1.506l-2.098.81-1.007 1.536.634 1.79 1.443 1.149.832 1.664-1.858.282L8 16l-1.669-.864-1.858-.282-.842-1.67-1.12-1.445L1 9.764v-1.506l2.098-.81 1.007-1.536-.634-1.79L2.027 2.97.169 2.686 0 1.023 1.858.74 3.527 0 8 0z"/></svg>
-            <div class="stat-content"><span>RAW Marks</span><b id="final-marks-val">0.00</b></div>
+        <div id="skipped-item" class="summary-item">
+            <div id="skipped-count" class="count">0</div><div class="label">Skip</div>
         </div>
     </div>
-</header>
 
-<div class="content-wrapper">
     <div class="container">
-        <div class="page-header">
-            <h1>4th Grade 2nd Shift Analysis</h1>
-            <div class="controls-container">
-                <input type="text" id="student-name-input" class="name-input" placeholder="यहाँ अपना नाम लिखें">
-                <button class="action-button" id="print-btn">Print Sheet</button>
-                <button class="action-button secondary" id="print-omr-btn">OMR प्रिन्ट</button>
+        <div class="header">
+            <h1>प्रश्न पत्र</h1>
+            <div class="header-controls">
+                <label for="series-select">सीरीज़:</label>
+                <select id="series-select">
+                    <option value="A">Series A</option><option value="B">Series B</option><option value="C">Series C</option>
+                </select>
             </div>
         </div>
-
-        <div class="filter-container" id="filter-container">
-            <button class="filter-btn active" data-filter="all">सभी</button>
-            <button class="filter-btn" data-filter="correct">सही</button>
-            <button class="filter-btn" data-filter="incorrect">गलत</button>
-            <button class="filter-btn" data-filter="skipped">छोड़े गए</button>
-        </div>
-        
-        <div class="print-header">
-            <h1>4th Grade 2nd Shift Analysis</h1>
-            <div class="stats-container" id="stats-container-print"></div>
-            <div id="print-student-name"></div>
-        </div>
-
-        <div class="table-container">
-            <table class="test-table" id="analysisTable">
-                <thead>
-                    <tr>
-                        <th class="sortable" data-column-index="0">Master S.N.<span class="sort-arrow"></span></th>
-                        <th class="sortable" data-column-index="1">My Paper<span class="sort-arrow"></span></th>
-                        <th class="question-col sortable" data-column-index="2">Master Paper Questions<span class="sort-arrow"></span></th>
-                        <th>My Ans.</th>
-                        <th>Official</th>
-                        <th class="sortable" data-column-index="5">Result<span class="sort-arrow"></span></th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div id="omr-modal" class="omr-modal">
-    <div class="omr-modal-content">
-        <div class="omr-modal-header">
-            <h2>OMR Print Details</h2>
-            <span class="omr-modal-close">&times;</span>
-        </div>
-        <div class="omr-modal-body">
-            <div class="form-group">
-                <label for="omr-student-name">नाम</label>
-                <input type="text" id="omr-student-name" placeholder="अपना नाम दर्ज करें">
+        <div class="controls-bar">
+            <div class="filter-buttons">
+                <button class="active" data-filter="all">सभी</button><button data-filter="correct">सही</button>
+                <button data-filter="incorrect">गलत</button><button data-filter="skipped">Skip</button>
             </div>
-            <div class="form-group">
-                <label for="omr-roll-number">रोल नंबर</label>
-                <input type="text" id="omr-roll-number" placeholder="अपना रोल नंबर दर्ज करें">
-            </div>
+            <button id="print-btn">प्रिंट</button>
         </div>
-        <div class="omr-modal-footer">
-            <button class="action-button" id="confirm-omr-print-master-btn">Print (Master Paper Order)</button>
-            <button class="action-button secondary" id="confirm-omr-print-my-paper-btn">Print (My Paper Order)</button>
-        </div>
+        <div id="questions-container"></div>
     </div>
-</div>
+    
+    <script>
+        const allQuestions = [
+            { id: 1, question: "भारत की राष्ट्रीय नदी कौन सी है?", options: ["A) यमुना", "B) ब्रह्मपुत्र", "C) गंगा", "D) गोदावरी", "E) इनमें से कोई नहीं"], answer: "C) गंगा" },
+            { id: 2, question: "सौर मंडल का सबसे बड़ा ग्रह कौन सा है?", options: ["A) पृथ्वी", "B) बृहस्पति", "C) मंगल", "D) शनि", "E) इनमें से कोई नहीं"], answer: "B) बृहस्पति" },
+            { id: 3, question: "'ताजमहल' किस शहर में स्थित है?", options: ["A) दिल्ली", "B) जयपुर", "C) मुंबई", "D) आगरा", "E) इनमें से कोई नहीं"], answer: "D) आगरा" },
+            { id: 4, question: "भारत का राष्ट्रीय खेल क्या है?", options: ["A) क्रिकेट", "B) हॉकी", "C) कबड्डी", "D) फुटबॉल", "E) इनमें से कोई नहीं"], answer: "B) हॉकी" },
+            { id: 5, question: "महात्मा गांधी का जन्म किस राज्य में हुआ था?", options: ["A) महाराष्ट्र", "B) राजस्थान", "C) गुजरात", "D) बिहार", "E) इनमें से कोई नहीं"], answer: "C) गुजरात" }
+        ];
 
-<div id="omr-print-area">
-    <div class="omr-print-header">
-        <h1>4th Grade 2nd Shift - OMR Sheet</h1>
-        <div id="omr-stats-bar-print"></div>
-        <div class="omr-student-details">
-            <span id="omr-print-name-display"></span>
-            <span id="omr-print-rollno-display"></span>
-        </div>
-    </div>
-    <div id="omr-grid-container" class="omr-grid-container"></div>
-</div>
-
-
-<script>
-// --- 1. DATA ---
-const questionsData = [
-    { s_no: 1, my_paper_sno: 1, question_text: "चित्रांगदा सिंह, राजस्थान की एक कलाकार, किस क्षेत्र में सर्वाधिक प्रसिद्ध हैं?", options: { A: "अभिनेत्री", B: "संगीतकार", C: "मूर्तिकला", D: "चित्रकार" }, official_answer: "A" },
-    { s_no: 2, my_paper_sno: 2, question_text: "राजस्थान की राजधानी क्या है?", options: { A: "जोधपुर", B: "जयपुर", C: "उदयपुर", D: "अजमेर" }, official_answer: "B" },
-    { s_no: 3, my_paper_sno: 3, question_text: "भारत का सबसे बड़ा मरुस्थल कौन सा है?", options: { A: "थार रेगिस्तान", B: "कच्छ का रण", C: "स्पीति घाटी ठंडा रेगिस्तान", D: "दक्कन काँटेदार झाड़ियाँ" }, official_answer: "A" },
-    { s_no: 4, my_paper_sno: 4, question_text: "सच का विलोम शब्द होगा?", options: { A: "नया", B: "पुराना", C: "झूठ", D: "कड़वा" }, official_answer: "C" },
-];
-
-// --- 2. ICONS & CONSTANTS ---
-const ICONS = {
-    correct: `<svg style="color:var(--correct-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>`,
-    incorrect: `<svg style="color:var(--incorrect-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>`,
-    skipped: `<svg style="color:var(--skipped-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg>`,
-    unattempted: `<svg style="color:#ced4da" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/></svg>`
-};
-let currentSort = { column: null, direction: 'asc' };
-
-// --- 3. DOM ELEMENTS ---
-const tableBody = document.getElementById('table-body');
-const studentNameInput = document.getElementById('student-name-input');
-const omrModal = document.getElementById('omr-modal');
-const omrModalCloseBtn = document.querySelector('.omr-modal-close');
-const printOmrBtn = document.getElementById('print-omr-btn');
-const confirmOmrPrintMasterBtn = document.getElementById('confirm-omr-print-master-btn');
-const confirmOmrPrintMyPaperBtn = document.getElementById('confirm-omr-print-my-paper-btn');
-
-
-// --- 4. CORE FUNCTIONS ---
-function renderTable() {
-    tableBody.innerHTML = '';
-    const fragment = document.createDocumentFragment();
-    questionsData.forEach(q => {
-        const row = document.createElement('tr');
-        row.dataset.questionSno = q.s_no;
+        const seriesOrder = { 'A': [1, 2, 3, 4, 5], 'B': [3, 5, 1, 4, 2], 'C': [5, 4, 3, 2, 1] };
         
-        let optionsHTML = Object.entries(q.options)
-            .map(([key, value]) => `<label><input type="radio" name="q${q.s_no}" value="${key}">( ${key} ) ${value}</label>`)
-            .join('');
-        optionsHTML += `<label><input type="radio" name="q${q.s_no}" value="E">( E ) प्रश्न हल नहीं किया</label>`;
+        let userAnswers = JSON.parse(localStorage.getItem('userAnswers')) || {};
+        let currentSeries = localStorage.getItem('currentSeries') || 'A';
+        let activeFilter = localStorage.getItem('activeFilter') || 'all';
 
-        row.innerHTML = `
-            <td data-label="Master Paper S.N.">${q.s_no}</td> 
-            <td data-label="My Paper S.N." class="editable-cell"><span data-sno="${q.s_no}">${q.my_paper_sno}</span></td> 
-            <td data-label="Question" class="question-col"><p>${q.question_text}</p><div class="options-container">${optionsHTML}</div></td>
-            <td data-label="My Answer"></td> 
-            <td data-label="Official Answer">${q.official_answer}</td> 
-            <td data-label="Result" data-result="unattempted"><span class="result-icon">${ICONS.unattempted}</span></td>
-        `;
-        fragment.appendChild(row);
-    });
-    tableBody.appendChild(fragment);
-}
-
-function updateAnswer(radioInput) {
-    const selectedOption = radioInput.value;
-    const row = radioInput.closest('tr');
-    
-    const myAnsCell = row.cells[3];
-    const officialAnswer = row.cells[4].textContent.trim();
-    const resultCell = row.cells[5];
-    
-    myAnsCell.textContent = selectedOption;
-    row.querySelectorAll('.options-container label').forEach(lbl => lbl.classList.remove('option-correct', 'option-incorrect', 'option-skipped'));
-    const currentLabel = radioInput.closest('label');
-    
-    if (selectedOption === 'E') {
-        currentLabel.classList.add('option-skipped');
-        resultCell.querySelector('.result-icon').innerHTML = ICONS.skipped;
-        resultCell.dataset.result = 'skipped';
-    } else if (selectedOption === officialAnswer) {
-        currentLabel.classList.add('option-correct');
-        resultCell.querySelector('.result-icon').innerHTML = ICONS.correct;
-        resultCell.dataset.result = 'correct';
-    } else {
-        currentLabel.classList.add('option-incorrect');
-        resultCell.querySelector('.result-icon').innerHTML = ICONS.incorrect;
-        resultCell.dataset.result = 'incorrect';
-    }
-
-    localStorage.setItem(`q${row.dataset.questionSno}_answer`, selectedOption);
-    updateSummaryAndScore();
-}
-
-function updateSummaryAndScore() {
-    const rows = tableBody.querySelectorAll("tr");
-    let correct = 0, incorrect = 0, skipped = 0;
-    
-    rows.forEach(row => {
-        const result = row.cells[5].dataset.result;
-        if (result === 'correct') correct++;
-        else if (result === 'incorrect') incorrect++;
-        else if (result === 'skipped') skipped++;
-    });
-
-    const finalScore = correct - (incorrect / 3);
-    const finalMarks = finalScore * 1.66666666;
-
-    document.getElementById('total-count').textContent = rows.length;
-    document.getElementById('correct-count').textContent = correct;
-    document.getElementById('incorrect-count').textContent = incorrect;
-    document.getElementById('skipped-count').textContent = skipped;
-    document.getElementById('final-score-val').textContent = finalScore.toFixed(2);
-    document.getElementById('final-marks-val').textContent = finalMarks.toFixed(2);
-}
-
-function sortTable(headerCell, columnIndex) {
-    const rows = Array.from(tableBody.rows);
-    const direction = (currentSort.column === columnIndex && currentSort.direction === 'asc') ? 'desc' : 'asc';
-    currentSort = { column: columnIndex, direction: direction };
-
-    document.querySelectorAll('th.sortable .sort-arrow').forEach(arrow => arrow.textContent = '');
-    headerCell.querySelector('.sort-arrow').textContent = direction === 'asc' ? '▲' : '▼';
-    const resultPriority = { correct: 1, incorrect: 2, skipped: 3, unattempted: 4 };
-
-    rows.sort((rowA, rowB) => {
-        let valA, valB;
-        if (columnIndex === 5) { // Result column
-            valA = resultPriority[rowA.cells[columnIndex].dataset.result];
-            valB = resultPriority[rowB.cells[columnIndex].dataset.result];
-        } else if (columnIndex === 0 || columnIndex === 1) { // Numeric columns
-            valA = parseFloat(rowA.cells[columnIndex].textContent.trim());
-            valB = parseFloat(rowB.cells[columnIndex].textContent.trim());
-        } else { // Text column
-             valA = rowA.cells[columnIndex].textContent.trim();
-             valB = rowB.cells[columnIndex].textContent.trim();
+        function saveData() {
+            localStorage.setItem('userAnswers', JSON.stringify(userAnswers));
+            localStorage.setItem('currentSeries', currentSeries);
+            localStorage.setItem('activeFilter', activeFilter);
         }
 
-        let comparison = valA > valB ? 1 : (valA < valB ? -1 : 0);
-        return direction === 'asc' ? comparison : -comparison;
-    });
-    
-    rows.forEach(row => tableBody.appendChild(row));
-}
-
-function editCell(spanElement) {
-    const currentVal = spanElement.textContent;
-    const parentTd = spanElement.parentNode;
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.value = currentVal;
-
-    const save = () => {
-        const newValue = input.value;
-        const qSno = spanElement.dataset.sno;
-        
-        // Update the source data array for consistency
-        const question = questionsData.find(q => q.s_no == qSno);
-        if (question) {
-            question.my_paper_sno = newValue;
+        function getQuestionStatus(questionId) {
+            const userAnswer = userAnswers[questionId];
+            if (!userAnswer || userAnswer.startsWith('E)')) return 'skipped';
+            
+            const questionData = allQuestions.find(q => q.id === questionId);
+            if (userAnswer === questionData.answer) return 'correct';
+            return 'incorrect';
         }
 
-        localStorage.setItem(`myPaper_sno_${qSno}`, newValue);
-        spanElement.textContent = newValue;
-        parentTd.innerHTML = '';
-        parentTd.appendChild(spanElement);
-    };
-    
-    input.onblur = save;
-    input.onkeydown = e => { if (e.key === 'Enter') save(); else if (e.key === 'Escape') { parentTd.innerHTML = ''; parentTd.appendChild(spanElement); } };
-    parentTd.innerHTML = '';
-    parentTd.appendChild(input);
-    input.focus();
-}
+        function updateSummary() {
+            let correct = 0, incorrect = 0, attempted = 0, skipped = 0;
+            
+            allQuestions.forEach(q => {
+                const status = getQuestionStatus(q.id);
+                if (status === 'correct') { correct++; attempted++; }
+                else if (status === 'incorrect') { incorrect++; attempted++; }
+                else { skipped++; }
+            });
 
-function filterTable(filter) {
-    tableBody.querySelectorAll('tr').forEach(row => {
-        row.style.display = (filter === 'all' || filter === row.cells[5].dataset.result) ? '' : 'none';
-    });
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
-}
-
-function loadSavedState() {
-    // This function now MODIFIES the existing table instead of re-rendering it.
-    tableBody.querySelectorAll('tr').forEach(row => {
-        const qSno = row.dataset.questionSno;
-
-        // 1. Load and set "My Paper S.N." from localStorage
-        const savedMyPaperSno = localStorage.getItem(`myPaper_sno_${qSno}`);
-        const question = questionsData.find(q => q.s_no == qSno);
-        if (savedMyPaperSno) {
-            row.querySelector('.editable-cell span').textContent = savedMyPaperSno;
-            if (question) question.my_paper_sno = savedMyPaperSno; // Sync with data array
+            document.getElementById('total-count').textContent = allQuestions.length;
+            document.getElementById('attempted-count').textContent = attempted;
+            document.getElementById('correct-count').textContent = correct;
+            document.getElementById('incorrect-count').textContent = incorrect;
+            document.getElementById('skipped-count').textContent = skipped;
         }
         
-        // 2. Load and set saved answer from localStorage
-        const savedAnswer = localStorage.getItem(`q${qSno}_answer`);
-        if (savedAnswer) {
-            const radio = row.querySelector(`input[type="radio"][value="${savedAnswer}"]`);
-            if (radio) {
-                radio.checked = true;
-                // Apply visual styles without triggering a full recalculation for every row
-                const myAnsCell = row.cells[3];
-                const officialAnswer = row.cells[4].textContent.trim();
-                const resultCell = row.cells[5];
-                myAnsCell.textContent = savedAnswer;
-                const currentLabel = radio.closest('label');
-                row.querySelectorAll('.options-container label').forEach(lbl => lbl.classList.remove('option-correct', 'option-incorrect', 'option-skipped'));
+        function findQuestionPositions(questionId) {
+            let positions = [];
+            for (const series in seriesOrder) {
+                const index = seriesOrder[series].indexOf(questionId) + 1;
+                positions.push(`Series ${series}: #${index}`);
+            }
+            return positions.join(' | ');
+        }
+        
+        function displayQuestions(series, filter = 'all') {
+            document.getElementById('questions-container').innerHTML = '';
+            currentSeries = series;
+            document.getElementById('series-select').value = series;
+            updateSummary();
+            updateActiveFilterButton(filter);
 
-                if (savedAnswer === 'E') {
-                    currentLabel.classList.add('option-skipped');
-                    resultCell.querySelector('.result-icon').innerHTML = ICONS.skipped;
-                    resultCell.dataset.result = 'skipped';
-                } else if (savedAnswer === officialAnswer) {
-                    currentLabel.classList.add('option-correct');
-                    resultCell.querySelector('.result-icon').innerHTML = ICONS.correct;
-                    resultCell.dataset.result = 'correct';
-                } else {
-                    currentLabel.classList.add('option-incorrect');
-                    resultCell.querySelector('.result-icon').innerHTML = ICONS.incorrect;
-                    resultCell.dataset.result = 'incorrect';
-                }
+            const order = seriesOrder[series];
+            let displayCount = 0;
+
+            order.forEach((questionId, index) => {
+                const questionData = allQuestions.find(q => q.id === questionId);
+                const status = getQuestionStatus(questionId);
+                
+                const shouldShow = filter === 'all' || filter === status;
+                if (!shouldShow) return;
+                displayCount++;
+
+                const questionBlock = document.createElement('div');
+                questionBlock.className = 'question-block';
+                
+                const questionTitle = document.createElement('h3');
+                questionTitle.textContent = `प्रश्न ${displayCount}: ${questionData.question}`;
+                
+                const optionsList = document.createElement('ul');
+                optionsList.className = 'options-list';
+                questionData.options.forEach(optionText => {
+                    const optionItem = document.createElement('li');
+                    optionItem.textContent = optionText;
+                    if (userAnswers[questionId] === optionText) {
+                        if (optionText.startsWith('E)')) optionItem.classList.add('special');
+                        else if (optionText === questionData.answer) optionItem.classList.add('correct');
+                        else optionItem.classList.add('incorrect');
+                    }
+                    optionsList.appendChild(optionItem);
+                });
+                
+                const infoBar = document.createElement('div');
+                infoBar.className = 'question-info-bar';
+                infoBar.textContent = findQuestionPositions(questionId);
+
+                questionBlock.appendChild(questionTitle);
+                questionBlock.appendChild(optionsList);
+                questionBlock.appendChild(infoBar);
+                document.getElementById('questions-container').appendChild(questionBlock);
+
+                optionsList.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'LI') {
+                        userAnswers[questionData.id] = e.target.textContent;
+                        displayQuestions(currentSeries, activeFilter);
+                        saveData();
+                    }
+                });
+            });
+            if (displayCount === 0) {
+                 document.getElementById('questions-container').innerHTML = `<p style="text-align:center; color: var(--light-text);">इस श्रेणी में कोई प्रश्न नहीं है।</p>`;
             }
         }
-    });
-    
-    // 3. Load saved student name
-    const savedName = localStorage.getItem('studentName');
-    if (savedName) {
-        studentNameInput.value = savedName;
-    }
-    
-    // 4. Update the score summary ONCE at the end. This is the key performance fix.
-    updateSummaryAndScore();
-}
-
-
-/**
- * Prepares and prints the OMR sheet.
- * @param {('master'|'my_paper')} sortBy - The criteria to sort the questions by.
- */
-function prepareAndPrintOMR(sortBy = 'master') {
-    const studentName = document.getElementById('omr-student-name').value.trim();
-    const rollNumber = document.getElementById('omr-roll-number').value.trim();
-
-    const mainStatsBar = document.getElementById('stats-bar').cloneNode(true);
-    document.getElementById('omr-stats-bar-print').innerHTML = '';
-    document.getElementById('omr-stats-bar-print').appendChild(mainStatsBar);
-    document.getElementById('omr-print-name-display').textContent = `Name: ${studentName || 'N/A'}`;
-    document.getElementById('omr-print-rollno-display').textContent = `Roll No: ${rollNumber || 'N/A'}`;
-
-    const gridContainer = document.getElementById('omr-grid-container');
-    gridContainer.innerHTML = '';
-    
-    // Create a temporary array from questionsData to sort, ensuring it reflects recent edits.
-    const printableData = Array.from(document.querySelectorAll('#table-body tr')).map(row => {
-        return {
-            masterSno: row.dataset.questionSno,
-            myPaperSno: row.cells[1].textContent.trim(),
-            myAnswer: row.cells[3].textContent.trim(),
-            result: row.cells[5].dataset.result
-        };
-    });
-    
-    printableData.sort((a, b) => {
-        let snoA, snoB;
-        if (sortBy === 'my_paper') {
-            snoA = parseInt(a.myPaperSno, 10);
-            snoB = parseInt(b.myPaperSno, 10);
-        } else { // Default to 'master' order
-            snoA = parseInt(a.masterSno, 10);
-            snoB = parseInt(b.masterSno, 10);
-        }
-        return snoA - snoB;
-    });
-
-    printableData.forEach(item => {
-        const questionNumberForDisplay = (sortBy === 'my_paper') ? item.myPaperSno : item.masterSno;
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'omr-question-row';
-
-        let optionsHTML = '';
-        const options = ['A', 'B', 'C', 'D', 'E'];
-        options.forEach(opt => {
-            let fillClass = '';
-            if (item.myAnswer === opt) {
-                if (item.result === 'correct') fillClass = 'filled-correct';
-                else if (item.result === 'incorrect') fillClass = 'filled-incorrect';
-                else if (item.result === 'skipped') fillClass = 'filled-skipped';
-            }
-            optionsHTML += `<div class="omr-option ${fillClass}">${opt}</div>`;
-        });
-
-        rowDiv.innerHTML = `
-            <span class="omr-question-number">${questionNumberForDisplay}.</span>
-            <div class="omr-options">${optionsHTML}</div>
-        `;
-        gridContainer.appendChild(rowDiv);
-    });
-
-    omrModal.style.display = 'none';
-    document.body.classList.add('printing-omr'); 
-    window.print();
-}
-
-
-// --- 5. EVENT LISTENERS ---
-document.addEventListener('DOMContentLoaded', () => {
-    // First, render the table structure.
-    renderTable();
-    // Then, load all saved data and apply it to the table.
-    loadSavedState();
-
-    tableBody.addEventListener('click', e => {
-        if (e.target.type === 'radio') updateAnswer(e.target);
-        if (e.target.tagName === 'SPAN' && e.target.closest('.editable-cell')) editCell(e.target);
-    });
-    
-    document.getElementById('filter-container').addEventListener('click', e => {
-        if (e.target.classList.contains('filter-btn')) filterTable(e.target.dataset.filter);
-    });
-
-    document.querySelectorAll('th.sortable').forEach(header => {
-        header.addEventListener('click', () => sortTable(header, parseInt(header.dataset.columnIndex)));
-    });
-
-    document.getElementById('print-btn').addEventListener('click', () => {
-        const studentName = studentNameInput.value.trim();
-        if (!studentName) {
-            alert("कृपया शीट प्रिंट करने से पहले अपना नाम लिखें।");
-            return;
+        
+        function updateActiveFilterButton(filter) {
+            document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active');
         }
 
-        const mainStats = document.getElementById('stats-bar');
-        const printStats = document.getElementById('stats-container-print');
-        printStats.innerHTML = mainStats.innerHTML;
-
-        const printNameContainer = document.getElementById('print-student-name');
-        printNameContainer.innerHTML = `Name: <span>${studentName}</span>`;
-
-        tableBody.querySelectorAll('tr').forEach(row => {
-            if (row.style.display === 'none') row.classList.add('hide-in-print');
+        document.getElementById('series-select').addEventListener('change', (e) => {
+            displayQuestions(e.target.value, activeFilter);
+            saveData();
         });
-        document.body.classList.remove('printing-omr');
-        window.print();
-    });
 
-    window.addEventListener('afterprint', () => {
-        tableBody.querySelectorAll('tr.hide-in-print').forEach(row => {
-            row.classList.remove('hide-in-print');
+        document.querySelectorAll('.filter-buttons button').forEach(button => {
+            button.addEventListener('click', () => {
+                activeFilter = button.dataset.filter;
+                displayQuestions(currentSeries, activeFilter);
+                saveData();
+            });
         });
-        document.body.classList.remove('printing-omr');
-    });
+        
+        document.getElementById('print-btn').addEventListener('click', () => {
+            const name = prompt("कृपया अपना नाम दर्ज करें:");
+            if (!name) { alert("नाम आवश्यक है।"); return; }
+            const rollNo = prompt("कृपया अपना रोल नंबर दर्ज करें:");
+            if (!rollNo) { alert("रोल नंबर आवश्यक है।"); return; }
+            
+            const printWindow = window.open('', '', 'height=800,width=800');
+            printWindow.document.write('<html><head><title>Print</title>');
+            printWindow.document.write('<style>' + document.querySelector('style').innerHTML + '</style>');
+            printWindow.document.write('</head><body>');
+            
+            const printHeader = `<div id="print-header"><h2>प्रश्न पत्र परिणाम</h2><p><strong>नाम:</strong> ${name} | <strong>रोल नंबर:</strong> ${rollNo}</p></div>`;
+            const summaryHTML = document.querySelector('.summary-bar').cloneNode(true);
+            summaryHTML.id = "print-summary";
 
-    studentNameInput.addEventListener('input', () => {
-        localStorage.setItem('studentName', studentNameInput.value);
-    });
-    
-    printOmrBtn.addEventListener('click', () => {
-        document.getElementById('omr-student-name').value = studentNameInput.value;
-        omrModal.style.display = 'block';
-    });
-    
-    omrModalCloseBtn.addEventListener('click', () => {
-        omrModal.style.display = 'none';
-    });
+            printWindow.document.write(printHeader);
+            printWindow.document.write(summaryHTML.outerHTML);
+            printWindow.document.write(document.querySelector('.container').innerHTML);
+            
+            printWindow.document.querySelectorAll('.header, .controls-bar').forEach(el => el.remove());
+            
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
+        });
 
-    window.addEventListener('click', (event) => {
-        if (event.target == omrModal) {
-            omrModal.style.display = 'none';
-        }
-    });
-
-    confirmOmrPrintMasterBtn.addEventListener('click', () => prepareAndPrintOMR('master'));
-    confirmOmrPrintMyPaperBtn.addEventListener('click', () => prepareAndPrintOMR('my_paper'));
-
-});
-</script>
-
+        window.addEventListener('load', () => {
+            displayQuestions(currentSeries, activeFilter);
+        });
+    </script>
 </body>
 </html>
