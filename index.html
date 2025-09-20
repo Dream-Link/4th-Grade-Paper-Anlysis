@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4th Grade 2nd Shift</title>
+    <title>4th Grade 2nd Shift - Final</title>
     
     <meta name="theme-color" content="#343a40"/>
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -13,475 +13,472 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* --- General Variables --- */
         :root {
             --primary-color: #0d6efd;
             --text-color: #212529;
             --text-light: #6c757d;
             --bg-color: #f8f9fa;
+            --surface-color: #ffffff;
             --border-color: #dee2e6;
             --header-bg: #343a40;
+
             --correct-color: #198754;
             --correct-light: #d1e7dd;
             --incorrect-color: #dc3545;
             --incorrect-light: #f8d7da;
             --skipped-color: #0dcaf0;
             --skipped-light: #cff4fc;
+
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+            --transition-speed: 0.3s;
         }
+
+        /* --- Dark Mode Variables --- */
+        body.dark-mode {
+            --text-color: #e9ecef;
+            --text-light: #adb5bd;
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --border-color: #495057;
+            --header-bg: #f8f9fa;
+
+            --correct-light: rgba(25, 135, 84, 0.2);
+            --incorrect-light: rgba(220, 53, 69, 0.2);
+            --skipped-light: rgba(13, 202, 240, 0.2);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        /* --- Base Styles --- */
         body {
             font-family: 'Noto Sans', sans-serif;
             margin: 0;
-            padding: 24px;
+            padding: 0;
             background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
         }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .header-container {
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        .content-wrapper { padding-top: 80px; /* Space for the sticky header */ }
+
+        /* --- Sticky Header & Stats Bar --- */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: var(--surface-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 12px 24px;
+            transition: background-color var(--transition-speed);
+        }
+        body.dark-mode .sticky-header {
+             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+        }
+        .stat-card svg { width: 18px; height: 18px; color: var(--text-light); }
+        .stat-card .stat-content span { font-size: 0.75em; font-weight: 500; color: var(--text-light); display: block; }
+        .stat-card .stat-content b { font-size: 1.1em; font-weight: 700; color: var(--text-color); }
+        #correct-count { color: var(--correct-color); }
+        #incorrect-count { color: var(--incorrect-color); }
+        #skipped-count { color: var(--skipped-color); }
+        #final-score-val { color: var(--primary-color); }
+
+        /* --- Title & Page Controls --- */
+        .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
             flex-wrap: wrap; 
-            gap: 16px; 
+            gap: 16px;
         }
-        h1 { color: var(--header-bg); font-weight: 700; margin: 0; flex-basis: 100%; }
-        .stats-and-actions { display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: center; }
-        .stats-container { display: flex; gap: 12px; flex-wrap: wrap; flex-grow: 1; }
-        .stat-card {
-            background-color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            border: 1px solid var(--border-color);
-            text-align: center;
-            flex-grow: 1;
-        }
-        .stat-card span { font-size: 0.8em; font-weight: 500; color: var(--text-light); display: block; }
-        .stat-card b { font-size: 1.3em; font-weight: 600; color: var(--text-color); }
-        #correct-count { color: var(--correct-color); }
-        #incorrect-count { color: var(--incorrect-color); }
-        #skipped-count { color: var(--skipped-color); }
-        #final-score-val { color: var(--primary-color); }
-        #final-marks-val { color: #fd7e14; }
-        .action-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: 500;
-        }
-        .table-container {
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
-            overflow: hidden;
-        }
-        .test-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        h1 { color: var(--header-bg); font-weight: 700; margin: 0; }
+        .controls-container { display: flex; align-items: center; gap: 16px; }
+        .action-button { background-color: var(--primary-color); color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: 500; transition: background-color 0.2s; }
+        .action-button:hover { background-color: #0b5ed7; }
+        
+        /* --- Theme Switch --- */
+        .theme-switch-label { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 5px; border-radius: 8px; }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary-color); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* --- Filters --- */
+        .filter-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+        .filter-btn { background-color: var(--surface-color); color: var(--text-color); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85em; transition: background-color 0.2s, color 0.2s; }
+        .filter-btn.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+
+        /* --- Table Styles --- */
+        .table-container { background-color: var(--surface-color); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; transition: background-color var(--transition-speed); }
+        .test-table { width: 100%; border-collapse: collapse; }
         .test-table th, .test-table td { padding: 16px; text-align: center; vertical-align: middle; border-bottom: 1px solid var(--border-color); overflow-wrap: break-word; }
         .question-col { width: 50%; text-align: left !important; }
-        .test-table th:not(.question-col),
-        .test-table td:not(.question-col) { width: 10%; }
-        .test-table th { background-color: #f8f9fa; color: var(--text-light); font-weight: 600; font-size: 0.85em; }
+        .test-table th { background-color: var(--bg-color); color: var(--text-light); font-weight: 600; font-size: 0.85em; transition: background-color var(--transition-speed); }
         .test-table th.sortable { cursor: pointer; user-select: none; }
         .sort-arrow { display: inline-block; width: 1em; text-align: center; }
         .question-col p { margin-top: 0; font-weight: 700; margin-bottom: 12px; }
         .result-icon svg { width: 1.6em; height: 1.6em; vertical-align: middle; }
-        .test-table tbody td:first-child,
-        .test-table tbody td:nth-last-child(2) { font-size: 1.1em; font-weight: 500; }
         .editable-cell span { cursor: pointer; padding: 5px; border-radius: 4px; }
-        .editable-cell input { width: 60px; text-align: center; border: 1px solid var(--primary-color); border-radius: 4px; padding: 4px; }
-        .options-container label {
-            display: block; margin-bottom: 8px; cursor: pointer; padding: 10px;
-            border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.05em;
-        }
+        .editable-cell input { width: 60px; text-align: center; border: 1px solid var(--primary-color); border-radius: 4px; padding: 4px; background-color: var(--surface-color); color: var(--text-color); }
+        .options-container label { display: block; margin-bottom: 8px; cursor: pointer; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.05em; transition: background-color 0.2s, border-color 0.2s; }
         .options-container input[type="radio"] { opacity: 0; width: 0; height: 0; }
         .options-container label.option-correct { font-weight: 600; border-color: var(--correct-color); background-color: var(--correct-light); }
         .options-container label.option-incorrect { font-weight: 600; border-color: var(--incorrect-color); background-color: var(--incorrect-light); }
         .options-container label.option-skipped { font-weight: 600; border-color: var(--skipped-color); background-color: var(--skipped-light); }
         
+        /* --- Responsive Styles --- */
+        @media (max-width: 992px) {
+            .stats-bar { flex-wrap: wrap; justify-content: space-between; row-gap: 10px; }
+            .stat-card { flex-basis: 30%; justify-content: center; }
+            .content-wrapper { padding-top: 110px; }
+        }
+
         @media (max-width: 768px) {
-            .test-table { table-layout: auto; }
+            .sticky-header { padding: 8px 16px; }
+            .content-wrapper { padding-top: 100px; }
+            .stat-card .stat-content span { font-size: 0.7em; }
+            .stat-card .stat-content b { font-size: 1em; }
+
             .test-table thead { display: none; }
-            .test-table tr { display: block; border-radius: 10px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); border: 1px solid var(--border-color); overflow: hidden; background-color: #fff; }
-            .test-table td { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f1f3f5; width: auto !important; }
+            .test-table tr { display: block; border-radius: 10px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border-color); overflow: hidden; background-color: var(--surface-color); }
+            .test-table td { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border-color); width: auto !important; }
             .test-table tr td:last-child { border-bottom: none; }
-            .test-table td::before { content: attr(data-label); font-weight: 600; text-align: left; margin-right: 12px; color: var(--text-light); white-space: nowrap; }
+            .test-table td::before { content: attr(data-label); font-weight: 600; text-align: left; margin-right: 12px; color: var(--text-light); }
             .test-table td.question-col { display: block; text-align: left; }
             .test-table td.question-col::before { display: block; margin-bottom: 8px; }
         }
+        @media (max-width: 480px) {
+             .content-wrapper { padding-top: 140px; }
+             .stat-card { flex-basis: 45%; }
+        }
+
 
         /* --- Final Print Styles --- */
         @media print {
-            body {
-                font-size: 9pt;
-                padding: 1cm;
-                margin: 0;
-                background-color: #fff;
-            }
-            .container { max-width: 100%; }
-            .action-buttons-container { display: none !important; }
-
-            /* Header and Stats Styling for Print */
-            .header-container {
-                border-bottom: 2px solid #333;
-                padding-bottom: 12px;
-                margin-bottom: 16px;
-                text-align: center;
-            }
-            .header-container h1 { font-size: 16pt; margin-bottom: 12px; }
-            .stats-and-actions { justify-content: center; }
-            .stats-container {
-                gap: 0;
-                border: 1px solid #ccc;
-                border-radius: 6px;
-                padding: 0;
-                overflow: hidden;
-                display: inline-flex;
-                flex-grow: 0;
-            }
-            .stat-card {
-                padding: 6px 10px;
-                border: none; box-shadow: none; border-radius: 0;
-                background-color: transparent;
-                border-right: 1px solid #ccc;
-            }
-            .stat-card:last-child { border-right: none; }
-            .stat-card span { font-size: 0.8em; }
-            .stat-card b { font-size: 1.1em; font-weight: 700; }
-            
-            /* Table Styling for Print */
+            body { font-size: 9pt; padding: 1cm; margin: 0; background-color: #fff; color: #000; }
+            .sticky-header, .page-header, .filter-container { display: none !important; }
+            .content-wrapper { padding-top: 0; }
+            .print-header { display: block !important; text-align: center; margin-bottom: 16px; border-bottom: 2px solid #333; padding-bottom: 12px; }
+            .print-header h1 { font-size: 16pt; }
+            .print-header .stats-container { justify-content: center; gap: 0; border: 1px solid #ccc; border-radius: 6px; padding: 0; overflow: hidden; display: inline-flex; }
+            .print-header .stat-card { padding: 6px 10px; border: none; box-shadow: none; border-radius: 0; background-color: transparent; border-right: 1px solid #ccc; }
+            .print-header .stat-card:last-child { border-right: none; }
+            .print-header .stat-card span { font-size: 0.8em; }
+            .print-header .stat-card b { font-size: 1.1em; font-weight: 700; }
             .table-container { box-shadow: none; border-radius: 0; }
-            .test-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+            .test-table { width: 100%; border-collapse: collapse; }
             .test-table thead { display: table-header-group !important; }
             .test-table tr, .test-table td { display: revert !important; }
             .test-table td::before { display: none !important; }
-            .test-table th, .test-table td {
-                padding: 4px 5px;
-                border: 1px solid #bbb;
-                text-align: center;
-                vertical-align: middle;
-                overflow-wrap: break-word;
-            }
-            .test-table th {
-                background-color: #eee !important;
-                -webkit-print-color-adjust: exact;
-                color-adjust: exact;
-            }
+            .test-table th, .test-table td { padding: 4px 5px; border: 1px solid #bbb; text-align: center; }
+            .test-table th { background-color: #eee !important; -webkit-print-color-adjust: exact; color-adjust: exact; }
             .question-col { text-align: left !important; width: 62% !important; }
-            .question-col p { margin: 0; font-weight: 500; margin-bottom: 5px; }
-            .test-table th:nth-child(1), .test-table td:nth-child(1) { width: 5% !important; }
-            .test-table th:nth-child(2), .test-table td:nth-child(2) { width: 9% !important; }
-            .test-table th:nth-child(4), .test-table td:nth-child(4) { width: 8% !important; }
-            .test-table th:nth-child(5), .test-table td:nth-child(5) { width: 8% !important; }
-            .test-table th:nth-child(6), .test-table td:nth-child(6) { width: 8% !important; }
-            .result-icon svg { width: 1em; height: 1em; }
             .test-table tbody tr { page-break-inside: avoid; }
-
-            /* Options Visibility and Highlighting for Print */
             .options-container { display: block !important; }
-            .options-container label {
-                padding: 3px 6px;
-                font-size: 0.9em;
-                margin-bottom: 2px;
-                border-radius: 3px;
-                border: 1px solid #ddd;
-            }
-            .options-container label.option-correct,
-            .options-container label.option-incorrect,
-            .options-container label.option-skipped {
-                -webkit-print-color-adjust: exact; /* Force background color printing */
-                color-adjust: exact;
-                color: #000 !important; /* Ensure text is readable */
-            }
+            .options-container label { padding: 3px 6px; font-size: 0.9em; margin-bottom: 2px; border-radius: 3px; border: 1px solid #ddd; }
+            .options-container label.option-correct, .options-container label.option-incorrect, .options-container label.option-skipped { -webkit-print-color-adjust: exact; color-adjust: exact; color: #000 !important; }
         }
+        .print-header { display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header-container">
-        <h1>4th Grade 2nd Shift</h1>
-        <div class="stats-and-actions">
-            <div class="stats-container">
-                <div class="stat-card"><span>कुल</span><b id="total-count">0</b></div>
-                <div class="stat-card"><span>सही</span><b id="correct-count">0</b></div>
-                <div class="stat-card"><span>गलत</span><b id="incorrect-count">0</b></div>
-                <div class="stat-card"><span>छोड़े</span><b id="skipped-count">0</b></div>
-                <div class="stat-card"><span>Final Score</span><b id="final-score-val">0.00</b></div>
-                <div class="stat-card"><span>Final Marks</span><b id="final-marks-val">0.00</b></div>
-            </div>
-            <div class="action-buttons-container">
-                <button class="action-button" onclick="window.print()">Print Sheet</button>
-            </div>
+<header class="sticky-header">
+    <div class="stats-bar" id="stats-bar">
+        <div class="stat-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM1 6.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/></svg>
+            <div class="stat-content"><span>कुल</span><b id="total-count">0</b></div>
+        </div>
+        <div class="stat-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color:var(--correct-color)" viewBox="0 0 16 16"><path d="M12.736 4.264a.5.5 0 0 1 .708 0l1 1a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7 11.293l6.027-6.027a.5.5 0 0 1 .709-.002z"/></svg>
+            <div class="stat-content"><span>सही</span><b id="correct-count">0</b></div>
+        </div>
+        <div class="stat-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color:var(--incorrect-color)" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
+            <div class="stat-content"><span>गलत</span><b id="incorrect-count">0</b></div>
+        </div>
+        <div class="stat-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color:var(--skipped-color)" viewBox="0 0 16 16"><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/></svg>
+            <div class="stat-content"><span>छोड़े</span><b id="skipped-count">0</b></div>
+        </div>
+        <div class="stat-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color:var(--primary-color)" viewBox="0 0 16 16"><path d="M4 11.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 2.5 7h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/></svg>
+            <div class="stat-content"><span>Final Score</span><b id="final-score-val">0.00</b></div>
         </div>
     </div>
-    <div class="table-container">
-        <table class="test-table" id="analysisTable">
-            <thead>
-                <tr>
-                    <th class="sortable" onclick="sortTable(this, 0)">S.No.<span class="sort-arrow"></span></th>
-                    <th class="sortable" onclick="sortTable(this, 1)">My Paper<span class="sort-arrow"></span></th>
-                    <th class="question-col sortable" onclick="sortTable(this, 2)">प्रश्न<span class="sort-arrow"></span></th>
-                    <th>My Ans.</th>
-                    <th>Official</th>
-                    <th class="sortable" onclick="sortTable(this, 5)">परिणाम<span class="sort-arrow"></span></th>
-                </tr>
-            </thead>
-            <tbody>
-                 <tr>
-                    <td data-label="S.No.">1</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">7</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>चित्रांगदा सिंह, राजस्थान की एक कलाकार, किस क्षेत्र में सर्वाधिक प्रसिद्ध हैं?</p>
-                        <div class="options-container">
-                            <label><input type="radio" name="q1" value="A" onchange="updateAnswer(this, 1, 'A')">(A) अभिनेत्री</label>
-                            <label><input type="radio" name="q1" value="B" onchange="updateAnswer(this, 1, 'B')">(B) संगीतकार</label>
-                            <label><input type="radio" name="q1" value="C" onchange="updateAnswer(this, 1, 'C')">(C) मूर्तिकला</label>
-                            <label><input type="radio" name="q1" value="D" onchange="updateAnswer(this, 1, 'D')">(D) चित्रकार</label>
-                            <label><input type="radio" name="q1" value="E" onchange="updateAnswer(this, 1, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">A</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">3</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">42</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>भारत का सबसे बड़ा मरुस्थल कौन सा है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q3" value="A" onchange="updateAnswer(this, 3, 'A')">(A) थार रेगिस्तान</label>
-                            <label><input type="radio" name="q3" value="B" onchange="updateAnswer(this, 3, 'B')">(B) कच्छ का रण</label>
-                            <label><input type="radio" name="q3" value="C" onchange="updateAnswer(this, 3, 'C')">(C) स्पीति घाटी ठंडा रेगिस्तान</label>
-                            <label><input type="radio" name="q3" value="D" onchange="updateAnswer(this, 3, 'D')">(D) दक्कन काँटेदार झाड़ियाँ</label>
-                            <label><input type="radio" name="q3" value="E" onchange="updateAnswer(this, 3, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">A</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-            </tbody>
-        </table>
+</header>
+
+<div class="content-wrapper">
+    <div class="container">
+        <div class="page-header">
+            <h1>4th Grade 2nd Shift Analysis</h1>
+            <div class="controls-container">
+                 <label class="theme-switch-label" for="theme-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>
+                    <div class="switch">
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider"></span>
+                    </div>
+                </label>
+                <button class="action-button" id="print-btn">Print Sheet</button>
+            </div>
+        </div>
+
+        <div class="filter-container" id="filter-container">
+            <button class="filter-btn active" data-filter="all">सभी</button>
+            <button class="filter-btn" data-filter="correct">सही</button>
+            <button class="filter-btn" data-filter="incorrect">गलत</button>
+            <button class="filter-btn" data-filter="skipped">छोड़े गए</button>
+        </div>
+        
+        <div class="print-header">
+            <h1>4th Grade 2nd Shift Analysis</h1>
+            <div class="stats-container" id="stats-container-print"></div>
+        </div>
+
+        <div class="table-container">
+            <table class="test-table" id="analysisTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-column-index="0">S.No.<span class="sort-arrow"></span></th>
+                        <th class="sortable" data-column-index="1">My Paper<span class="sort-arrow"></span></th>
+                        <th class="question-col sortable" data-column-index="2">प्रश्न<span class="sort-arrow"></span></th>
+                        <th>My Ans.</th>
+                        <th>Official</th>
+                        <th class="sortable" data-column-index="5">परिणाम<span class="sort-arrow"></span></th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <script>
-    // All your existing JS code remains the same
-    const ICONS = {
-        correct: `<svg style="color:var(--correct-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>`,
-        incorrect: `<svg style="color:var(--incorrect-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>`,
-        skipped: `<svg style="color:var(--skipped-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg>`,
-        unattempted: `<svg style="color:#ced4da" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/></svg>`
-    };
+// --- 1. DATA ---
+const questionsData = [
+    {
+        s_no: 1, my_paper_sno: 7, question_text: "चित्रांगदा सिंह, राजस्थान की एक कलाकार, किस क्षेत्र में सर्वाधिक प्रसिद्ध हैं?", options: { A: "अभिनेत्री", B: "संगीतकार", C: "मूर्तिकला", D: "चित्रकार" }, official_answer: "A"
+    },
+    {
+        s_no: 2, my_paper_sno: 15, question_text: "राजस्थान की राजधानी क्या है?", options: { A: "जोधपुर", B: "जयपुर", C: "उदयपुर", D: "अजमेर" }, official_answer: "B"
+    },
+    {
+        s_no: 3, my_paper_sno: 42, question_text: "भारत का सबसे बड़ा मरुस्थल कौन सा है?", options: { A: "थार रेगिस्तान", B: "कच्छ का रण", C: "स्पीति घाटी ठंडा रेगिस्तान", D: "दक्कन काँटेदार झाड़ियाँ" }, official_answer: "A"
+    },
+];
 
-    function updateAnswer(radioInput, questionNumber, selectedOption) {
-        const currentRow = radioInput.closest('tr');
-        const myAnsCell = currentRow.cells[3];
-        const officialKeyCell = currentRow.cells[4];
-        const resultCell = currentRow.cells[5].querySelector('.result-icon');
-        const currentLabel = radioInput.closest('label');
-        const questionContainer = radioInput.closest('.options-container');
+// --- 2. ICONS & CONSTANTS ---
+const ICONS = {
+    correct: `<svg style="color:var(--correct-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>`,
+    incorrect: `<svg style="color:var(--incorrect-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>`,
+    skipped: `<svg style="color:var(--skipped-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg>`,
+    unattempted: `<svg style="color:#ced4da" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/></svg>`
+};
+let currentSort = { column: null, direction: 'asc' };
 
-        myAnsCell.textContent = selectedOption;
+// --- 3. DOM ELEMENTS ---
+const tableBody = document.getElementById('table-body');
+const themeToggle = document.getElementById('theme-toggle');
 
-        questionContainer.querySelectorAll('label').forEach(lbl => {
-            lbl.classList.remove('option-correct', 'option-incorrect', 'option-skipped');
-        });
+// --- 4. CORE FUNCTIONS ---
 
-        const officialAnswer = officialKeyCell.textContent.trim();
+function renderTable() {
+    tableBody.innerHTML = '';
+    questionsData.forEach(q => {
+        const row = document.createElement('tr');
+        row.dataset.questionSno = q.s_no;
         
-        if (selectedOption === 'E') {
-            currentLabel.classList.add('option-skipped');
-            resultCell.innerHTML = ICONS.skipped;
-        } else if (selectedOption === officialAnswer) {
-            currentLabel.classList.add('option-correct');
-            resultCell.innerHTML = ICONS.correct;
-        } else {
-            currentLabel.classList.add('option-incorrect');
-            resultCell.innerHTML = ICONS.incorrect;
-        }
+        let optionsHTML = Object.entries(q.options)
+            .map(([key, value]) => `<label><input type="radio" name="q${q.s_no}" value="${key}">( ${key} ) ${value}</label>`)
+            .join('');
+        optionsHTML += `<label><input type="radio" name="q${q.s_no}" value="E">( E ) प्रश्न हल नहीं किया</label>`;
 
-        localStorage.setItem('q' + questionNumber + '_answer', selectedOption);
-        updateSummaryAndScore();
-    }
+        row.innerHTML = `
+            <td data-label="S.No.">${q.s_no}</td> 
+            <td data-label="My Paper" class="editable-cell"><span data-sno="${q.s_no}">${q.my_paper_sno}</span></td> 
+            <td data-label="प्रश्न" class="question-col"><p>${q.question_text}</p><div class="options-container">${optionsHTML}</div></td>
+            <td data-label="My Ans."></td> 
+            <td data-label="Official">${q.official_answer}</td> 
+            <td data-label="परिणाम" data-result="unattempted"><span class="result-icon">${ICONS.unattempted}</span></td>
+        `;
+        tableBody.appendChild(row);
+    });
+    loadSavedState();
+}
 
-    function updateSummaryAndScore() {
-        const rows = document.querySelectorAll("#analysisTable tbody tr");
-        let correct = 0, incorrect = 0, skipped = 0;
-        rows.forEach(row => {
-            const resultIconSVG = row.cells[5].querySelector('.result-icon svg');
-            if (resultIconSVG) {
-                const color = resultIconSVG.style.color;
-                if (color.includes('var(--correct-color)')) correct++;
-                else if (color.includes('var(--incorrect-color)')) incorrect++;
-                else if (color.includes('var(--skipped-color)')) skipped++;
-            }
-        });
-
-        document.getElementById('total-count').textContent = rows.length;
-        document.getElementById('correct-count').textContent = correct;
-        document.getElementById('incorrect-count').textContent = incorrect;
-        document.getElementById('skipped-count').textContent = skipped;
-        
-        const finalScore = correct - (incorrect / 3);
-        document.getElementById('final-score-val').textContent = finalScore.toFixed(2);
-        
-        const finalMarks = finalScore * 1.6666666;
-        document.getElementById('final-marks-val').textContent = finalMarks.toFixed(2);
-    }
+function updateAnswer(radioInput) {
+    const selectedOption = radioInput.value;
+    const row = radioInput.closest('tr');
+    const questionSno = row.dataset.questionSno;
     
-    function loadSavedAnswers() {
-        document.querySelectorAll('#analysisTable tbody tr').forEach((row, index) => {
-            const qName = 'q' + (index + 1);
-            const savedAnswer = localStorage.getItem(qName + '_answer');
-            if(savedAnswer) {
-                const radio = row.querySelector(`input[type="radio"][value="${savedAnswer}"]`);
-                if(radio) {
-                    radio.checked = true;
-                    updateAnswer(radio, index + 1, savedAnswer);
-                }
-            } else {
-                 const iconSpan = row.querySelector('.result-icon');
-                 if (!iconSpan.innerHTML) {
-                    iconSpan.innerHTML = ICONS.unattempted;
-                }
-            }
-        });
-        updateSummaryAndScore();
+    const myAnsCell = row.cells[3];
+    const officialAnswer = row.cells[4].textContent.trim();
+    const resultCell = row.cells[5];
+    
+    myAnsCell.textContent = selectedOption;
+    row.querySelectorAll('.options-container label').forEach(lbl => lbl.classList.remove('option-correct', 'option-incorrect', 'option-skipped'));
+    const currentLabel = radioInput.closest('label');
+    
+    if (selectedOption === 'E') {
+        currentLabel.classList.add('option-skipped');
+        resultCell.querySelector('.result-icon').innerHTML = ICONS.skipped;
+        resultCell.dataset.result = 'skipped';
+    } else if (selectedOption === officialAnswer) {
+        currentLabel.classList.add('option-correct');
+        resultCell.querySelector('.result-icon').innerHTML = ICONS.correct;
+        resultCell.dataset.result = 'correct';
+    } else {
+        currentLabel.classList.add('option-incorrect');
+        resultCell.querySelector('.result-icon').innerHTML = ICONS.incorrect;
+        resultCell.dataset.result = 'incorrect';
     }
 
-    function loadMyPaperNumbers() {
-        document.querySelectorAll('#analysisTable tbody tr').forEach(row => {
-            const masterSNoCell = row.cells[0];
-            const myPaperCell = row.cells[1];
-            if (masterSNoCell && myPaperCell) {
-                const masterSNo = masterSNoCell.textContent.trim();
-                const storageKey = `myPaper_sno_${masterSNo}`;
-                const savedValue = localStorage.getItem(storageKey);
-                if (savedValue) {
-                    myPaperCell.querySelector('span').textContent = savedValue;
-                }
-            }
-        });
-    }
+    localStorage.setItem(`q${questionSno}_answer`, selectedOption);
+    updateSummaryAndScore();
+}
 
-    function editCell(spanElement) {
-        const currentVal = spanElement.textContent;
-        const parentTd = spanElement.parentNode;
-        
-        const input = document.createElement('input');
-        input.type = 'number';
-        input.value = currentVal;
-        
-        input.onblur = () => saveCell(input);
-        input.onkeydown = (event) => {
-            if (event.key === 'Enter') {
-                saveCell(input);
-            } else if (event.key === 'Escape') {
-                const span = document.createElement('span');
-                span.textContent = currentVal;
-                span.onclick = () => editCell(span);
-                parentTd.innerHTML = '';
-                parentTd.appendChild(span);
-            }
-        };
-        
-        parentTd.innerHTML = '';
-        parentTd.appendChild(input);
-        input.focus();
-    }
+function updateSummaryAndScore() {
+    const rows = tableBody.querySelectorAll("tr");
+    let correct = 0, incorrect = 0, skipped = 0;
+    
+    rows.forEach(row => {
+        const result = row.cells[5].dataset.result;
+        if (result === 'correct') correct++;
+        else if (result === 'incorrect') incorrect++;
+        else if (result === 'skipped') skipped++;
+    });
 
-    function saveCell(inputElement) {
-        const newVal = inputElement.value;
-        const parentTd = inputElement.parentNode;
-        const masterSNo = parentTd.closest('tr').cells[0].textContent.trim();
-        const storageKey = `myPaper_sno_${masterSNo}`;
+    document.getElementById('total-count').textContent = rows.length;
+    document.getElementById('correct-count').textContent = correct;
+    document.getElementById('incorrect-count').textContent = incorrect;
+    document.getElementById('skipped-count').textContent = skipped;
+    document.getElementById('final-score-val').textContent = (correct - (incorrect / 3)).toFixed(2);
+}
 
-        localStorage.setItem(storageKey, newVal);
-        
-        const span = document.createElement('span');
-        span.textContent = newVal;
-        span.onclick = () => editCell(span);
-        
-        parentTd.innerHTML = '';
-        parentTd.appendChild(span);
-    }
+function sortTable(headerCell, columnIndex) {
+    const rows = Array.from(tableBody.rows);
+    const direction = (currentSort.column === columnIndex && currentSort.direction === 'asc') ? 'desc' : 'asc';
+    currentSort = { column: columnIndex, direction: direction };
 
-    document.addEventListener('DOMContentLoaded', () => {
-        loadSavedAnswers();
-        loadMyPaperNumbers();
+    document.querySelectorAll('th.sortable .sort-arrow').forEach(arrow => arrow.textContent = '');
+    headerCell.querySelector('.sort-arrow').textContent = direction === 'asc' ? '▲' : '▼';
+    const resultPriority = { correct: 1, incorrect: 2, skipped: 3, unattempted: 4 };
+
+    rows.sort((rowA, rowB) => {
+        let valA, valB;
+        if (columnIndex === 5) {
+            valA = resultPriority[rowA.cells[columnIndex].dataset.result];
+            valB = resultPriority[rowB.cells[columnIndex].dataset.result];
+        } else {
+            valA = rowA.cells[columnIndex].textContent.trim();
+            valB = rowB.cells[columnIndex].textContent.trim();
+        }
+        if (!isNaN(parseFloat(valA)) && isFinite(valA) && !isNaN(parseFloat(valB)) && isFinite(valB)) {
+            valA = parseFloat(valA); valB = parseFloat(valB);
+        }
+        let comparison = valA > valB ? 1 : (valA < valB ? -1 : 0);
+        return direction === 'asc' ? comparison : -comparison;
     });
     
-    let currentSort = { column: null, direction: 'asc' };
+    rows.forEach(row => tableBody.appendChild(row));
+}
 
-    function sortTable(headerCell, columnIndex) {
-        const table = document.getElementById("analysisTable");
-        const tbody = table.tBodies[0];
-        const rows = Array.from(tbody.rows);
-        
-        const direction = (currentSort.column === columnIndex && currentSort.direction === 'asc') ? 'desc' : 'asc';
-        currentSort = { column: columnIndex, direction: direction };
+function editCell(spanElement) {
+    const currentVal = spanElement.textContent;
+    const parentTd = spanElement.parentNode;
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.value = currentVal;
 
-        table.querySelectorAll('th.sortable .sort-arrow').forEach(arrow => arrow.textContent = '');
-        headerCell.querySelector('.sort-arrow').textContent = direction === 'asc' ? '▲' : '▼';
+    const save = () => {
+        localStorage.setItem(`myPaper_sno_${spanElement.dataset.sno}`, input.value);
+        spanElement.textContent = input.value;
+        parentTd.innerHTML = '';
+        parentTd.appendChild(spanElement);
+    };
+    
+    input.onblur = save;
+    input.onkeydown = e => { if (e.key === 'Enter') save(); else if (e.key === 'Escape') parentTd.innerHTML = ''; parentTd.appendChild(spanElement); };
+    parentTd.innerHTML = '';
+    parentTd.appendChild(input);
+    input.focus();
+}
 
-        const resultPriority = {
-            'var(--correct-color)': 1,
-            'var(--incorrect-color)': 2,
-            'var(--skipped-color)': 3,
-            '#ced4da': 4
-        };
+function filterTable(filter) {
+    tableBody.querySelectorAll('tr').forEach(row => {
+        row.style.display = (filter === 'all' || filter === row.cells[5].dataset.result) ? '' : 'none';
+    });
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
+}
 
-        rows.sort((rowA, rowB) => {
-            let valA, valB;
-            if (columnIndex === 5) {
-                const svgA = rowA.cells[columnIndex].querySelector('svg');
-                const svgB = rowB.cells[columnIndex].querySelector('svg');
-                valA = svgA ? resultPriority[svgA.style.color] : 5;
-                valB = svgB ? resultPriority[svgB.style.color] : 5;
-            } else {
-                valA = rowA.cells[columnIndex].textContent.trim();
-                valB = rowB.cells[columnIndex].textContent.trim();
-            }
+function toggleDarkMode(isDark) {
+    document.body.classList.toggle('dark-mode', isDark);
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
 
-            const isNumeric = !isNaN(parseFloat(valA)) && isFinite(valA) && !isNaN(parseFloat(valB)) && isFinite(valB);
-            if (isNumeric) {
-                valA = parseFloat(valA);
-                valB = parseFloat(valB);
-            }
+function loadSavedState() {
+    tableBody.querySelectorAll('tr').forEach(row => {
+        const qSno = row.dataset.questionSno;
+        const savedAnswer = localStorage.getItem(`q${qSno}_answer`);
+        if (savedAnswer) {
+            const radio = row.querySelector(`input[type="radio"][value="${savedAnswer}"]`);
+            if (radio) { radio.checked = true; updateAnswer(radio); }
+        }
+    });
+    tableBody.querySelectorAll('.editable-cell span').forEach(span => {
+        const savedValue = localStorage.getItem(`myPaper_sno_${span.dataset.sno}`);
+        if (savedValue) span.textContent = savedValue;
+    });
+    updateSummaryAndScore();
+}
 
-            let comparison = 0;
-            if (valA > valB) {
-                comparison = 1;
-            } else if (valA < valB) {
-                comparison = -1;
-            }
-            return direction === 'asc' ? comparison : -comparison;
-        });
-        
-        tbody.innerHTML = '';
-        rows.forEach(row => tbody.appendChild(row));
-    }
+// --- 5. EVENT LISTENERS ---
+document.addEventListener('DOMContentLoaded', () => {
+    renderTable();
+
+    tableBody.addEventListener('click', e => {
+        if (e.target.type === 'radio') updateAnswer(e.target);
+        if (e.target.tagName === 'SPAN' && e.target.closest('.editable-cell')) editCell(e.target);
+    });
+    
+    const savedTheme = localStorage.getItem('theme');
+    themeToggle.checked = savedTheme === 'dark';
+    toggleDarkMode(themeToggle.checked);
+    themeToggle.addEventListener('change', () => toggleDarkMode(themeToggle.checked));
+
+    document.getElementById('filter-container').addEventListener('click', e => {
+        if (e.target.classList.contains('filter-btn')) filterTable(e.target.dataset.filter);
+    });
+
+    document.querySelectorAll('th.sortable').forEach(header => {
+        header.addEventListener('click', () => sortTable(header, parseInt(header.dataset.columnIndex)));
+    });
+
+    document.getElementById('print-btn').addEventListener('click', () => {
+        const mainStats = document.getElementById('stats-bar');
+        const printStats = document.getElementById('stats-container-print');
+        printStats.innerHTML = mainStats.innerHTML;
+        window.print();
+    });
+});
 </script>
 
 </body>
