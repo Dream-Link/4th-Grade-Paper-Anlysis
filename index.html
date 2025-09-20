@@ -108,7 +108,7 @@
         }
         .omr-modal-content {
             background-color: #fff; margin: 15% auto; padding: 25px; border: 1px solid #888;
-            width: 90%; max-width: 400px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 90%; max-width: 500px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         .omr-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .omr-modal-header h2 { margin: 0; font-size: 1.2em; }
@@ -117,7 +117,7 @@
         .omr-modal-body .form-group { margin-bottom: 15px; }
         .omr-modal-body label { display: block; margin-bottom: 5px; font-weight: 500; }
         .omr-modal-body input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 6px; }
-        .omr-modal-footer { text-align: right; }
+        .omr-modal-footer { text-align: right; display: flex; gap: 10px; justify-content: flex-end; }
 
         /* --- Responsive Styles --- */
         @media (max-width: 768px) {
@@ -173,7 +173,6 @@
             .omr-print-header .stats-bar .stat-card b { font-size: 1.2em; }
             .omr-student-details { display: flex; justify-content: space-between; margin-top: 10px; padding: 8px; border-top: 1px solid #333; border-bottom: 1px solid #333; font-size: 11pt; }
             
-            /* --- FIXED: OMR Column Layout --- */
             .omr-grid-container {
                 column-count: 4;
                 column-gap: 20px;
@@ -181,15 +180,29 @@
             .omr-question-row {
                 display: flex;
                 align-items: center;
-                break-inside: avoid; /* Prevents rows from splitting across columns */
+                break-inside: avoid;
                 margin-bottom: 5px;
             }
             .omr-question-number { font-weight: bold; width: 30px; text-align: right; margin-right: 5px; font-size: 9pt; }
             .omr-options { display: flex; gap: 4px; }
             .omr-option { width: 18px; height: 18px; border: 1px solid #555; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 8pt; }
-            .omr-option.filled-correct { background-color: var(--correct-light) !important; border-color: var(--correct-color) !important; }
-            .omr-option.filled-incorrect { background-color: var(--incorrect-light) !important; border-color: var(--incorrect-color) !important; }
-            .omr-option.filled-skipped { background-color: var(--skipped-light) !important; border-color: var(--skipped-color) !important; }
+            
+            /* --- !! CHANGED CODE FOR DARKER OMR BUBBLES !! --- */
+            .omr-option.filled-correct { 
+                background-color: var(--correct-color) !important; 
+                border-color: var(--correct-color) !important; 
+                color: #fff !important; 
+            }
+            .omr-option.filled-incorrect { 
+                background-color: var(--incorrect-color) !important; 
+                border-color: var(--incorrect-color) !important; 
+                color: #fff !important; 
+            }
+            .omr-option.filled-skipped { 
+                background-color: var(--skipped-color) !important; 
+                border-color: var(--skipped-color) !important; 
+                color: #fff !important; 
+            }
             .omr-option.filled-correct, .omr-option.filled-incorrect, .omr-option.filled-skipped { -webkit-print-color-adjust: exact; color-adjust: exact; }
 
             /* --- Styles for Regular "Print Sheet" --- */
@@ -310,7 +323,8 @@
             </div>
         </div>
         <div class="omr-modal-footer">
-            <button class="action-button" id="confirm-omr-print-btn">Print OMR</button>
+            <button class="action-button" id="confirm-omr-print-master-btn">Print (Master Paper Order)</button>
+            <button class="action-button secondary" id="confirm-omr-print-my-paper-btn">Print (My Paper Order)</button>
         </div>
     </div>
 </div>
@@ -335,11 +349,10 @@ const questionsData = [
     { s_no: 2, my_paper_sno: 15, question_text: "राजस्थान की राजधानी क्या है?", options: { A: "जोधपुर", B: "जयपुर", C: "उदयपुर", D: "अजमेर" }, official_answer: "B" },
     { s_no: 3, my_paper_sno: 42, question_text: "भारत का सबसे बड़ा मरुस्थल कौन सा है?", options: { A: "थार रेगिस्तान", B: "कच्छ का रण", C: "स्पीति घाटी ठंडा रेगिस्तान", D: "दक्कन काँटेदार झाड़ियाँ" }, official_answer: "A" },
 ];
-// Populate with dummy data up to 120
 for (let i = 4; i <= 120; i++) {
     questionsData.push({ 
         s_no: i, 
-        my_paper_sno: i, 
+        my_paper_sno: Math.floor(Math.random() * 120) + 1, // random for testing
         question_text: `प्रश्न संख्या ${i} का पाठ यहाँ आएगा।`, 
         options: { A: "विकल्प A", B: "विकल्प B", C: "विकल्प C", D: "विकल्प D" }, 
         official_answer: "A" 
@@ -362,12 +375,14 @@ const studentNameInput = document.getElementById('student-name-input');
 const omrModal = document.getElementById('omr-modal');
 const omrModalCloseBtn = document.querySelector('.omr-modal-close');
 const printOmrBtn = document.getElementById('print-omr-btn');
-const confirmOmrPrintBtn = document.getElementById('confirm-omr-print-btn');
+const confirmOmrPrintMasterBtn = document.getElementById('confirm-omr-print-master-btn');
+const confirmOmrPrintMyPaperBtn = document.getElementById('confirm-omr-print-my-paper-btn');
 
-// --- 4. CORE FUNCTIONS (No changes to core logic, only print functions) ---
 
+// --- 4. CORE FUNCTIONS ---
 function renderTable() {
     tableBody.innerHTML = '';
+    const fragment = document.createDocumentFragment();
     questionsData.forEach(q => {
         const row = document.createElement('tr');
         row.dataset.questionSno = q.s_no;
@@ -385,9 +400,9 @@ function renderTable() {
             <td data-label="Official Answer">${q.official_answer}</td> 
             <td data-label="Result" data-result="unattempted"><span class="result-icon">${ICONS.unattempted}</span></td>
         `;
-        tableBody.appendChild(row);
+        fragment.appendChild(row);
     });
-    loadSavedState();
+    tableBody.appendChild(fragment);
 }
 
 function updateAnswer(radioInput) {
@@ -453,16 +468,17 @@ function sortTable(headerCell, columnIndex) {
 
     rows.sort((rowA, rowB) => {
         let valA, valB;
-        if (columnIndex === 5) {
+        if (columnIndex === 5) { // Result column
             valA = resultPriority[rowA.cells[columnIndex].dataset.result];
             valB = resultPriority[rowB.cells[columnIndex].dataset.result];
-        } else {
-            valA = rowA.cells[columnIndex].textContent.trim();
-            valB = rowB.cells[columnIndex].textContent.trim();
+        } else if (columnIndex === 0 || columnIndex === 1) { // Numeric columns
+            valA = parseFloat(rowA.cells[columnIndex].textContent.trim());
+            valB = parseFloat(rowB.cells[columnIndex].textContent.trim());
+        } else { // Text column
+             valA = rowA.cells[columnIndex].textContent.trim();
+             valB = rowB.cells[columnIndex].textContent.trim();
         }
-        if (!isNaN(parseFloat(valA)) && isFinite(valA) && !isNaN(parseFloat(valB)) && isFinite(valB)) {
-            valA = parseFloat(valA); valB = parseFloat(valB);
-        }
+
         let comparison = valA > valB ? 1 : (valA < valB ? -1 : 0);
         return direction === 'asc' ? comparison : -comparison;
     });
@@ -478,8 +494,17 @@ function editCell(spanElement) {
     input.value = currentVal;
 
     const save = () => {
-        localStorage.setItem(`myPaper_sno_${spanElement.dataset.sno}`, input.value);
-        spanElement.textContent = input.value;
+        const newValue = input.value;
+        const qSno = spanElement.dataset.sno;
+        
+        // Update the source data array for consistency
+        const question = questionsData.find(q => q.s_no == qSno);
+        if (question) {
+            question.my_paper_sno = newValue;
+        }
+
+        localStorage.setItem(`myPaper_sno_${qSno}`, newValue);
+        spanElement.textContent = newValue;
         parentTd.innerHTML = '';
         parentTd.appendChild(spanElement);
     };
@@ -499,26 +524,65 @@ function filterTable(filter) {
 }
 
 function loadSavedState() {
+    // This function now MODIFIES the existing table instead of re-rendering it.
     tableBody.querySelectorAll('tr').forEach(row => {
         const qSno = row.dataset.questionSno;
+
+        // 1. Load and set "My Paper S.N." from localStorage
+        const savedMyPaperSno = localStorage.getItem(`myPaper_sno_${qSno}`);
+        const question = questionsData.find(q => q.s_no == qSno);
+        if (savedMyPaperSno) {
+            row.querySelector('.editable-cell span').textContent = savedMyPaperSno;
+            if (question) question.my_paper_sno = savedMyPaperSno; // Sync with data array
+        }
+        
+        // 2. Load and set saved answer from localStorage
         const savedAnswer = localStorage.getItem(`q${qSno}_answer`);
         if (savedAnswer) {
             const radio = row.querySelector(`input[type="radio"][value="${savedAnswer}"]`);
-            if (radio) { radio.checked = true; updateAnswer(radio); }
+            if (radio) {
+                radio.checked = true;
+                // Apply visual styles without triggering a full recalculation for every row
+                const myAnsCell = row.cells[3];
+                const officialAnswer = row.cells[4].textContent.trim();
+                const resultCell = row.cells[5];
+                myAnsCell.textContent = savedAnswer;
+                const currentLabel = radio.closest('label');
+                row.querySelectorAll('.options-container label').forEach(lbl => lbl.classList.remove('option-correct', 'option-incorrect', 'option-skipped'));
+
+                if (savedAnswer === 'E') {
+                    currentLabel.classList.add('option-skipped');
+                    resultCell.querySelector('.result-icon').innerHTML = ICONS.skipped;
+                    resultCell.dataset.result = 'skipped';
+                } else if (savedAnswer === officialAnswer) {
+                    currentLabel.classList.add('option-correct');
+                    resultCell.querySelector('.result-icon').innerHTML = ICONS.correct;
+                    resultCell.dataset.result = 'correct';
+                } else {
+                    currentLabel.classList.add('option-incorrect');
+                    resultCell.querySelector('.result-icon').innerHTML = ICONS.incorrect;
+                    resultCell.dataset.result = 'incorrect';
+                }
+            }
         }
     });
-    tableBody.querySelectorAll('.editable-cell span').forEach(span => {
-        const savedValue = localStorage.getItem(`myPaper_sno_${span.dataset.sno}`);
-        if (savedValue) span.textContent = savedValue;
-    });
+    
+    // 3. Load saved student name
     const savedName = localStorage.getItem('studentName');
     if (savedName) {
         studentNameInput.value = savedName;
     }
+    
+    // 4. Update the score summary ONCE at the end. This is the key performance fix.
     updateSummaryAndScore();
 }
 
-function prepareAndPrintOMR() {
+
+/**
+ * Prepares and prints the OMR sheet.
+ * @param {('master'|'my_paper')} sortBy - The criteria to sort the questions by.
+ */
+function prepareAndPrintOMR(sortBy = 'master') {
     const studentName = document.getElementById('omr-student-name').value.trim();
     const rollNumber = document.getElementById('omr-roll-number').value.trim();
 
@@ -529,20 +593,32 @@ function prepareAndPrintOMR() {
     document.getElementById('omr-print-rollno-display').textContent = `Roll No: ${rollNumber || 'N/A'}`;
 
     const gridContainer = document.getElementById('omr-grid-container');
-    gridContainer.innerHTML = ''; 
-    const allRows = Array.from(document.getElementById('table-body').querySelectorAll('tr'));
+    gridContainer.innerHTML = '';
     
-    allRows.sort((a, b) => {
-        const snoA = parseInt(a.querySelector('td:first-child').textContent);
-        const snoB = parseInt(b.querySelector('td:first-child').textContent);
+    // Create a temporary array from questionsData to sort, ensuring it reflects recent edits.
+    const printableData = Array.from(document.querySelectorAll('#table-body tr')).map(row => {
+        return {
+            masterSno: row.dataset.questionSno,
+            myPaperSno: row.cells[1].textContent.trim(),
+            myAnswer: row.cells[3].textContent.trim(),
+            result: row.cells[5].dataset.result
+        };
+    });
+    
+    printableData.sort((a, b) => {
+        let snoA, snoB;
+        if (sortBy === 'my_paper') {
+            snoA = parseInt(a.myPaperSno, 10);
+            snoB = parseInt(b.myPaperSno, 10);
+        } else { // Default to 'master' order
+            snoA = parseInt(a.masterSno, 10);
+            snoB = parseInt(b.masterSno, 10);
+        }
         return snoA - snoB;
     });
 
-    allRows.forEach(row => {
-        const questionSno = row.dataset.questionSno;
-        const myAnswer = row.cells[3].textContent;
-        const result = row.cells[5].dataset.result;
-
+    printableData.forEach(item => {
+        const questionNumberForDisplay = (sortBy === 'my_paper') ? item.myPaperSno : item.masterSno;
         const rowDiv = document.createElement('div');
         rowDiv.className = 'omr-question-row';
 
@@ -550,16 +626,16 @@ function prepareAndPrintOMR() {
         const options = ['A', 'B', 'C', 'D', 'E'];
         options.forEach(opt => {
             let fillClass = '';
-            if (myAnswer === opt) {
-                if (result === 'correct') fillClass = 'filled-correct';
-                else if (result === 'incorrect') fillClass = 'filled-incorrect';
-                else if (result === 'skipped') fillClass = 'filled-skipped';
+            if (item.myAnswer === opt) {
+                if (item.result === 'correct') fillClass = 'filled-correct';
+                else if (item.result === 'incorrect') fillClass = 'filled-incorrect';
+                else if (item.result === 'skipped') fillClass = 'filled-skipped';
             }
             optionsHTML += `<div class="omr-option ${fillClass}">${opt}</div>`;
         });
 
         rowDiv.innerHTML = `
-            <span class="omr-question-number">${questionSno}.</span>
+            <span class="omr-question-number">${questionNumberForDisplay}.</span>
             <div class="omr-options">${optionsHTML}</div>
         `;
         gridContainer.appendChild(rowDiv);
@@ -573,7 +649,10 @@ function prepareAndPrintOMR() {
 
 // --- 5. EVENT LISTENERS ---
 document.addEventListener('DOMContentLoaded', () => {
+    // First, render the table structure.
     renderTable();
+    // Then, load all saved data and apply it to the table.
+    loadSavedState();
 
     tableBody.addEventListener('click', e => {
         if (e.target.type === 'radio') updateAnswer(e.target);
@@ -635,7 +714,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    confirmOmrPrintBtn.addEventListener('click', prepareAndPrintOMR);
+    confirmOmrPrintMasterBtn.addEventListener('click', () => prepareAndPrintOMR('master'));
+    confirmOmrPrintMyPaperBtn.addEventListener('click', () => prepareAndPrintOMR('my_paper'));
+
 });
 </script>
 
