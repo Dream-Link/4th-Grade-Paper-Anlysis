@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4th Grade 2nd Shift - Final</title>
+    <title>4th Grade 2nd Shift - Final Version</title>
     
     <meta name="theme-color" content="#343a40"/>
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -59,7 +59,7 @@
             transition: background-color var(--transition-speed), color var(--transition-speed);
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
-        .content-wrapper { padding-top: 80px; /* Space for the sticky header */ }
+        .content-wrapper { padding-top: 80px; }
 
         /* --- Sticky Header & Stats Bar --- */
         .sticky-header {
@@ -71,40 +71,20 @@
             padding: 12px 24px;
             transition: background-color var(--transition-speed);
         }
-        body.dark-mode .sticky-header {
-             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-        }
-        .stats-bar {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .stat-card {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-align: center;
-        }
+        body.dark-mode .sticky-header { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); }
+        .stats-bar { display: flex; justify-content: space-around; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto; }
+        .stat-card { display: flex; align-items: center; gap: 8px; text-align: center; }
         .stat-card svg { width: 18px; height: 18px; color: var(--text-light); }
-        .stat-card .stat-content span { font-size: 0.75em; font-weight: 500; color: var(--text-light); display: block; }
+        .stat-card .stat-content span { font-size: 0.75em; font-weight: 500; color: var(--text-light); display: block; white-space: nowrap; }
         .stat-card .stat-content b { font-size: 1.1em; font-weight: 700; color: var(--text-color); }
         #correct-count { color: var(--correct-color); }
         #incorrect-count { color: var(--incorrect-color); }
         #skipped-count { color: var(--skipped-color); }
         #final-score-val { color: var(--primary-color); }
+        #final-marks-val { color: #fd7e14; }
 
         /* --- Title & Page Controls --- */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap; 
-            gap: 16px;
-        }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
         h1 { color: var(--header-bg); font-weight: 700; margin: 0; }
         .controls-container { display: flex; align-items: center; gap: 16px; }
         .action-button { background-color: var(--primary-color); color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: 500; transition: background-color 0.2s; }
@@ -143,17 +123,14 @@
         .options-container label.option-skipped { font-weight: 600; border-color: var(--skipped-color); background-color: var(--skipped-light); }
         
         /* --- Responsive Styles --- */
-        @media (max-width: 992px) {
-            .stats-bar { flex-wrap: wrap; justify-content: space-between; row-gap: 10px; }
-            .stat-card { flex-basis: 30%; justify-content: center; }
-            .content-wrapper { padding-top: 110px; }
-        }
-
         @media (max-width: 768px) {
-            .sticky-header { padding: 8px 16px; }
-            .content-wrapper { padding-top: 100px; }
-            .stat-card .stat-content span { font-size: 0.7em; }
-            .stat-card .stat-content b { font-size: 1em; }
+            .content-wrapper { padding-top: 70px; }
+            .sticky-header { padding: 8px 12px; }
+            .stats-bar { justify-content: space-between; gap: 4px; }
+            .stat-card { gap: 4px; }
+            .stat-card svg { width: 14px; height: 14px; }
+            .stat-card .stat-content span { font-size: 0.65em; }
+            .stat-card .stat-content b { font-size: 0.9em; }
 
             .test-table thead { display: none; }
             .test-table tr { display: block; border-radius: 10px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border-color); overflow: hidden; background-color: var(--surface-color); }
@@ -163,11 +140,12 @@
             .test-table td.question-col { display: block; text-align: left; }
             .test-table td.question-col::before { display: block; margin-bottom: 8px; }
         }
+        
         @media (max-width: 480px) {
-             .content-wrapper { padding-top: 140px; }
-             .stat-card { flex-basis: 45%; }
+            .stats-bar { flex-wrap: wrap; justify-content: space-around; row-gap: 8px; }
+            .content-wrapper { padding-top: 100px; }
+            .stat-card { flex-basis: 45%; justify-content: center; }
         }
-
 
         /* --- Final Print Styles --- */
         @media print {
@@ -176,15 +154,13 @@
             .content-wrapper { padding-top: 0; }
             .print-header { display: block !important; text-align: center; margin-bottom: 16px; border-bottom: 2px solid #333; padding-bottom: 12px; }
             .print-header h1 { font-size: 16pt; }
-            .print-header .stats-container { justify-content: center; gap: 0; border: 1px solid #ccc; border-radius: 6px; padding: 0; overflow: hidden; display: inline-flex; }
-            .print-header .stat-card { padding: 6px 10px; border: none; box-shadow: none; border-radius: 0; background-color: transparent; border-right: 1px solid #ccc; }
-            .print-header .stat-card:last-child { border-right: none; }
-            .print-header .stat-card span { font-size: 0.8em; }
-            .print-header .stat-card b { font-size: 1.1em; font-weight: 700; }
+            .print-header .stats-container { display: flex; width: 100%; justify-content: space-around; align-items: center; border: 1px solid #ccc; border-radius: 6px; padding: 8px 0; }
+            .print-header .stat-card { padding: 6px 10px; }
             .table-container { box-shadow: none; border-radius: 0; }
             .test-table { width: 100%; border-collapse: collapse; }
             .test-table thead { display: table-header-group !important; }
             .test-table tr, .test-table td { display: revert !important; }
+            tr.hide-in-print { display: none !important; }
             .test-table td::before { display: none !important; }
             .test-table th, .test-table td { padding: 4px 5px; border: 1px solid #bbb; text-align: center; }
             .test-table th { background-color: #eee !important; -webkit-print-color-adjust: exact; color-adjust: exact; }
@@ -202,24 +178,28 @@
 <header class="sticky-header">
     <div class="stats-bar" id="stats-bar">
         <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM1 6.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM1 6.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/></svg>
             <div class="stat-content"><span>कुल</span><b id="total-count">0</b></div>
         </div>
         <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color:var(--correct-color)" viewBox="0 0 16 16"><path d="M12.736 4.264a.5.5 0 0 1 .708 0l1 1a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7 11.293l6.027-6.027a.5.5 0 0 1 .709-.002z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="color:var(--correct-color)"><path d="M12.736 4.264a.5.5 0 0 1 .708 0l1 1a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7 11.293l6.027-6.027a.5.5 0 0 1 .709-.002z"/></svg>
             <div class="stat-content"><span>सही</span><b id="correct-count">0</b></div>
         </div>
         <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color:var(--incorrect-color)" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="color:var(--incorrect-color)"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
             <div class="stat-content"><span>गलत</span><b id="incorrect-count">0</b></div>
         </div>
         <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color:var(--skipped-color)" viewBox="0 0 16 16"><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="color:var(--skipped-color)"><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/></svg>
             <div class="stat-content"><span>छोड़े</span><b id="skipped-count">0</b></div>
         </div>
         <div class="stat-card">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color:var(--primary-color)" viewBox="0 0 16 16"><path d="M4 11.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 2.5 7h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="color:var(--primary-color)"><path d="M4 11.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 2.5 7h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/></svg>
             <div class="stat-content"><span>Final Score</span><b id="final-score-val">0.00</b></div>
+        </div>
+        <div class="stat-card">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="color:#fd7e14"><path d="M8 0l1.669.864 1.858.282.842 1.67 1.12 1.445L15 6.236v1.506l-2.098.81-1.007 1.536.634 1.79 1.443 1.149.832 1.664-1.858.282L8 16l-1.669-.864-1.858-.282-.842-1.67-1.12-1.445L1 9.764v-1.506l2.098-.81 1.007-1.536-.634-1.79L2.027 2.97.169 2.686 0 1.023 1.858.74 3.527 0 8 0z"/></svg>
+            <div class="stat-content"><span>Final Marks</span><b id="final-marks-val">0.00</b></div>
         </div>
     </div>
 </header>
@@ -230,7 +210,7 @@
             <h1>4th Grade 2nd Shift Analysis</h1>
             <div class="controls-container">
                  <label class="theme-switch-label" for="theme-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>
                     <div class="switch">
                         <input type="checkbox" id="theme-toggle">
                         <span class="slider"></span>
@@ -265,7 +245,7 @@
                     </tr>
                 </thead>
                 <tbody id="table-body">
-                    </tbody>
+                </tbody>
             </table>
         </div>
     </div>
@@ -274,15 +254,9 @@
 <script>
 // --- 1. DATA ---
 const questionsData = [
-    {
-        s_no: 1, my_paper_sno: 7, question_text: "चित्रांगदा सिंह, राजस्थान की एक कलाकार, किस क्षेत्र में सर्वाधिक प्रसिद्ध हैं?", options: { A: "अभिनेत्री", B: "संगीतकार", C: "मूर्तिकला", D: "चित्रकार" }, official_answer: "A"
-    },
-    {
-        s_no: 2, my_paper_sno: 15, question_text: "राजस्थान की राजधानी क्या है?", options: { A: "जोधपुर", B: "जयपुर", C: "उदयपुर", D: "अजमेर" }, official_answer: "B"
-    },
-    {
-        s_no: 3, my_paper_sno: 42, question_text: "भारत का सबसे बड़ा मरुस्थल कौन सा है?", options: { A: "थार रेगिस्तान", B: "कच्छ का रण", C: "स्पीति घाटी ठंडा रेगिस्तान", D: "दक्कन काँटेदार झाड़ियाँ" }, official_answer: "A"
-    },
+    { s_no: 1, my_paper_sno: 7, question_text: "चित्रांगदा सिंह, राजस्थान की एक कलाकार, किस क्षेत्र में सर्वाधिक प्रसिद्ध हैं?", options: { A: "अभिनेत्री", B: "संगीतकार", C: "मूर्तिकला", D: "चित्रकार" }, official_answer: "A" },
+    { s_no: 2, my_paper_sno: 15, question_text: "राजस्थान की राजधानी क्या है?", options: { A: "जोधपुर", B: "जयपुर", C: "उदयपुर", D: "अजमेर" }, official_answer: "B" },
+    { s_no: 3, my_paper_sno: 42, question_text: "भारत का सबसे बड़ा मरुस्थल कौन सा है?", options: { A: "थार रेगिस्तान", B: "कच्छ का रण", C: "स्पीति घाटी ठंडा रेगिस्तान", D: "दक्कन काँटेदार झाड़ियाँ" }, official_answer: "A" },
 ];
 
 // --- 2. ICONS & CONSTANTS ---
@@ -366,11 +340,15 @@ function updateSummaryAndScore() {
         else if (result === 'skipped') skipped++;
     });
 
+    const finalScore = correct - (incorrect / 3);
+    const finalMarks = finalScore * 1.66666666;
+
     document.getElementById('total-count').textContent = rows.length;
     document.getElementById('correct-count').textContent = correct;
     document.getElementById('incorrect-count').textContent = incorrect;
     document.getElementById('skipped-count').textContent = skipped;
-    document.getElementById('final-score-val').textContent = (correct - (incorrect / 3)).toFixed(2);
+    document.getElementById('final-score-val').textContent = finalScore.toFixed(2);
+    document.getElementById('final-marks-val').textContent = finalMarks.toFixed(2);
 }
 
 function sortTable(headerCell, columnIndex) {
@@ -416,7 +394,7 @@ function editCell(spanElement) {
     };
     
     input.onblur = save;
-    input.onkeydown = e => { if (e.key === 'Enter') save(); else if (e.key === 'Escape') parentTd.innerHTML = ''; parentTd.appendChild(spanElement); };
+    input.onkeydown = e => { if (e.key === 'Enter') save(); else if (e.key === 'Escape') { parentTd.innerHTML = ''; parentTd.appendChild(spanElement); } };
     parentTd.innerHTML = '';
     parentTd.appendChild(input);
     input.focus();
@@ -476,7 +454,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const mainStats = document.getElementById('stats-bar');
         const printStats = document.getElementById('stats-container-print');
         printStats.innerHTML = mainStats.innerHTML;
+
+        tableBody.querySelectorAll('tr').forEach(row => {
+            if (row.style.display === 'none') {
+                row.classList.add('hide-in-print');
+            }
+        });
         window.print();
+    });
+
+    window.addEventListener('afterprint', () => {
+        tableBody.querySelectorAll('tr.hide-in-print').forEach(row => {
+            row.classList.remove('hide-in-print');
+        });
     });
 });
 </script>
