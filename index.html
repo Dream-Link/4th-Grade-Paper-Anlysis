@@ -281,12 +281,12 @@ function renderTable() {
         optionsHTML += `<label><input type="radio" name="q${q.s_no}" value="E">( E ) प्रश्न हल नहीं किया</label>`;
 
         row.innerHTML = `
-            <td data-label="S.No.">${q.s_no}</td> 
-            <td data-label="My Paper" class="editable-cell"><span data-sno="${q.s_no}">${q.my_paper_sno}</span></td> 
-            <td data-label="प्रश्न" class="question-col"><p>${q.question_text}</p><div class="options-container">${optionsHTML}</div></td>
-            <td data-label="My Ans."></td> 
-            <td data-label="Official">${q.official_answer}</td> 
-            <td data-label="परिणाम" data-result="unattempted"><span class="result-icon">${ICONS.unattempted}</span></td>
+            <td data-label="Master Paper S.N.">${q.s_no}</td> 
+            <td data-label="My Paper S.N." class="editable-cell"><span data-sno="${q.s_no}">${q.my_paper_sno}</span></td> 
+            <td data-label="Question" class="question-col"><p>${q.question_text}</p><div class="options-container">${optionsHTML}</div></td>
+            <td data-label="My Answer"></td> 
+            <td data-label="Official Answer">${q.official_answer}</td> 
+            <td data-label="Result" data-result="unattempted"><span class="result-icon">${ICONS.unattempted}</span></td>
         `;
         tableBody.appendChild(row);
     });
@@ -452,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const studentName = studentNameInput.value.trim();
         const printNameContainer = document.getElementById('print-student-name');
         if (studentName) {
-            printNameContainer.innerHTML = `अभ्यर्थी का नाम: <span>${studentName}</span>`;
+            printNameContainer.innerHTML = `Name: <span>${studentName}</span>`;
         } else {
             printNameContainer.innerHTML = ''; // Clear if no name is entered
         }
