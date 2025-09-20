@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>4th Grade 2nd Shift</title>
     
-    <!-- PWA-specific meta tags -->
     <meta name="theme-color" content="#343a40"/>
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="manifest" href="manifest.json">
@@ -86,7 +85,7 @@
         .test-table th { background-color: #f8f9fa; color: var(--text-light); font-weight: 600; font-size: 0.85em; }
         .test-table th.sortable { cursor: pointer; user-select: none; }
         .sort-arrow { display: inline-block; width: 1em; text-align: center; }
-        .question-col p { margin-top: 0; font-weight: 700; }
+        .question-col p { margin-top: 0; font-weight: 700; margin-bottom: 12px; }
         .result-icon svg { width: 1.6em; height: 1.6em; vertical-align: middle; }
         .test-table tbody td:first-child,
         .test-table tbody td:nth-last-child(2) { font-size: 1.1em; font-weight: 500; }
@@ -100,6 +99,7 @@
         .options-container label.option-correct { font-weight: 600; border-color: var(--correct-color); background-color: var(--correct-light); }
         .options-container label.option-incorrect { font-weight: 600; border-color: var(--incorrect-color); background-color: var(--incorrect-light); }
         .options-container label.option-skipped { font-weight: 600; border-color: var(--skipped-color); background-color: var(--skipped-light); }
+        
         @media (max-width: 768px) {
             .test-table { table-layout: auto; }
             .test-table thead { display: none; }
@@ -110,18 +110,96 @@
             .test-table td.question-col { display: block; text-align: left; }
             .test-table td.question-col::before { display: block; margin-bottom: 8px; }
         }
+
+        /* --- Final Print Styles --- */
         @media print {
+            body {
+                font-size: 9pt;
+                padding: 1cm;
+                margin: 0;
+                background-color: #fff;
+            }
+            .container { max-width: 100%; }
             .action-buttons-container { display: none !important; }
+
+            /* Header and Stats Styling for Print */
+            .header-container {
+                border-bottom: 2px solid #333;
+                padding-bottom: 12px;
+                margin-bottom: 16px;
+                text-align: center;
+            }
+            .header-container h1 { font-size: 16pt; margin-bottom: 12px; }
+            .stats-and-actions { justify-content: center; }
+            .stats-container {
+                gap: 0;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                padding: 0;
+                overflow: hidden;
+                display: inline-flex;
+                flex-grow: 0;
+            }
+            .stat-card {
+                padding: 6px 10px;
+                border: none; box-shadow: none; border-radius: 0;
+                background-color: transparent;
+                border-right: 1px solid #ccc;
+            }
+            .stat-card:last-child { border-right: none; }
+            .stat-card span { font-size: 0.8em; }
+            .stat-card b { font-size: 1.1em; font-weight: 700; }
+            
+            /* Table Styling for Print */
+            .table-container { box-shadow: none; border-radius: 0; }
+            .test-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
             .test-table thead { display: table-header-group !important; }
-            .test-table, .test-table tbody, .test-table tr, .test-table th, .test-table td { display: revert !important; }
+            .test-table tr, .test-table td { display: revert !important; }
             .test-table td::before { display: none !important; }
+            .test-table th, .test-table td {
+                padding: 4px 5px;
+                border: 1px solid #bbb;
+                text-align: center;
+                vertical-align: middle;
+                overflow-wrap: break-word;
+            }
+            .test-table th {
+                background-color: #eee !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            .question-col { text-align: left !important; width: 62% !important; }
+            .question-col p { margin: 0; font-weight: 500; margin-bottom: 5px; }
+            .test-table th:nth-child(1), .test-table td:nth-child(1) { width: 5% !important; }
+            .test-table th:nth-child(2), .test-table td:nth-child(2) { width: 9% !important; }
+            .test-table th:nth-child(4), .test-table td:nth-child(4) { width: 8% !important; }
+            .test-table th:nth-child(5), .test-table td:nth-child(5) { width: 8% !important; }
+            .test-table th:nth-child(6), .test-table td:nth-child(6) { width: 8% !important; }
+            .result-icon svg { width: 1em; height: 1em; }
+            .test-table tbody tr { page-break-inside: avoid; }
+
+            /* Options Visibility and Highlighting for Print */
+            .options-container { display: block !important; }
+            .options-container label {
+                padding: 3px 6px;
+                font-size: 0.9em;
+                margin-bottom: 2px;
+                border-radius: 3px;
+                border: 1px solid #ddd;
+            }
+            .options-container label.option-correct,
+            .options-container label.option-incorrect,
+            .options-container label.option-skipped {
+                -webkit-print-color-adjust: exact; /* Force background color printing */
+                color-adjust: exact;
+                color: #000 !important; /* Ensure text is readable */
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Rest of your HTML content remains the same -->
     <div class="header-container">
         <h1>4th Grade 2nd Shift</h1>
         <div class="stats-and-actions">
@@ -186,312 +264,6 @@
                     <td data-label="परिणाम"><span class="result-icon"></span></td>
                 </tr>
                 <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
-                    <td data-label="S.No.">2</td> 
-                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
-                    <td data-label="प्रश्न" class="question-col">
-                        <p>राजस्थान की राजधानी क्या है?</p>
-                         <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td data-label="My Ans."></td> 
-                    <td data-label="Official">B</td> 
-                    <td data-label="परिणाम"><span class="result-icon"></span></td>
-                </tr>
-                <tr>
                     <td data-label="S.No.">3</td> 
                     <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">42</span></td> 
                     <td data-label="प्रश्न" class="question-col">
@@ -513,7 +285,6 @@
     </div>
 </div>
 
-<script src="install.js"></script>
 <script>
     // All your existing JS code remains the same
     const ICONS = {
@@ -580,18 +351,20 @@
     }
     
     function loadSavedAnswers() {
-        document.querySelectorAll('input[type="radio"]').forEach(radio => {
-            const questionName = radio.name;
-            const savedAnswer = localStorage.getItem(questionName + '_answer');
-            if (savedAnswer && radio.value === savedAnswer) {
-                radio.checked = true;
-                updateAnswer(radio, radio.name.substring(1), savedAnswer);
-            }
-        });
-        
-        document.querySelectorAll('.result-icon').forEach(iconSpan => {
-             if (!iconSpan.innerHTML) {
-                iconSpan.innerHTML = ICONS.unattempted;
+        document.querySelectorAll('#analysisTable tbody tr').forEach((row, index) => {
+            const qName = 'q' + (index + 1);
+            const savedAnswer = localStorage.getItem(qName + '_answer');
+            if(savedAnswer) {
+                const radio = row.querySelector(`input[type="radio"][value="${savedAnswer}"]`);
+                if(radio) {
+                    radio.checked = true;
+                    updateAnswer(radio, index + 1, savedAnswer);
+                }
+            } else {
+                 const iconSpan = row.querySelector('.result-icon');
+                 if (!iconSpan.innerHTML) {
+                    iconSpan.innerHTML = ICONS.unattempted;
+                }
             }
         });
         updateSummaryAndScore();
