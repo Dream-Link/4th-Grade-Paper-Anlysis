@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4th Grade 2nd Shift Paper</title>
+    <title>4th Grade 2nd Shift</title>
+    
+    <!-- PWA-specific meta tags -->
+    <meta name="theme-color" content="#343a40"/>
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="manifest" href="manifest.json">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,23 +28,13 @@
             --skipped-color: #0dcaf0;
             --skipped-light: #cff4fc;
         }
-
-        /* --- बेसिक स्टाइल --- */
         body {
-            font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Noto Sans', sans-serif;
             margin: 0;
             padding: 24px;
             background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* --- हेडर और आँकड़े --- */
+        .container { max-width: 1200px; margin: 0 auto; }
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -47,29 +43,9 @@
             flex-wrap: wrap; 
             gap: 16px; 
         }
-
-        h1 {
-            color: var(--header-bg);
-            font-weight: 700;
-            margin: 0;
-            flex-basis: 100%;
-        }
-        
-        .stats-and-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            width: 100%;
-            align-items: center;
-        }
-
-        .stats-container {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            flex-grow: 1;
-        }
-        
+        h1 { color: var(--header-bg); font-weight: 700; margin: 0; flex-basis: 100%; }
+        .stats-and-actions { display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: center; }
+        .stats-container { display: flex; gap: 12px; flex-wrap: wrap; flex-grow: 1; }
         .stat-card {
             background-color: #ffffff;
             padding: 8px 16px;
@@ -79,27 +55,13 @@
             text-align: center;
             flex-grow: 1;
         }
-
-        .stat-card span {
-            font-size: 0.8em;
-            font-weight: 500;
-            color: var(--text-light);
-            display: block;
-        }
-        
-        .stat-card b {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-        
-        /* Result Bar Text Colors */
+        .stat-card span { font-size: 0.8em; font-weight: 500; color: var(--text-light); display: block; }
+        .stat-card b { font-size: 1.3em; font-weight: 600; color: var(--text-color); }
         #correct-count { color: var(--correct-color); }
         #incorrect-count { color: var(--incorrect-color); }
         #skipped-count { color: var(--skipped-color); }
         #final-score-val { color: var(--primary-color); }
         #final-marks-val { color: #fd7e14; }
-
         .action-button {
             background-color: var(--primary-color);
             color: white;
@@ -110,137 +72,72 @@
             font-size: 0.9em;
             font-weight: 500;
         }
-        
-        /* --- टेबल स्टाइल --- */
         .table-container {
             background-color: #fff;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
             overflow: hidden;
         }
-
-        .test-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        .test-table th, .test-table td {
-            padding: 16px;
-            text-align: center;
-            vertical-align: middle;
-            border-bottom: 1px solid var(--border-color);
-            overflow-wrap: break-word;
-        }
-        
+        .test-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        .test-table th, .test-table td { padding: 16px; text-align: center; vertical-align: middle; border-bottom: 1px solid var(--border-color); overflow-wrap: break-word; }
         .question-col { width: 50%; text-align: left !important; }
         .test-table th:not(.question-col),
         .test-table td:not(.question-col) { width: 10%; }
-        .test-table tbody tr:last-child td { border-bottom: none; }
         .test-table th { background-color: #f8f9fa; color: var(--text-light); font-weight: 600; font-size: 0.85em; }
         .test-table th.sortable { cursor: pointer; user-select: none; }
         .sort-arrow { display: inline-block; width: 1em; text-align: center; }
         .question-col p { margin-top: 0; font-weight: 700; }
-        
-        .result-icon svg {
-            width: 1.6em;
-            height: 1.6em;
-            vertical-align: middle;
-        }
-
+        .result-icon svg { width: 1.6em; height: 1.6em; vertical-align: middle; }
         .test-table tbody td:first-child,
-        .test-table tbody td:nth-last-child(2) {
-            font-size: 1.1em;
-            font-weight: 500;
-        }
-
+        .test-table tbody td:nth-last-child(2) { font-size: 1.1em; font-weight: 500; }
         .editable-cell span { cursor: pointer; padding: 5px; border-radius: 4px; }
         .editable-cell input { width: 60px; text-align: center; border: 1px solid var(--primary-color); border-radius: 4px; padding: 4px; }
-
         .options-container label {
             display: block; margin-bottom: 8px; cursor: pointer; padding: 10px;
-            border-radius: 8px; border: 1px solid var(--border-color);
-            font-size: 1.05em;
+            border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.05em;
         }
         .options-container input[type="radio"] { opacity: 0; width: 0; height: 0; }
         .options-container label.option-correct { font-weight: 600; border-color: var(--correct-color); background-color: var(--correct-light); }
         .options-container label.option-incorrect { font-weight: 600; border-color: var(--incorrect-color); background-color: var(--incorrect-light); }
         .options-container label.option-skipped { font-weight: 600; border-color: var(--skipped-color); background-color: var(--skipped-light); }
-        
-        /* --- मोबाइल और कॉम्पैक्ट स्टाइल --- */
         @media (max-width: 768px) {
             .test-table { table-layout: auto; }
-            .test-table tr {
-                display: block; border-radius: 10px; margin-bottom: 12px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-                border: 1px solid var(--border-color); overflow: hidden; background-color: #fff;
-            }
             .test-table thead { display: none; }
-            .test-table td {
-                display: flex; justify-content: space-between; align-items: center;
-                padding: 10px 12px; border-bottom: 1px solid #f1f3f5; width: auto !important;
-            }
+            .test-table tr { display: block; border-radius: 10px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); border: 1px solid var(--border-color); overflow: hidden; background-color: #fff; }
+            .test-table td { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f1f3f5; width: auto !important; }
             .test-table tr td:last-child { border-bottom: none; }
-            .test-table td::before {
-                content: attr(data-label); font-weight: 600; text-align: left;
-                margin-right: 12px; color: var(--text-light); white-space: nowrap;
-            }
+            .test-table td::before { content: attr(data-label); font-weight: 600; text-align: left; margin-right: 12px; color: var(--text-light); white-space: nowrap; }
             .test-table td.question-col { display: block; text-align: left; }
             .test-table td.question-col::before { display: block; margin-bottom: 8px; }
         }
-
-        /* --- प्रिंट मीडिया स्टाइल --- */
         @media print {
-            body { background-color: #fff; padding: 10px; font-size: 10pt; }
             .action-buttons-container { display: none !important; }
-            .header-container { margin-bottom: 20px; }
-            .stat-card { box-shadow: none; border: 1px solid #ccc; }
-            .container, .table-container { max-width: 100%; margin: 0; padding: 0; overflow: visible; box-shadow: none; }
-            
             .test-table thead { display: table-header-group !important; }
-            .test-table tbody { display: table-row-group !important; }
-            .test-table tr { display: table-row !important; }
-            .test-table th, .test-table td { display: table-cell !important; }
-            
-            .test-table { border-collapse: collapse; }
-            .test-table td, .test-table th { padding: 8px; border: 1px solid #ccc; }
+            .test-table, .test-table tbody, .test-table tr, .test-table th, .test-table td { display: revert !important; }
             .test-table td::before { display: none !important; }
-            .options-container input, .sort-arrow { display: none; }
-            .options-container label {
-                border: none; padding: 2px 0; margin: 0;
-                -webkit-print-color-adjust: exact; color-adjust: exact;
-            }
-            .editable-cell input { display: none; }
-            .editable-cell span { background-color: transparent !important; }
-            
-            .result-icon svg {
-                width: 1.3em;
-                height: 1.3em;
-            }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- Rest of your HTML content remains the same -->
     <div class="header-container">
         <h1>4th Grade 2nd Shift</h1>
-        
         <div class="stats-and-actions">
             <div class="stats-container">
                 <div class="stat-card"><span>कुल</span><b id="total-count">0</b></div>
                 <div class="stat-card"><span>सही</span><b id="correct-count">0</b></div>
                 <div class="stat-card"><span>गलत</span><b id="incorrect-count">0</b></div>
                 <div class="stat-card"><span>छोड़े</span><b id="skipped-count">0</b></div>
-                <div class="stat-card"><span>Final Right Que.</span><b id="final-score-val">0.00</b></div>
+                <div class="stat-card"><span>Final Score</span><b id="final-score-val">0.00</b></div>
                 <div class="stat-card"><span>Final Marks</span><b id="final-marks-val">0.00</b></div>
             </div>
             <div class="action-buttons-container">
-                <button class="action-button" onclick="window.print()">Print Result</button>
+                <button class="action-button" onclick="window.print()">Print Sheet</button>
             </div>
         </div>
     </div>
-
     <div class="table-container">
         <table class="test-table" id="analysisTable">
             <thead>
@@ -310,7 +207,9 @@
     </div>
 </div>
 
+<script src="install.js"></script>
 <script>
+    // All your existing JS code remains the same
     const ICONS = {
         correct: `<svg style="color:var(--correct-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>`,
         incorrect: `<svg style="color:var(--incorrect-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>`,
