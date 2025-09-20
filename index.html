@@ -656,9 +656,12 @@ function prepareAndPrintOMR(sortBy = 'master') {
     });
 
     omrModal.style.display = 'none';
-    document.body.classList.add('printing-omr'); 
+document.body.classList.add('printing-omr');
+
+// प्रिंट कमांड से पहले एक छोटा सा डिले जोड़ें
+setTimeout(function() {
     window.print();
-}
+}, 250); // 250 मिलीसेकंड का डिले
 
 
 // --- 5. EVENT LISTENERS ---
