@@ -350,7 +350,14 @@ const questionsData = [
     { s_no: 3, my_paper_sno: 3, question_text: "भारत का सबसे बड़ा मरुस्थल कौन सा है?", options: { A: "थार रेगिस्तान", B: "कच्छ का रण", C: "स्पीति घाटी ठंडा रेगिस्तान", D: "दक्कन काँटेदार झाड़ियाँ" }, official_answer: "A" },
     { s_no: 4, my_paper_sno: 4, question_text: "सच का विलोम शब्द होगा?", options: { A: "नया", B: "पुराना", C: "झूठ", D: "कड़वा" }, official_answer: "C" },
 ];
-
+for (let i = 4; i <= 120; i++) {
+    questionsData.push({ 
+        s_no: i, 
+        my_paper_sno: Math.floor(Math.random() * 120) + 1, // random for testing
+        question_text: `प्रश्न संख्या ${i} का पाठ यहाँ आएगा।`, 
+        options: { A: "विकल्प A", B: "विकल्प B", C: "विकल्प C", D: "विकल्प D" }, 
+        official_answer: "A" 
+    });
 }
 
 
