@@ -3,30 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4th Grade Paper</title>
+    <title>Final Refined Paper</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #007bff;
-            --text-color: #343a40;
+            --primary-color: #0d6efd;
+            --text-color: #212529;
+            --text-light: #6c757d;
             --bg-color: #f8f9fa;
             --border-color: #dee2e6;
-            --header-bg: #34495e;
-            --correct-color: #28a745;
+            --header-bg: #343a40;
+            --correct-color: #198754;
+            --correct-light: #d1e7dd;
             --incorrect-color: #dc3545;
-            --skipped-color: #007bff; /* Blue for explicitly skipped */
-            --unattempted-color: #ccc; /* Light gray for untouched */
+            --incorrect-light: #f8d7da;
+            --skipped-color: #0dcaf0;
+            --skipped-light: #cff4fc;
         }
 
         /* --- बेसिक स्टाइल --- */
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 24px;
             background-color: var(--bg-color);
             color: var(--text-color);
+            line-height: 1.6;
         }
 
         .container {
@@ -34,145 +38,182 @@
             margin: 0 auto;
         }
 
-        /* --- हेडर, समरी और स्कोर बार --- */
+        /* --- हेडर और आँकड़े --- */
         .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             flex-wrap: wrap; 
-            gap: 20px; 
+            gap: 16px; 
         }
 
         h1 {
             color: var(--header-bg);
             font-weight: 700;
             margin: 0;
-            flex-grow: 1; 
+            flex-basis: 100%;
         }
-
-        .summary-bar, .score-bar {
+        
+        .stats-and-actions {
             display: flex;
-            gap: 25px;
+            flex-wrap: wrap;
+            gap: 12px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            flex-grow: 1;
+        }
+        
+        .stat-card {
             background-color: #ffffff;
-            padding: 12px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            padding: 8px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             border: 1px solid var(--border-color);
+            text-align: center;
+            flex-grow: 1;
         }
-        
-        .summary-bar span, .score-bar span {
-            font-size: 1em;
+
+        .stat-card span {
+            font-size: 0.8em;
             font-weight: 500;
-            color: #555;
-            white-space: nowrap; 
+            color: var(--text-light);
+            display: block;
         }
         
-        .summary-bar b, .score-bar b {
-            font-size: 1.1em;
+        .stat-card b {
+            font-size: 1.3em;
             font-weight: 600;
-            color: var(--primary-color);
+            color: var(--text-color);
         }
-
-        .score-bar {
-            background-color: #eaf5ff; 
-            border-color: #b8d9f5;
-        }
-
-        .print-button {
+        
+        .action-button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 10px 16px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 0.9em;
             font-weight: 500;
-            transition: background-color 0.2s ease, transform 0.2s ease;
-        }
-        .print-button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
         }
         
-        /* --- टेबल कंटेनर (रिस्पॉन्सिव स्क्रॉल के लिए) --- */
+        /* --- टेबल स्टाइल --- */
         .table-container {
-            overflow-x: auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+            overflow: hidden;
         }
 
-        /* --- टेबल स्टाइल --- */
         .test-table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #fff;
-            border-radius: 12px;
-            overflow: hidden; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-            border: 1px solid var(--border-color);
+            table-layout: fixed;
         }
 
         .test-table th, .test-table td {
-            border: 1px solid var(--border-color);
             padding: 16px;
             text-align: center;
             vertical-align: middle;
-        }
-
-        .test-table th {
-            background-color: var(--header-bg);
-            color: white;
-            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            overflow-wrap: break-word;
         }
         
-        .test-table th.sortable {
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.2s ease;
-        }
+        .question-col { width: 50%; text-align: left !important; }
+        .test-table th:not(.question-col),
+        .test-table td:not(.question-col) { width: 10%; }
+        .test-table tbody tr:last-child td { border-bottom: none; }
+        .test-table th { background-color: #f8f9fa; color: var(--text-light); font-weight: 600; font-size: 0.85em; }
+        .test-table th.sortable { cursor: pointer; user-select: none; }
+        .sort-arrow { display: inline-block; width: 1em; text-align: center; }
+        .question-col p { margin-top: 0; font-weight: 700; }
         
-        .test-table th.sortable:hover { background-color: #4a6580; }
-        
-        .sort-arrow { margin-left: 5px; opacity: 0.7; }
-        .test-table tr:nth-child(even) { background-color: #fdfdff; }
-        .question-col { text-align: left !important; width: 45%; }
-        .options-container label { display: block; margin-bottom: 8px; cursor: pointer; }
-
-        .result-icon { font-size: 1.8em; font-weight: 700; }
-        .correct { color: var(--correct-color); }
-        .incorrect { color: var(--incorrect-color); }
-        .skipped { color: var(--skipped-color); } /* Explicitly skipped */
-        .unattempted { color: var(--unattempted-color); } /* Not touched */
-
-        /* --- रिस्पॉन्सिव स्टाइल --- */
-        @media (max-width: 1024px) {
-            .header-container {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        /* आइकॉन साइज़ सुधार */
+        .result-icon svg {
+            width: 1.6em;
+            height: 1.6em;
+            vertical-align: middle;
         }
+
+        /* फॉन्ट साइज़ सुधार */
+        .test-table tbody td:first-child,
+        .test-table tbody td:nth-last-child(2) {
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .editable-cell span { cursor: pointer; padding: 5px; border-radius: 4px; }
+        .editable-cell input { width: 60px; text-align: center; border: 1px solid var(--primary-color); border-radius: 4px; padding: 4px; }
+
+        .options-container label {
+            display: block; margin-bottom: 8px; cursor: pointer; padding: 10px;
+            border-radius: 8px; border: 1px solid var(--border-color);
+            font-size: 1.05em;
+        }
+        .options-container input[type="radio"] { opacity: 0; width: 0; height: 0; }
+        .options-container label.option-correct { font-weight: 600; border-color: var(--correct-color); background-color: var(--correct-light); }
+        .options-container label.option-incorrect { font-weight: 600; border-color: var(--incorrect-color); background-color: var(--incorrect-light); }
+        .options-container label.option-skipped { font-weight: 600; border-color: var(--skipped-color); background-color: var(--skipped-light); }
+        
+        /* --- मोबाइल और कॉम्पैक्ट स्टाइल --- */
         @media (max-width: 768px) {
-            body { padding: 15px; }
-            .test-table th, .test-table td { padding: 12px; font-size: 0.95em; }
+            .test-table { table-layout: auto; }
+            .test-table tr {
+                display: block; border-radius: 10px; margin-bottom: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                border: 1px solid var(--border-color); overflow: hidden; background-color: #fff;
+            }
+            .test-table thead { display: none; }
+            .test-table td {
+                display: flex; justify-content: space-between; align-items: center;
+                padding: 10px 12px; border-bottom: 1px solid #f1f3f5; width: auto !important;
+            }
+            .test-table tr td:last-child { border-bottom: none; }
+            .test-table td::before {
+                content: attr(data-label); font-weight: 600; text-align: left;
+                margin-right: 12px; color: var(--text-light); white-space: nowrap;
+            }
+            .test-table td.question-col { display: block; text-align: left; }
+            .test-table td.question-col::before { display: block; margin-bottom: 8px; }
         }
 
-        /* --- प्रिंट मीडिया के लिए स्टाइल --- */
+        /* --- प्रिंट मीडिया स्टाइल --- */
         @media print {
-            body { background-color: #fff; margin: 0; padding: 10px; }
-            .header-container, .print-button { display: none; }
-            .container, .table-container { max-width: 100%; margin: 0; padding: 0; overflow: visible; }
-            .test-table {
-                box-shadow: none;
-                border: 1px solid #ccc;
-                border-radius: 12px; /* राउंडेड स्टाइल प्रिंट में भी रखने के लिए */
+            body { background-color: #fff; padding: 10px; font-size: 10pt; }
+            .action-buttons-container { display: none !important; }
+            .header-container { margin-bottom: 20px; }
+            .stat-card { box-shadow: none; border: 1px solid #ccc; }
+            .container, .table-container { max-width: 100%; margin: 0; padding: 0; overflow: visible; box-shadow: none; }
+            
+            /* प्रिंट हेडर सुधार */
+            .test-table thead { display: table-header-group !important; }
+            .test-table tbody { display: table-row-group !important; }
+            .test-table tr { display: table-row !important; }
+            .test-table th, .test-table td { display: table-cell !important; }
+            
+            .test-table { border-collapse: collapse; }
+            .test-table td, .test-table th { padding: 8px; border: 1px solid #ccc; }
+            .test-table td::before { display: none !important; }
+            .options-container input, .sort-arrow { display: none; }
+            .options-container label {
+                border: none; padding: 2px 0; margin: 0;
+                -webkit-print-color-adjust: exact; color-adjust: exact;
             }
-            .test-table th, .test-table td {
-                padding: 10px;
-                border-color: #ccc;
-                font-size: 0.9em;
+            .editable-cell input { display: none; }
+            .editable-cell span { background-color: transparent !important; }
+            
+            /* प्रिंट आइकॉन सुधार */
+            .result-icon svg {
+                width: 1.3em;
+                height: 1.3em;
             }
-            .sortable .sort-arrow, .options-container input { display: none; }
-            .options-container label { margin-bottom: 4px; }
-            .result-icon { font-size: 1.5em; }
         }
     </style>
 </head>
@@ -181,198 +222,286 @@
 <div class="container">
     <div class="header-container">
         <h1>4th Grade 2nd Shift (Paper Code - n)</h1>
-        <div class="summary-bar">
-            <span>कुल: <b id="total-count">0</b></span>
-            <span>सही: <b id="correct-count" style="color: var(--correct-color);">0</b></span>
-            <span>गलत: <b id="incorrect-count" style="color: var(--incorrect-color);">0</b></span>
-            <span>छोड़े गए: <b id="skipped-count" style="color: var(--skipped-color);">0</b></span>
+        
+        <div class="stats-and-actions">
+            <div class="stats-container">
+                <div class="stat-card"><span>कुल</span><b id="total-count">0</b></div>
+                <div class="stat-card"><span>सही</span><b id="correct-count">0</b></div>
+                <div class="stat-card"><span>गलत</span><b id="incorrect-count">0</b></div>
+                <div class="stat-card"><span>छोड़े</span><b id="skipped-count">0</b></div>
+                <div class="stat-card"><span>Final Score</span><b id="final-score-val">0.00</b></div>
+                <div class="stat-card"><span>Final Marks</span><b id="final-marks-val">0.00</b></div>
+            </div>
+            <div class="action-buttons-container">
+                <button class="action-button" onclick="window.print()">Print Sheet</button>
+            </div>
         </div>
-         <div class="score-bar">
-            <span>Final Questions: <b id="final-score">0.00</b></span>
-        </div>
-        <button class="print-button" onclick="window.print()">Print Answer Sheet</button>
     </div>
 
     <div class="table-container">
         <table class="test-table" id="analysisTable">
             <thead>
                 <tr>
-                    <th class="sortable" onclick="sortTable(0)">Master S.No. <span class="sort-arrow"></span></th>
-                    <th class="sortable" onclick="sortTable(1)">My Paper<span class="sort-arrow"></span></th>
-                    <th class="sortable" onclick="sortTable(2)">विषय <span class="sort-arrow"></span></th>
-                    <th class="question-col sortable" onclick="sortTable(3)">प्रश्न / विकल्प <span class="sort-arrow"></span></th>
+                    <th class="sortable" onclick="sortTable(this, 0)">S.No.<span class="sort-arrow"></span></th>
+                    <th class="sortable" onclick="sortTable(this, 1)">My Paper<span class="sort-arrow"></span></th>
+                    <th class="question-col sortable" onclick="sortTable(this, 2)">प्रश्न<span class="sort-arrow"></span></th>
                     <th>My Ans.</th>
                     <th>Official</th>
-                    <th class="sortable" onclick="sortTable(6)">परिणाम <span class="sort-arrow"></span></th>
+                    <th class="sortable" onclick="sortTable(this, 5)">परिणाम<span class="sort-arrow"></span></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td> <td>7</td> <td>करंट अफेयर्स</td>
-                    <td class="question-col">
+                 <tr>
+                    <td data-label="S.No.">1</td> 
+                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">7</span></td> 
+                    <td data-label="प्रश्न" class="question-col">
                         <p>चित्रांगदा सिंह, राजस्थान की एक कलाकार, किस क्षेत्र में सर्वाधिक प्रसिद्ध हैं?</p>
                         <div class="options-container">
-                            <label><input type="radio" name="q1" value="A" onchange="updateAnswer(this, 1, 'A')"> (A) अभिनेत्री</label>
-                            <label><input type="radio" name="q1" value="B" onchange="updateAnswer(this, 1, 'B')"> (B) संगीतकार</label>
-                            <label><input type="radio" name="q1" value="C" onchange="updateAnswer(this, 1, 'C')"> (C) मूर्तिकला</label>
-                            <label><input type="radio" name="q1" value="D" onchange="updateAnswer(this, 1, 'D')"> (D) चित्रकार</label>
-                            <label><input type="radio" name="q1" value="E" onchange="updateAnswer(this, 1, 'E')"> (E) प्रश्न हल नहीं किया</label>
+                            <label><input type="radio" name="q1" value="A" onchange="updateAnswer(this, 1, 'A')">(A) अभिनेत्री</label>
+                            <label><input type="radio" name="q1" value="B" onchange="updateAnswer(this, 1, 'B')">(B) संगीतकार</label>
+                            <label><input type="radio" name="q1" value="C" onchange="updateAnswer(this, 1, 'C')">(C) मूर्तिकला</label>
+                            <label><input type="radio" name="q1" value="D" onchange="updateAnswer(this, 1, 'D')">(D) चित्रकार</label>
+                            <label><input type="radio" name="q1" value="E" onchange="updateAnswer(this, 1, 'E')">(E) प्रश्न हल नहीं किया</label>
                         </div>
                     </td>
-                    <td></td> <td>A</td> <td><span class="result-icon unattempted">○</span></td>
+                    <td data-label="My Ans."></td> 
+                    <td data-label="Official">A</td> 
+                    <td data-label="परिणाम"><span class="result-icon"></span></td>
                 </tr>
                 <tr>
-                    <td>2</td> <td>15</td> <td>इतिहास</td>
-                    <td class="question-col">
+                    <td data-label="S.No.">2</td> 
+                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">15</span></td> 
+                    <td data-label="प्रश्न" class="question-col">
                         <p>राजस्थान की राजधानी क्या है?</p>
                          <div class="options-container">
-                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')"> (A) जोधपुर</label>
-                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')"> (B) जयपुर</label>
-                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')"> (C) उदयपुर</label>
-                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')"> (D) अजमेर</label>
-                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')"> (E) प्रश्न हल नहीं किया</label>
+                            <label><input type="radio" name="q2" value="A" onchange="updateAnswer(this, 2, 'A')">(A) जोधपुर</label>
+                            <label><input type="radio" name="q2" value="B" onchange="updateAnswer(this, 2, 'B')">(B) जयपुर</label>
+                            <label><input type="radio" name="q2" value="C" onchange="updateAnswer(this, 2, 'C')">(C) उदयपुर</label>
+                            <label><input type="radio" name="q2" value="D" onchange="updateAnswer(this, 2, 'D')">(D) अजमेर</label>
+                            <label><input type="radio" name="q2" value="E" onchange="updateAnswer(this, 2, 'E')">(E) प्रश्न हल नहीं किया</label>
                         </div>
                     </td>
-                    <td></td> <td>B</td> <td><span class="result-icon unattempted">○</span></td>
+                    <td data-label="My Ans."></td> 
+                    <td data-label="Official">B</td> 
+                    <td data-label="परिणाम"><span class="result-icon"></span></td>
                 </tr>
                 <tr>
-                    <td>3</td> <td>42</td> <td>भूगोल</td>
-                    <td class="question-col">
+                    <td data-label="S.No.">3</td> 
+                    <td data-label="My Paper" class="editable-cell"><span onclick="editCell(this)">42</span></td> 
+                    <td data-label="प्रश्न" class="question-col">
                         <p>भारत का सबसे बड़ा मरुस्थल कौन सा है?</p>
                          <div class="options-container">
-                            <label><input type="radio" name="q3" value="A" onchange="updateAnswer(this, 3, 'A')"> (A) थार रेगिस्तान</label>
-                            <label><input type="radio" name="q3" value="B" onchange="updateAnswer(this, 3, 'B')"> (B) कच्छ का रण</label>
-                            <label><input type="radio" name="q3" value="C" onchange="updateAnswer(this, 3, 'C')"> (C) स्पीति घाटी ठंडा रेगिस्तान</label>
-                            <label><input type="radio" name="q3" value="D" onchange="updateAnswer(this, 3, 'D')"> (D) दक्कन काँटेदार झाड़ियाँ</label>
-                            <label><input type="radio" name="q3" value="E" onchange="updateAnswer(this, 3, 'E')"> (E) प्रश्न हल नहीं किया</label>
+                            <label><input type="radio" name="q3" value="A" onchange="updateAnswer(this, 3, 'A')">(A) थार रेगिस्तान</label>
+                            <label><input type="radio" name="q3" value="B" onchange="updateAnswer(this, 3, 'B')">(B) कच्छ का रण</label>
+                            <label><input type="radio" name="q3" value="C" onchange="updateAnswer(this, 3, 'C')">(C) स्पीति घाटी ठंडा रेगिस्तान</label>
+                            <label><input type="radio" name="q3" value="D" onchange="updateAnswer(this, 3, 'D')">(D) दक्कन काँटेदार झाड़ियाँ</label>
+                            <label><input type="radio" name="q3" value="E" onchange="updateAnswer(this, 3, 'E')">(E) प्रश्न हल नहीं किया</label>
                         </div>
                     </td>
-                    <td></td> <td>A</td> <td><span class="result-icon unattempted">○</span></td>
-                </tr>
-                <tr>
-                    <td>4</td> <td>23</td> <td>राजनीति</td>
-                    <td class="question-col">
-                        <p>भारतीय संविधान के जनक के रूप में किसे जाना जाता है?</p>
-                        <div class="options-container">
-                            <label><input type="radio" name="q4" value="A" onchange="updateAnswer(this, 4, 'A')"> (A) महात्मा गांधी</label>
-                            <label><input type="radio" name="q4" value="B" onchange="updateAnswer(this, 4, 'B')"> (B) जवाहरलाल नेहरू</label>
-                            <label><input type="radio" name="q4" value="C" onchange="updateAnswer(this, 4, 'C')"> (C) डॉ. बी. आर. अम्बेडकर</label>
-                            <label><input type="radio" name="q4" value="D" onchange="updateAnswer(this, 4, 'D')"> (D) सरदार पटेल</label>
-                            <label><input type="radio" name="q4" value="E" onchange="updateAnswer(this, 4, 'E')"> (E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td></td> <td>C</td> <td><span class="result-icon unattempted">○</span></td>
-                </tr>
-                 <tr>
-                    <td>5</td> <td>88</td> <td>कला</td>
-                    <td class="question-col">
-                        <p>प्रसिद्ध 'ब्लू पॉटरी' राजस्थान के किस शहर से है?</p>
-                        <div class="options-container">
-                            <label><input type="radio" name="q5" value="A" onchange="updateAnswer(this, 5, 'A')"> (A) उदयपुर</label>
-                            <label><input type="radio" name="q5" value="B" onchange="updateAnswer(this, 5, 'B')"> (B) बीकानेर</label>
-                            <label><input type="radio" name="q5" value="C" onchange="updateAnswer(this, 5, 'C')"> (C) कोटा</label>
-                            <label><input type="radio" name="q5" value="D" onchange="updateAnswer(this, 5, 'D')"> (D) जयपुर</label>
-                            <label><input type="radio" name="q5" value="E" onchange="updateAnswer(this, 5, 'E')"> (E) प्रश्न हल नहीं किया</label>
-                        </div>
-                    </td>
-                    <td></td> <td>D</td> <td><span class="result-icon unattempted">○</span></td>
+                    <td data-label="My Ans."></td> 
+                    <td data-label="Official">A</td> 
+                    <td data-label="परिणाम"><span class="result-icon"></span></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
 
-    <script>
-        function updateAnswer(radioInput, questionNumber, selectedOption) {
-            const currentRow = radioInput.closest('tr');
-            const myAnsCell = currentRow.cells[4];
-            const officialKeyCell = currentRow.cells[5];
-            const resultCell = currentRow.cells[6];
-            myAnsCell.textContent = selectedOption;
-            const officialAnswer = officialKeyCell.textContent;
+<script>
+    const ICONS = {
+        correct: `<svg style="color:var(--correct-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>`,
+        incorrect: `<svg style="color:var(--incorrect-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>`,
+        skipped: `<svg style="color:var(--skipped-color)" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg>`,
+        unattempted: `<svg style="color:#ced4da" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/></svg>`
+    };
 
-            if (selectedOption === 'E') {
-                resultCell.innerHTML = '<span class="result-icon skipped">○</span>';
-            } else if (selectedOption === officialAnswer) {
-                resultCell.innerHTML = '<span class="result-icon correct">✓</span>';
-            } else {
-                resultCell.innerHTML = '<span class="result-icon incorrect">✗</span>';
-            }
-            localStorage.setItem('q' + questionNumber + '_answer', selectedOption);
-            updateSummaryAndScore();
-        }
+    function updateAnswer(radioInput, questionNumber, selectedOption) {
+        const currentRow = radioInput.closest('tr');
+        const myAnsCell = currentRow.cells[3];
+        const officialKeyCell = currentRow.cells[4];
+        const resultCell = currentRow.cells[5].querySelector('.result-icon');
+        const currentLabel = radioInput.closest('label');
+        const questionContainer = radioInput.closest('.options-container');
 
-        function updateSummaryAndScore() {
-            const rows = document.querySelectorAll("#analysisTable tbody tr");
-            let correct = 0, incorrect = 0, skipped = 0;
-            rows.forEach(row => {
-                const resultIcon = row.cells[6].querySelector('.result-icon');
-                if (resultIcon.classList.contains('correct')) correct++;
-                else if (resultIcon.classList.contains('incorrect')) incorrect++;
-                else if (resultIcon.classList.contains('skipped')) skipped++;
-            });
-            document.getElementById('total-count').textContent = rows.length;
-            document.getElementById('correct-count').textContent = correct;
-            document.getElementById('incorrect-count').textContent = incorrect;
-            document.getElementById('skipped-count').textContent = skipped;
-            const finalScore = correct - (incorrect / 3);
-            document.getElementById('final-score').textContent = finalScore.toFixed(2);
-        }
+        myAnsCell.textContent = selectedOption;
 
-        function sortTable(columnIndex) {
-            const table = document.getElementById("analysisTable");
-            const tbody = table.tBodies[0];
-            const rows = Array.from(tbody.rows);
-            const headerCell = table.tHead.rows[0].cells[columnIndex];
-            const currentDir = headerCell.getAttribute("data-sort-dir") || "desc";
-            const newDir = currentDir === "asc" ? "desc" : "asc";
-            table.querySelectorAll("th.sortable").forEach(th => {
-                th.removeAttribute("data-sort-dir");
-                th.querySelector(".sort-arrow").textContent = "";
-            });
-            headerCell.setAttribute("data-sort-dir", newDir);
-            headerCell.querySelector(".sort-arrow").textContent = newDir === "asc" ? " ▲" : " ▼";
-            const resultPriority = { '✓': 1, '✗': 2, '○': 3 };
-            rows.sort((rowA, rowB) => {
-                let valA = rowA.cells[columnIndex].textContent.trim();
-                let valB = rowB.cells[columnIndex].textContent.trim();
-                if (columnIndex === 6) {
-                    valA = resultPriority[valA] || 3; valB = resultPriority[valB] || 3;
-                }
-                if (!isNaN(valA) && !isNaN(valB) && valA.trim() !== "" && valB.trim() !== "") {
-                    valA = parseFloat(valA); valB = parseFloat(valB);
-                }
-                if (valA < valB) return newDir === "asc" ? -1 : 1;
-                if (valA > valB) return newDir === "asc" ? 1 : -1;
-                return 0;
-            });
-            rows.forEach(row => tbody.appendChild(row));
-        }
+        questionContainer.querySelectorAll('label').forEach(lbl => {
+            lbl.classList.remove('option-correct', 'option-incorrect', 'option-skipped');
+        });
+
+        const officialAnswer = officialKeyCell.textContent.trim();
         
-        function loadSavedAnswers() {
-            document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                const questionName = radio.name;
-                const savedAnswer = localStorage.getItem(questionName + '_answer');
-                if (savedAnswer && radio.value === savedAnswer) {
-                    radio.checked = true;
-                    const currentRow = radio.closest('tr');
-                    if (currentRow) {
-                        const myAnsCell = currentRow.cells[4];
-                        const officialKeyCell = currentRow.cells[5];
-                        const resultCell = currentRow.cells[6];
-                        myAnsCell.textContent = savedAnswer;
-                        const officialAnswer = officialKeyCell.textContent.trim();
-                        if (savedAnswer === 'E') resultCell.innerHTML = '<span class="result-icon skipped">○</span>';
-                        else if (savedAnswer === officialAnswer) resultCell.innerHTML = '<span class="result-icon correct">✓</span>';
-                        else resultCell.innerHTML = '<span class="result-icon incorrect">✗</span>';
-                    }
-                }
-            });
-            updateSummaryAndScore();
+        if (selectedOption === 'E') {
+            currentLabel.classList.add('option-skipped');
+            resultCell.innerHTML = ICONS.skipped;
+        } else if (selectedOption === officialAnswer) {
+            currentLabel.classList.add('option-correct');
+            resultCell.innerHTML = ICONS.correct;
+        } else {
+            currentLabel.classList.add('option-incorrect');
+            resultCell.innerHTML = ICONS.incorrect;
         }
 
-        document.addEventListener('DOMContentLoaded', loadSavedAnswers);
-    </script>
+        localStorage.setItem('q' + questionNumber + '_answer', selectedOption);
+        updateSummaryAndScore();
+    }
+
+    function updateSummaryAndScore() {
+        const rows = document.querySelectorAll("#analysisTable tbody tr");
+        let correct = 0, incorrect = 0, skipped = 0;
+        rows.forEach(row => {
+            const resultIconSVG = row.cells[5].querySelector('.result-icon svg');
+            if (resultIconSVG) {
+                const color = resultIconSVG.style.color;
+                if (color.includes('var(--correct-color)')) correct++;
+                else if (color.includes('var(--incorrect-color)')) incorrect++;
+                else if (color.includes('var(--skipped-color)')) skipped++;
+            }
+        });
+
+        document.getElementById('total-count').textContent = rows.length;
+        document.getElementById('correct-count').textContent = correct;
+        document.getElementById('incorrect-count').textContent = incorrect;
+        document.getElementById('skipped-count').textContent = skipped;
+        
+        const finalScore = correct - (incorrect / 3);
+        document.getElementById('final-score-val').textContent = finalScore.toFixed(2);
+        
+        const finalMarks = finalScore * 1.6666666;
+        document.getElementById('final-marks-val').textContent = finalMarks.toFixed(2);
+    }
+    
+    function loadSavedAnswers() {
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            const questionName = radio.name;
+            const savedAnswer = localStorage.getItem(questionName + '_answer');
+            if (savedAnswer && radio.value === savedAnswer) {
+                radio.checked = true;
+                updateAnswer(radio, radio.name.substring(1), savedAnswer);
+            }
+        });
+        
+        document.querySelectorAll('.result-icon').forEach(iconSpan => {
+             if (!iconSpan.innerHTML) {
+                iconSpan.innerHTML = ICONS.unattempted;
+            }
+        });
+        updateSummaryAndScore();
+    }
+
+    function loadMyPaperNumbers() {
+        document.querySelectorAll('#analysisTable tbody tr').forEach(row => {
+            const masterSNoCell = row.cells[0];
+            const myPaperCell = row.cells[1];
+            if (masterSNoCell && myPaperCell) {
+                const masterSNo = masterSNoCell.textContent.trim();
+                const storageKey = `myPaper_sno_${masterSNo}`;
+                const savedValue = localStorage.getItem(storageKey);
+                if (savedValue) {
+                    myPaperCell.querySelector('span').textContent = savedValue;
+                }
+            }
+        });
+    }
+
+    function editCell(spanElement) {
+        const currentVal = spanElement.textContent;
+        const parentTd = spanElement.parentNode;
+        
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.value = currentVal;
+        
+        input.onblur = () => saveCell(input);
+        input.onkeydown = (event) => {
+            if (event.key === 'Enter') {
+                saveCell(input);
+            } else if (event.key === 'Escape') {
+                const span = document.createElement('span');
+                span.textContent = currentVal;
+                span.onclick = () => editCell(span);
+                parentTd.innerHTML = '';
+                parentTd.appendChild(span);
+            }
+        };
+        
+        parentTd.innerHTML = '';
+        parentTd.appendChild(input);
+        input.focus();
+    }
+
+    function saveCell(inputElement) {
+        const newVal = inputElement.value;
+        const parentTd = inputElement.parentNode;
+        const masterSNo = parentTd.closest('tr').cells[0].textContent.trim();
+        const storageKey = `myPaper_sno_${masterSNo}`;
+
+        localStorage.setItem(storageKey, newVal);
+        
+        const span = document.createElement('span');
+        span.textContent = newVal;
+        span.onclick = () => editCell(span);
+        
+        parentTd.innerHTML = '';
+        parentTd.appendChild(span);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadSavedAnswers();
+        loadMyPaperNumbers();
+    });
+    
+    let currentSort = { column: null, direction: 'asc' };
+
+    function sortTable(headerCell, columnIndex) {
+        const table = document.getElementById("analysisTable");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.rows);
+        
+        const direction = (currentSort.column === columnIndex && currentSort.direction === 'asc') ? 'desc' : 'asc';
+        currentSort = { column: columnIndex, direction: direction };
+
+        table.querySelectorAll('th.sortable .sort-arrow').forEach(arrow => arrow.textContent = '');
+        headerCell.querySelector('.sort-arrow').textContent = direction === 'asc' ? '▲' : '▼';
+
+        const resultPriority = {
+            'var(--correct-color)': 1,
+            'var(--incorrect-color)': 2,
+            'var(--skipped-color)': 3,
+            '#ced4da': 4
+        };
+
+        rows.sort((rowA, rowB) => {
+            let valA, valB;
+            if (columnIndex === 5) {
+                const svgA = rowA.cells[columnIndex].querySelector('svg');
+                const svgB = rowB.cells[columnIndex].querySelector('svg');
+                valA = svgA ? resultPriority[svgA.style.color] : 5;
+                valB = svgB ? resultPriority[svgB.style.color] : 5;
+            } else {
+                valA = rowA.cells[columnIndex].textContent.trim();
+                valB = rowB.cells[columnIndex].textContent.trim();
+            }
+
+            const isNumeric = !isNaN(parseFloat(valA)) && isFinite(valA) && !isNaN(parseFloat(valB)) && isFinite(valB);
+            if (isNumeric) {
+                valA = parseFloat(valA);
+                valB = parseFloat(valB);
+            }
+
+            let comparison = 0;
+            if (valA > valB) {
+                comparison = 1;
+            } else if (valA < valB) {
+                comparison = -1;
+            }
+            return direction === 'asc' ? comparison : -comparison;
+        });
+        
+        tbody.innerHTML = '';
+        rows.forEach(row => tbody.appendChild(row));
+    }
+</script>
 
 </body>
 </html>
