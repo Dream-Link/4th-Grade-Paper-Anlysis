@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>फाइनल प्रश्न पत्र</title>
+    <title>फाइनल प्रश्न पत्र (Updated)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -21,9 +21,48 @@
             font-family: 'Noto Sans Devanagari', sans-serif; background-color: var(--primary-bg);
             color: var(--text-color); margin: 0; line-height: 1.6;
         }
+
+        /* --- New Sticky Bar Container --- */
+        .top-sticky-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--container-bg);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 8px 15px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap; 
+        }
+        .header h1 { 
+            margin: 0; 
+            font-size: 1.2em; /* Compacted font size */
+            color: var(--header-color); 
+        }
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #series-select { 
+            padding: 6px 10px; /* Compacted padding */
+            border-radius: 8px; 
+            border: 1px solid var(--border-color); 
+            font-size: 0.9em; 
+            cursor: pointer; 
+        }
+        
         .summary-bar {
-            background-color: var(--container-bg); padding: 6px 8px; box-shadow: 0 4px 12px var(--shadow-color);
-            position: sticky; top: 0; z-index: 100; display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; border-bottom: 1px solid var(--border-color); align-items: stretch;
+            padding: 6px 8px;
+            display: grid; 
+            grid-template-columns: repeat(7, 1fr); 
+            gap: 6px; 
+            align-items: stretch;
         }
         .summary-item { text-align: center; padding: 5px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .summary-item .count { font-size: 1.25em; font-weight: 700; line-height: 1.1; height: 28px; display: flex; align-items: center; justify-content: center; width: 100%; }
@@ -34,17 +73,14 @@
         #right-que-item, #raw-marks-item { background-color: #e0f2fe; color: #0c4a6e; border: 1px solid #bae6fd; }
         
         .container { max-width: 900px; margin: 25px auto; background-color: var(--container-bg); padding: 25px 30px; border-radius: 16px; box-shadow: 0 5px 25px var(--shadow-color); }
-        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; margin-bottom: 5px; flex-wrap: wrap; }
-        .header h1 { margin: 0; font-size: 1.7em; color: var(--header-color); }
-        #series-select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1em; cursor: pointer; }
         .controls-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
         .filter-buttons button { background: none; border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 15px; cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.9em; }
+        .filter-buttons button:hover { background-color: #f1f5f9; }
         .filter-buttons button.active { background-color: var(--accent-light); color: var(--accent-color); border-color: var(--accent-color); font-weight: 500; }
         #print-btn { background-color: var(--accent-color); color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background-color 0.2s; }
         #print-btn:hover { background-color: #1d4ed8; }
         
-        .question-block { margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
-        /* --- Info bar moved to top --- */
+        .question-block { margin-bottom: 30px; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
         .question-info-bar { font-size: 0.8em; color: var(--light-text); margin-bottom: 12px; display: block; background-color: #f8fafc; padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color); }
         .question-block h3 { margin: 0 0 15px 0; color: var(--header-color); font-size: 1.1em; }
         
@@ -55,7 +91,6 @@
         .options-list li.incorrect { background-color: var(--incorrect-bg); border-color: var(--incorrect-border); color: var(--incorrect-text); font-weight: 500; }
         .options-list li.special { background-color: var(--special-bg); border-color: var(--special-border); color: var(--special-text); font-weight: 500; }
 
-        /* --- Print Modal Styles --- */
         #print-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: center; justify-content: center; }
         #print-modal { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 90%; max-width: 400px; }
         #print-modal h2 { margin-top: 0; color: var(--header-color); }
@@ -69,27 +104,103 @@
 
         @media (max-width: 600px) {
             .container { margin: 10px 0; padding: 15px 20px; border-radius: 0; box-shadow: none; }
-            .header h1 { font-size: 1.4em; }
+            .header h1 { font-size: 1em; }
             .controls-bar { flex-direction: column; align-items: stretch; }
             .filter-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
             .filter-buttons button { text-align: center; }
         }
+        @media (max-width: 480px) {
+            .summary-bar { grid-template-columns: repeat(4, 1fr); }
+            .summary-item .label { font-size: 0.6em; }
+        }
+        @media (max-width: 380px) {
+            .summary-bar { grid-template-columns: repeat(3, 1fr); }
+            .header { justify-content: center; text-align: center; }
+            .header h1 { width: 100%; margin-bottom: 8px;}
+        }
+
+        @media print {
+            body { font-size: 10pt; background-color: #fff !important; }
+            .container { box-shadow: none !important; border: none !important; padding: 15px 0; margin: 10px 0; max-width: 100%; }
+            .top-sticky-bar, .controls-bar, #print-modal-overlay { display: none !important; }
+            
+            #print-header { display: block; text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin: 20px; }
+            #print-header h2 { margin: 0; color: #1a2533; font-size: 1.8em; }
+            #print-header p { margin: 8px 0 0 0; font-size: 1.2em; }
+            
+            .print-summary-bar { display: grid !important; grid-template-columns: repeat(7, 1fr) !important; gap: 10px; padding: 10px; border-radius: 12px; background-color: #ffffff !important; border: 1px solid #e2e8f0; }
+            .print-summary-bar .summary-item { border-radius: 8px; padding: 8px; border: 2px solid; }
+            .print-summary-bar .summary-item .count { font-size: 1.6em; }
+            .print-summary-bar .summary-item .label { font-size: 0.8em; opacity: 0.9; }
+            .print-summary-bar #total-item { border-color: #581c87; color: #581c87 !important; background-color: #fff !important; }
+            .print-summary-bar #attempted-item { border-color: #1d4ed8; color: #1d4ed8 !important; background-color: #fff !important; }
+            .print-summary-bar #correct-item { border-color: #16a34a; color: #16a34a !important; background-color: #fff !important; }
+            .print-summary-bar #incorrect-item { border-color: #ef4444; color: #ef4444 !important; background-color: #fff !important; }
+            .print-summary-bar #skipped-item { border-color: #475569; color: #475569 !important; background-color: #fff !important; }
+            .print-summary-bar #right-que-item { border-color: #0c4a6e; color: #0c4a6e !important; background-color: #fff !important; }
+            .print-summary-bar #raw-marks-item { border-color: #9f1239; color: #9f1239 !important; background-color: #fff !important; }
+
+            .question-block { page-break-inside: avoid; padding: 15px; border-color: #ccc !important; border-radius: 8px; margin-bottom: 15px; }
+            .options-list { gap: 4px; } /* Compacted gap */
+            .options-list li { padding: 6px 10px !important; border-radius: 6px !important; border: 1px solid #ddd !important; background-color: #fff !important; color: #333 !important; font-weight: normal !important; }
+            .options-list li.correct { background-color: var(--correct-bg) !important; color: var(--correct-text) !important; font-weight: 500 !important; border-color: var(--correct-border) !important; }
+            .options-list li.incorrect { background-color: var(--incorrect-bg) !important; color: var(--incorrect-text) !important; font-weight: 500 !important; border-color: var(--incorrect-border) !important; }
+            .options-list li.special { background-color: var(--special-bg) !important; color: var(--special-text) !important; font-weight: 500 !important; border-color: var(--special-border) !important; }
+
+            .options-list li.correct::before { content: '✔ '; color: var(--correct-text); }
+            .options-list li.incorrect::before { content: '✘ '; color: var(--incorrect-text); }
+        }
+
+        body.print-mode .controls-bar,
+        body.print-mode #print-btn {
+            display: none;
+        }
+        #print-header, #print-summary-container {
+            display: none; 
+        }
+        body.print-mode #print-header, 
+        body.print-mode #print-summary-container {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <div class="summary-bar">
-        <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">कुल प्रश्न</div></div>
-        <div id="attempted-item" class="summary-item"><div id="attempted-count" class="count">0</div><div class="label">प्रयास</div></div>
-        <div id="correct-item" class="summary-item"><div id="correct-count" class="count">0</div><div class="label">सही</div></div>
-        <div id="incorrect-item" class="summary-item"><div id="incorrect-count" class="count">0</div><div class="label">गलत</div></div>
-        <div id="skipped-item" class="summary-item"><div id="skipped-count" class="count">0</div><div class="label">Skip</div></div>
-        <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Right Que</div></div>
-        <div id="raw-marks-item" class="summary-item"><div id="raw-marks-value" class="count">0.00</div><div class="label">RAW Marks</div></div>
+    <div id="print-header"></div>
+    <div id="print-summary-container"></div>
+
+    <div class="top-sticky-bar">
+        <div class="header">
+            <h1>4th Grade 2nd Shift (20/09/2025)</h1>
+            <div class="header-controls">
+                <label for="series-select">सीरीज़:</label>
+                <select id="series-select">
+                    <option value="A">Series A</option>
+                    <option value="B">Series B</option>
+                    <option value="C">Series C</option>
+                </select>
+            </div>
+        </div>
+        <div class="summary-bar">
+            <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">कुल प्रश्न</div></div>
+            <div id="attempted-item" class="summary-item"><div id="attempted-count" class="count">0</div><div class="label">प्रयास</div></div>
+            <div id="correct-item" class="summary-item"><div id="correct-count" class="count">0</div><div class="label">सही</div></div>
+            <div id="incorrect-item" class="summary-item"><div id="incorrect-count" class="count">0</div><div class="label">गलत</div></div>
+            <div id="skipped-item" class="summary-item"><div id="skipped-count" class="count">0</div><div class="label">Skip</div></div>
+            <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Right Que</div></div>
+            <div id="raw-marks-item" class="summary-item"><div id="raw-marks-value" class="count">0.00</div><div class="label">RAW Marks</div></div>
+        </div>
     </div>
     
     <div class="container">
-        <div class="header"><h1>4th Grade 2nd Shift (20/09/2025)</h1><div class="header-controls"><label for="series-select">सीरीज़:</label><select id="series-select"><option value="A">Series A</option><option value="B">Series B</option><option value="C">Series C</option></select></div></div>
-        <div class="controls-bar"><div class="filter-buttons"><button class="active" data-filter="all">सभी</button><button data-filter="correct">सही</button><button data-filter="incorrect">गलत</button><button data-filter="skipped">Skip (E)</button></div><button id="print-btn">प्रिंट</button></div>
+        <div class="controls-bar">
+            <div class="filter-buttons">
+                <button class="active" data-filter="all">सभी</button>
+                <button data-filter="correct">सही</button>
+                <button data-filter="incorrect">गलत</button>
+                <button data-filter="skipped">Skip (E)</button>
+            </div>
+            <button id="print-btn">प्रिंट</button>
+        </div>
         <div id="questions-container"></div>
     </div>
 
@@ -148,7 +259,7 @@
             currentSeries = series; document.getElementById('series-select').value = series;
             updateSummary(); updateActiveFilterButton(filter);
             const order = seriesOrder[series]; let displayCount = 0;
-            order.forEach((questionId, index) => {
+            order.forEach((questionId) => {
                 const questionData = allQuestions.find(q => q.id === questionId);
                 const status = getQuestionStatus(questionId);
                 if (filter !== 'all' && filter !== status) return;
@@ -169,16 +280,23 @@
                 orderedOptions.push(lastOption);
 
                 orderedOptions.forEach(optionText => {
-                    const optionItem = document.createElement('li'); optionItem.textContent = optionText;
-                    if (userAnswers[questionId] === optionText) { 
-                        if (optionText.startsWith('E)')) optionItem.classList.add('special'); 
-                        else if (optionText === questionData.answer) optionItem.classList.add('correct'); 
-                        else optionItem.classList.add('incorrect'); 
+                    const optionItem = document.createElement('li');
+                    optionItem.textContent = optionText;
+                    const userAnswer = userAnswers[questionId];
+
+                    if (userAnswer) {
+                        if (userAnswer === optionText) {
+                            if (optionText.startsWith('E)')) optionItem.classList.add('special');
+                            else if (optionText === questionData.answer) optionItem.classList.add('correct');
+                            else optionItem.classList.add('incorrect');
+                        }
+                        if (userAnswer !== questionData.answer && optionText === questionData.answer) {
+                            optionItem.classList.add('correct');
+                        }
                     }
                     optionsList.appendChild(optionItem);
                 });
                 
-                // --- Changed Append Order ---
                 questionBlock.appendChild(infoBar);
                 questionBlock.appendChild(questionTitle); 
                 questionBlock.appendChild(optionsList); 
@@ -192,44 +310,28 @@
         document.getElementById('series-select').addEventListener('change', (e) => { displayQuestions(e.target.value, activeFilter); saveData(); });
         document.querySelectorAll('.filter-buttons button').forEach(button => { button.addEventListener('click', () => { activeFilter = button.dataset.filter; displayQuestions(currentSeries, activeFilter); saveData(); }); });
         
-        function executePrint(name, rollNo) {
-            const printWindow = window.open('', '', 'height=800,width=800');
-            let baseStyles = document.querySelector('style').innerHTML;
+        function triggerPrint(name, rollNo) {
+            const printHeader = document.getElementById('print-header');
+            printHeader.innerHTML = `<h2>4th Grade 2nd Shift (20/09/2025)</h2><p><strong>नाम:</strong> ${name} | <strong>रोल नंबर:</strong> ${rollNo}</p>`;
             
-            const printSpecificStyles = `
-                @media print {
-                    @page { size: A4; margin: 20px; }
-                    body { font-family: 'Noto Sans Devanagari', sans-serif; background-color: #fff; font-size: 10pt; }
-                    .container { box-shadow: none; border: none; padding: 15px 0; margin: 10px 0; }
-                    .header, .controls-bar, #print-modal-overlay { display: none !important; }
-                    #print-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-                    #print-header h2 { margin: 0; color: #1a2533; font-size: 1.8em; }
-                    #print-header p { margin: 8px 0 0 0; font-size: 1.2em; }
-                    .summary-bar { position: static; box-shadow: none; display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; padding: 10px; border-radius: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; }
-                    .summary-bar .summary-item { border-radius: 8px; color: #fff; padding: 8px; } .summary-bar .summary-item .count { font-size: 1.6em; } .summary-bar .summary-item .label { font-size: 0.8em; opacity: 0.9; }
-                    #total-item { background-color: #581c87; } #attempted-item { background-color: #1d4ed8; } #correct-item { background-color: #16a34a; }
-                    #incorrect-item { background-color: #ef4444; } #skipped-item { background-color: #475569; } #right-que-item { background-color: #0c4a6e; } #raw-marks-item { background-color: #9f1239; }
-                    .question-block { page-break-inside: avoid; padding: 15px; border-color: #ccc; border-radius: 8px; }
-                    .options-list li { padding: 8px 12px !important; border-radius: 6px !important; border: 1px solid #ddd !important; background-color: #fff !important; color: #333 !important; font-weight: normal !important; border-left-width: 5px !important; }
-                    /* --- Fixed Print Colors using Hex Codes --- */
-                    .options-list li.correct { border-left-color: #15803d !important; background-color: #dcfce7 !important; color: #15803d !important; font-weight: 500 !important; }
-                    .options-list li.incorrect { border-left-color: #b91c1c !important; background-color: #fee2e2 !important; color: #b91c1c !important; font-weight: 500 !important; }
-                    .options-list li.special { border-left-color: #1e40af !important; background-color: #dbeafe !important; color: #1e40af !important; font-weight: 500 !important; }
-                }
-            `;
-
-            printWindow.document.write('<html><head><title>Print Results</title><style>' + baseStyles + printSpecificStyles + '</style></head><body>');
-            const printHeader = `<div id="print-header"><h2>प्रश्न पत्र परिणाम</h2><p><strong>नाम:</strong> ${name} | <strong>रोल नंबर:</strong> ${rollNo}</p></div>`;
-            const summaryHTML = document.querySelector('.summary-bar').outerHTML;
-            const questionsHTML = document.getElementById('questions-container').innerHTML;
-            printWindow.document.write(printHeader + summaryHTML + '<div class="container">' + questionsHTML + '</div>');
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.focus();
-            setTimeout(() => { printWindow.print(); printWindow.close(); }, 300);
+            const summaryBarClone = document.querySelector('.summary-bar').cloneNode(true);
+            summaryBarClone.className = 'print-summary-bar';
+            document.getElementById('print-summary-container').innerHTML = '';
+            document.getElementById('print-summary-container').appendChild(summaryBarClone);
+            
+            document.body.classList.add('print-mode');
+            
+            setTimeout(() => {
+                window.print();
+            }, 100);
         }
 
-        // --- New Print Modal Logic ---
+        window.addEventListener('afterprint', () => {
+            document.body.classList.remove('print-mode');
+            document.getElementById('print-header').innerHTML = '';
+            document.getElementById('print-summary-container').innerHTML = '';
+        });
+
         const printBtn = document.getElementById('print-btn');
         const printModalOverlay = document.getElementById('print-modal-overlay');
         const cancelPrintBtn = document.getElementById('cancel-print');
@@ -255,7 +357,7 @@
             localStorage.setItem('studentName', name);
             localStorage.setItem('studentRoll', rollNo);
             printModalOverlay.style.display = 'none';
-            executePrint(name, rollNo);
+            triggerPrint(name, rollNo);
         });
 
         window.addEventListener('load', () => { 
