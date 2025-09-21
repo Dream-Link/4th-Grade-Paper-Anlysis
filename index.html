@@ -5,179 +5,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>फाइनल प्रश्न पत्र</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-bg: #f4f7f8; --container-bg: #ffffff; --header-color: #1a2533;
             --text-color: #334155; --light-text: #64748b; --border-color: #e2e8f0;
             --accent-color: #2563eb; --accent-light: #eff6ff; --shadow-color: rgba(0, 0, 0, 0.08);
-            --correct-bg: #f0fdf4; --correct-border: #bbf7d0; --correct-text: #16a34a;
-            --incorrect-bg: #fef2f2; --incorrect-border: #fecaca; --incorrect-text: #ef4444;
-            --special-bg: #eff6ff; --special-border: #bfdbfe; --special-text: #3b82f6;
+            --correct-bg: #dcfce7; --correct-border: #86efac; --correct-text: #15803d;
+            --incorrect-bg: #fee2e2; --incorrect-border: #fca5a5; --incorrect-text: #b91c1c;
+            --special-bg: #dbeafe; --special-border: #93c5fd; --special-text: #1e40af;
             --skipped-bg: #f8fafc; --skipped-border: #e2e8f0; --skipped-text: #475569;
         }
-
         body {
-            font-family: 'Noto Sans Devanagari', sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-color);
-            margin: 0;
-            line-height: 1.6;
+            font-family: 'Noto Sans Devanagari', sans-serif; background-color: var(--primary-bg);
+            color: var(--text-color); margin: 0; line-height: 1.6;
         }
-
-        /* --- नया मॉडर्न और कलरफुल टॉप बार --- */
         .summary-bar {
-            background-color: var(--container-bg);
-            padding: 15px 10px;
-            box-shadow: 0 4px 12px var(--shadow-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            border-bottom: 1px solid var(--border-color);
+            background-color: var(--container-bg); padding: 6px 8px; box-shadow: 0 4px 12px var(--shadow-color);
+            position: sticky; top: 0; z-index: 100; display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; border-bottom: 1px solid var(--border-color); align-items: stretch;
         }
-        .summary-item {
-            text-align: center;
-            padding: 10px;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .summary-item .count {
-            font-size: 1.5em;
-            font-weight: 700;
-        }
-        .summary-item .label {
-            font-size: 0.8em;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
-        /* रंग */
-        #total-item { background-color: #f3e8ff; color: #581c87; }
-        #attempted-item { background-color: var(--accent-light); color: var(--accent-color); }
-        #correct-item { background-color: var(--correct-bg); color: var(--correct-text); }
-        #incorrect-item { background-color: var(--incorrect-bg); color: var(--incorrect-text); }
+        .summary-item { text-align: center; padding: 5px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .summary-item .count { font-size: 1.25em; font-weight: 700; line-height: 1.1; height: 28px; display: flex; align-items: center; justify-content: center; width: 100%; }
+        .summary-item .label { font-size: 0.65em; text-transform: uppercase; font-weight: 500; }
+        #total-item { background-color: #f3e8ff; color: #581c87; } #attempted-item { background-color: var(--accent-light); color: var(--accent-color); }
+        #correct-item { background-color: var(--correct-bg); color: var(--correct-text); } #incorrect-item { background-color: var(--incorrect-bg); color: var(--incorrect-text); }
         #skipped-item { background-color: var(--skipped-bg); color: var(--skipped-text); }
-
-
-        .container {
-            max-width: 900px;
-            margin: 25px auto;
-            background-color: var(--container-bg);
-            padding: 25px 30px;
-            border-radius: 16px;
-            box-shadow: 0 5px 25px var(--shadow-color);
-        }
-
-        .header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 15px; margin-bottom: 5px; flex-wrap: wrap;
-        }
+        #right-que-item, #raw-marks-item { background-color: #e0f2fe; color: #0c4a6e; border: 1px solid #bae6fd; }
+        
+        .container { max-width: 900px; margin: 25px auto; background-color: var(--container-bg); padding: 25px 30px; border-radius: 16px; box-shadow: 0 5px 25px var(--shadow-color); }
+        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; margin-bottom: 5px; flex-wrap: wrap; }
         .header h1 { margin: 0; font-size: 1.7em; color: var(--header-color); }
-        #series-select {
-            padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color);
-            font-size: 1em; cursor: pointer;
-        }
-
-        .controls-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 0; border-bottom: 1px solid var(--border-color);
-            margin-bottom: 25px; flex-wrap: wrap; gap: 10px;
-        }
-        .filter-buttons button {
-            background: none; border: 1px solid var(--border-color); border-radius: 20px;
-            padding: 6px 15px; cursor: pointer; transition: all 0.2s;
-            font-family: inherit; font-size: 0.9em;
-        }
-        .filter-buttons button.active {
-            background-color: var(--accent-light); color: var(--accent-color);
-            border-color: var(--accent-color); font-weight: 500;
-        }
-        #print-btn {
-            background-color: var(--accent-color); color: white; border: none;
-            padding: 8px 18px; border-radius: 8px; cursor: pointer;
-            font-weight: 500; transition: background-color 0.2s;
-        }
+        #series-select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1em; cursor: pointer; }
+        .controls-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
+        .filter-buttons button { background: none; border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 15px; cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.9em; }
+        .filter-buttons button.active { background-color: var(--accent-light); color: var(--accent-color); border-color: var(--accent-color); font-weight: 500; }
+        #print-btn { background-color: var(--accent-color); color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background-color 0.2s; }
         #print-btn:hover { background-color: #1d4ed8; }
-
-        .question-block {
-            margin-bottom: 20px; border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 20px;
-        }
+        
+        .question-block { margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
+        /* --- Info bar moved to top --- */
+        .question-info-bar { font-size: 0.8em; color: var(--light-text); margin-bottom: 12px; display: block; background-color: #f8fafc; padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color); }
         .question-block h3 { margin: 0 0 15px 0; color: var(--header-color); font-size: 1.1em; }
         
-        /* --- प्रश्न ट्रैकिंग बार --- */
-        .question-info-bar {
-            font-size: 0.85em; color: var(--light-text); background-color: #f8fafc;
-            padding: 6px 12px; border-radius: 6px; margin-top: 20px; border: 1px solid var(--border-color);
-            display: inline-block;
-        }
-
         .options-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-        .options-list li {
-            border: 1px solid var(--border-color); padding: 10px 15px;
-            border-radius: 8px; cursor: pointer; transition: all 0.2s;
-        }
+        .options-list li { border: 1px solid var(--border-color); padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
         .options-list li:hover { border-color: var(--accent-color); background-color: var(--accent-light); }
-        
         .options-list li.correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-text); font-weight: 500; }
         .options-list li.incorrect { background-color: var(--incorrect-bg); border-color: var(--incorrect-border); color: var(--incorrect-text); font-weight: 500; }
         .options-list li.special { background-color: var(--special-bg); border-color: var(--special-border); color: var(--special-text); font-weight: 500; }
 
-        @media print {
-            body { background-color: #fff; font-size: 12pt; }
-            .summary-bar, .controls-bar, #print-btn, .header-controls { display: none; }
-            .container { margin: 0; padding: 0; box-shadow: none; border: none; }
-            .question-block { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; page-break-inside: avoid; }
-            .options-list li { padding: 8px; }
-            #print-header { display: block !important; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
-            #print-summary { display: flex !important; justify-content: space-around; background-color: #f2f2f2; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        /* --- Print Modal Styles --- */
+        #print-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: center; justify-content: center; }
+        #print-modal { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 90%; max-width: 400px; }
+        #print-modal h2 { margin-top: 0; color: var(--header-color); }
+        #print-modal p { margin-bottom: 20px; font-size: 0.9em; }
+        #print-modal label { display: block; margin-bottom: 5px; font-weight: 500; }
+        #print-modal input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; }
+        .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; }
+        .modal-buttons button { padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 500; }
+        #cancel-print { background-color: #f1f5f9; color: var(--text-color); }
+        #confirm-print { background-color: var(--accent-color); color: white; }
+
+        @media (max-width: 600px) {
+            .container { margin: 10px 0; padding: 15px 20px; border-radius: 0; box-shadow: none; }
+            .header h1 { font-size: 1.4em; }
+            .controls-bar { flex-direction: column; align-items: stretch; }
+            .filter-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+            .filter-buttons button { text-align: center; }
         }
     </style>
 </head>
 <body>
-
     <div class="summary-bar">
-        <div id="total-item" class="summary-item">
-            <div id="total-count" class="count">0</div><div class="label">कुल प्रश्न</div>
-        </div>
-        <div id="attempted-item" class="summary-item">
-            <div id="attempted-count" class="count">0</div><div class="label">प्रयास</div>
-        </div>
-        <div id="correct-item" class="summary-item">
-            <div id="correct-count" class="count">0</div><div class="label">सही</div>
-        </div>
-        <div id="incorrect-item" class="summary-item">
-            <div id="incorrect-count" class="count">0</div><div class="label">गलत</div>
-        </div>
-        <div id="skipped-item" class="summary-item">
-            <div id="skipped-count" class="count">0</div><div class="label">Skip</div>
-        </div>
+        <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">कुल प्रश्न</div></div>
+        <div id="attempted-item" class="summary-item"><div id="attempted-count" class="count">0</div><div class="label">प्रयास</div></div>
+        <div id="correct-item" class="summary-item"><div id="correct-count" class="count">0</div><div class="label">सही</div></div>
+        <div id="incorrect-item" class="summary-item"><div id="incorrect-count" class="count">0</div><div class="label">गलत</div></div>
+        <div id="skipped-item" class="summary-item"><div id="skipped-count" class="count">0</div><div class="label">Skip</div></div>
+        <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Right Que</div></div>
+        <div id="raw-marks-item" class="summary-item"><div id="raw-marks-value" class="count">0.00</div><div class="label">RAW Marks</div></div>
+    </div>
+    
+    <div class="container">
+        <div class="header"><h1>4th Grade 2nd Shift (20/09/2025)</h1><div class="header-controls"><label for="series-select">सीरीज़:</label><select id="series-select"><option value="A">Series A</option><option value="B">Series B</option><option value="C">Series C</option></select></div></div>
+        <div class="controls-bar"><div class="filter-buttons"><button class="active" data-filter="all">सभी</button><button data-filter="correct">सही</button><button data-filter="incorrect">गलत</button><button data-filter="skipped">Skip (E)</button></div><button id="print-btn">प्रिंट</button></div>
+        <div id="questions-container"></div>
     </div>
 
-    <div class="container">
-        <div class="header">
-            <h1>प्रश्न पत्र</h1>
-            <div class="header-controls">
-                <label for="series-select">सीरीज़:</label>
-                <select id="series-select">
-                    <option value="A">Series A</option><option value="B">Series B</option><option value="C">Series C</option>
-                </select>
+    <div id="print-modal-overlay">
+        <div id="print-modal">
+            <h2>प्रिंट जानकारी</h2>
+            <p>प्रिंट करने के लिए अपना नाम और रोल नंबर दर्ज करें।</p>
+            <label for="student-name">नाम:</label>
+            <input type="text" id="student-name" placeholder="अपना नाम यहाँ लिखें">
+            <label for="student-roll">रोल नंबर:</label>
+            <input type="text" id="student-roll" placeholder="अपना रोल नंबर यहाँ लिखें">
+            <div class="modal-buttons">
+                <button id="cancel-print">रद्द करें</button>
+                <button id="confirm-print">प्रिंट करें</button>
             </div>
         </div>
-        <div class="controls-bar">
-            <div class="filter-buttons">
-                <button class="active" data-filter="all">सभी</button><button data-filter="correct">सही</button>
-                <button data-filter="incorrect">गलत</button><button data-filter="skipped">Skip</button>
-            </div>
-            <button id="print-btn">प्रिंट</button>
-        </div>
-        <div id="questions-container"></div>
     </div>
     
     <script>
@@ -190,157 +118,149 @@
         ];
 
         const seriesOrder = { 'A': [1, 2, 3, 4, 5], 'B': [3, 5, 1, 4, 2], 'C': [5, 4, 3, 2, 1] };
-        
+        const seriesOptionOrder = { '1': { 'A': [0, 3, 2, 1], 'B': [1, 2, 0, 3], 'C': [2, 1, 3, 0] }, '2': { 'A': [0, 3, 2, 1], 'B': [1, 2, 0, 3], 'C': [2, 1, 3, 0] } };
         let userAnswers = JSON.parse(localStorage.getItem('userAnswers')) || {};
         let currentSeries = localStorage.getItem('currentSeries') || 'A';
         let activeFilter = localStorage.getItem('activeFilter') || 'all';
 
-        function saveData() {
-            localStorage.setItem('userAnswers', JSON.stringify(userAnswers));
-            localStorage.setItem('currentSeries', currentSeries);
-            localStorage.setItem('activeFilter', activeFilter);
-        }
-
-        function getQuestionStatus(questionId) {
-            const userAnswer = userAnswers[questionId];
-            if (!userAnswer || userAnswer.startsWith('E)')) return 'skipped';
-            
-            const questionData = allQuestions.find(q => q.id === questionId);
-            if (userAnswer === questionData.answer) return 'correct';
-            return 'incorrect';
-        }
-
-        function updateSummary() {
-            let correct = 0, incorrect = 0, attempted = 0, skipped = 0;
-            
-            allQuestions.forEach(q => {
-                const status = getQuestionStatus(q.id);
-                if (status === 'correct') { correct++; attempted++; }
-                else if (status === 'incorrect') { incorrect++; attempted++; }
-                else { skipped++; }
-            });
-
-            document.getElementById('total-count').textContent = allQuestions.length;
-            document.getElementById('attempted-count').textContent = attempted;
-            document.getElementById('correct-count').textContent = correct;
-            document.getElementById('incorrect-count').textContent = incorrect;
-            document.getElementById('skipped-count').textContent = skipped;
-        }
+        function saveData() { localStorage.setItem('userAnswers', JSON.stringify(userAnswers)); localStorage.setItem('currentSeries', currentSeries); localStorage.setItem('activeFilter', activeFilter); }
+        function getQuestionStatus(questionId) { const userAnswer = userAnswers[questionId]; if (!userAnswer) return 'unattempted'; if (userAnswer.startsWith('E)')) return 'skipped'; const questionData = allQuestions.find(q => q.id === questionId); if (userAnswer === questionData.answer) return 'correct'; return 'incorrect'; }
         
-        function findQuestionPositions(questionId) {
-            let positions = [];
-            for (const series in seriesOrder) {
-                const index = seriesOrder[series].indexOf(questionId) + 1;
-                positions.push(`Series ${series}: #${index}`);
-            }
-            return positions.join(' | ');
+        function updateSummary() { 
+            let correct = 0, incorrect = 0, attempted = 0, unattempted = 0, special_attempts = 0; 
+            allQuestions.forEach(q => { const status = getQuestionStatus(q.id); if (status === 'correct') correct++; else if (status === 'incorrect') incorrect++; else if (status === 'skipped') special_attempts++; else unattempted++; }); 
+            attempted = correct + incorrect + special_attempts;
+            document.getElementById('total-count').textContent = allQuestions.length; 
+            document.getElementById('attempted-count').textContent = attempted; 
+            document.getElementById('correct-count').textContent = correct; 
+            document.getElementById('incorrect-count').textContent = incorrect; 
+            document.getElementById('skipped-count').textContent = unattempted;
+            const rightQue = correct - (incorrect / 3);
+            const rawMarks = rightQue * 1.6666666;
+            document.getElementById('right-que-value').textContent = rightQue.toFixed(3);
+            document.getElementById('raw-marks-value').textContent = rawMarks.toFixed(3);
         }
+
+        function findQuestionPositions(questionId) { let positions = []; for (const series in seriesOrder) { const index = seriesOrder[series].indexOf(questionId) + 1; positions.push(`Series ${series}: #${index}`); } return positions.join(' | '); }
         
         function displayQuestions(series, filter = 'all') {
             document.getElementById('questions-container').innerHTML = '';
-            currentSeries = series;
-            document.getElementById('series-select').value = series;
-            updateSummary();
-            updateActiveFilterButton(filter);
-
-            const order = seriesOrder[series];
-            let displayCount = 0;
-
+            currentSeries = series; document.getElementById('series-select').value = series;
+            updateSummary(); updateActiveFilterButton(filter);
+            const order = seriesOrder[series]; let displayCount = 0;
             order.forEach((questionId, index) => {
                 const questionData = allQuestions.find(q => q.id === questionId);
                 const status = getQuestionStatus(questionId);
-                
-                const shouldShow = filter === 'all' || filter === status;
-                if (!shouldShow) return;
+                if (filter !== 'all' && filter !== status) return;
                 displayCount++;
+                const questionBlock = document.createElement('div'); questionBlock.className = 'question-block';
+                const questionTitle = document.createElement('h3'); questionTitle.textContent = `प्रश्न ${displayCount}: ${questionData.question}`;
+                const optionsList = document.createElement('ul'); optionsList.className = 'options-list';
+                const infoBar = document.createElement('div'); infoBar.className = 'question-info-bar'; infoBar.textContent = findQuestionPositions(questionId);
+                
+                let orderedOptions;
+                const lastOption = questionData.options[questionData.options.length - 1];
+                let firstFourOptions = questionData.options.slice(0, -1);
+                if (seriesOptionOrder[questionId] && seriesOptionOrder[questionId][series]) {
+                    orderedOptions = seriesOptionOrder[questionId][series].map(index => firstFourOptions[index]);
+                } else {
+                    orderedOptions = firstFourOptions;
+                }
+                orderedOptions.push(lastOption);
 
-                const questionBlock = document.createElement('div');
-                questionBlock.className = 'question-block';
-                
-                const questionTitle = document.createElement('h3');
-                questionTitle.textContent = `प्रश्न ${displayCount}: ${questionData.question}`;
-                
-                const optionsList = document.createElement('ul');
-                optionsList.className = 'options-list';
-                questionData.options.forEach(optionText => {
-                    const optionItem = document.createElement('li');
-                    optionItem.textContent = optionText;
-                    if (userAnswers[questionId] === optionText) {
-                        if (optionText.startsWith('E)')) optionItem.classList.add('special');
-                        else if (optionText === questionData.answer) optionItem.classList.add('correct');
-                        else optionItem.classList.add('incorrect');
+                orderedOptions.forEach(optionText => {
+                    const optionItem = document.createElement('li'); optionItem.textContent = optionText;
+                    if (userAnswers[questionId] === optionText) { 
+                        if (optionText.startsWith('E)')) optionItem.classList.add('special'); 
+                        else if (optionText === questionData.answer) optionItem.classList.add('correct'); 
+                        else optionItem.classList.add('incorrect'); 
                     }
                     optionsList.appendChild(optionItem);
                 });
                 
-                const infoBar = document.createElement('div');
-                infoBar.className = 'question-info-bar';
-                infoBar.textContent = findQuestionPositions(questionId);
-
-                questionBlock.appendChild(questionTitle);
-                questionBlock.appendChild(optionsList);
+                // --- Changed Append Order ---
                 questionBlock.appendChild(infoBar);
+                questionBlock.appendChild(questionTitle); 
+                questionBlock.appendChild(optionsList); 
                 document.getElementById('questions-container').appendChild(questionBlock);
-
-                optionsList.addEventListener('click', (e) => {
-                    if (e.target.tagName === 'LI') {
-                        userAnswers[questionData.id] = e.target.textContent;
-                        displayQuestions(currentSeries, activeFilter);
-                        saveData();
-                    }
-                });
+                optionsList.addEventListener('click', (e) => { if (e.target.tagName === 'LI') { userAnswers[questionData.id] = e.target.textContent; displayQuestions(currentSeries, activeFilter); saveData(); } });
             });
-            if (displayCount === 0) {
-                 document.getElementById('questions-container').innerHTML = `<p style="text-align:center; color: var(--light-text);">इस श्रेणी में कोई प्रश्न नहीं है।</p>`;
-            }
+            if (displayCount === 0) { document.getElementById('questions-container').innerHTML = `<p style="text-align:center; color: var(--light-text);">इस श्रेणी में कोई प्रश्न नहीं है।</p>`; }
         }
         
-        function updateActiveFilterButton(filter) {
-            document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active');
-        }
-
-        document.getElementById('series-select').addEventListener('change', (e) => {
-            displayQuestions(e.target.value, activeFilter);
-            saveData();
-        });
-
-        document.querySelectorAll('.filter-buttons button').forEach(button => {
-            button.addEventListener('click', () => {
-                activeFilter = button.dataset.filter;
-                displayQuestions(currentSeries, activeFilter);
-                saveData();
-            });
-        });
+        function updateActiveFilterButton(filter) { document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active')); document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active'); }
+        document.getElementById('series-select').addEventListener('change', (e) => { displayQuestions(e.target.value, activeFilter); saveData(); });
+        document.querySelectorAll('.filter-buttons button').forEach(button => { button.addEventListener('click', () => { activeFilter = button.dataset.filter; displayQuestions(currentSeries, activeFilter); saveData(); }); });
         
-        document.getElementById('print-btn').addEventListener('click', () => {
-            const name = prompt("कृपया अपना नाम दर्ज करें:");
-            if (!name) { alert("नाम आवश्यक है।"); return; }
-            const rollNo = prompt("कृपया अपना रोल नंबर दर्ज करें:");
-            if (!rollNo) { alert("रोल नंबर आवश्यक है।"); return; }
-            
+        function executePrint(name, rollNo) {
             const printWindow = window.open('', '', 'height=800,width=800');
-            printWindow.document.write('<html><head><title>Print</title>');
-            printWindow.document.write('<style>' + document.querySelector('style').innerHTML + '</style>');
-            printWindow.document.write('</head><body>');
+            let baseStyles = document.querySelector('style').innerHTML;
             
-            const printHeader = `<div id="print-header"><h2>प्रश्न पत्र परिणाम</h2><p><strong>नाम:</strong> ${name} | <strong>रोल नंबर:</strong> ${rollNo}</p></div>`;
-            const summaryHTML = document.querySelector('.summary-bar').cloneNode(true);
-            summaryHTML.id = "print-summary";
+            const printSpecificStyles = `
+                @media print {
+                    @page { size: A4; margin: 20px; }
+                    body { font-family: 'Noto Sans Devanagari', sans-serif; background-color: #fff; font-size: 10pt; }
+                    .container { box-shadow: none; border: none; padding: 15px 0; margin: 10px 0; }
+                    .header, .controls-bar, #print-modal-overlay { display: none !important; }
+                    #print-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+                    #print-header h2 { margin: 0; color: #1a2533; font-size: 1.8em; }
+                    #print-header p { margin: 8px 0 0 0; font-size: 1.2em; }
+                    .summary-bar { position: static; box-shadow: none; display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; padding: 10px; border-radius: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; }
+                    .summary-bar .summary-item { border-radius: 8px; color: #fff; padding: 8px; } .summary-bar .summary-item .count { font-size: 1.6em; } .summary-bar .summary-item .label { font-size: 0.8em; opacity: 0.9; }
+                    #total-item { background-color: #581c87; } #attempted-item { background-color: #1d4ed8; } #correct-item { background-color: #16a34a; }
+                    #incorrect-item { background-color: #ef4444; } #skipped-item { background-color: #475569; } #right-que-item { background-color: #0c4a6e; } #raw-marks-item { background-color: #9f1239; }
+                    .question-block { page-break-inside: avoid; padding: 15px; border-color: #ccc; border-radius: 8px; }
+                    .options-list li { padding: 8px 12px !important; border-radius: 6px !important; border: 1px solid #ddd !important; background-color: #fff !important; color: #333 !important; font-weight: normal !important; border-left-width: 5px !important; }
+                    /* --- Fixed Print Colors using Hex Codes --- */
+                    .options-list li.correct { border-left-color: #15803d !important; background-color: #dcfce7 !important; color: #15803d !important; font-weight: 500 !important; }
+                    .options-list li.incorrect { border-left-color: #b91c1c !important; background-color: #fee2e2 !important; color: #b91c1c !important; font-weight: 500 !important; }
+                    .options-list li.special { border-left-color: #1e40af !important; background-color: #dbeafe !important; color: #1e40af !important; font-weight: 500 !important; }
+                }
+            `;
 
-            printWindow.document.write(printHeader);
-            printWindow.document.write(summaryHTML.outerHTML);
-            printWindow.document.write(document.querySelector('.container').innerHTML);
-            
-            printWindow.document.querySelectorAll('.header, .controls-bar').forEach(el => el.remove());
-            
+            printWindow.document.write('<html><head><title>Print Results</title><style>' + baseStyles + printSpecificStyles + '</style></head><body>');
+            const printHeader = `<div id="print-header"><h2>प्रश्न पत्र परिणाम</h2><p><strong>नाम:</strong> ${name} | <strong>रोल नंबर:</strong> ${rollNo}</p></div>`;
+            const summaryHTML = document.querySelector('.summary-bar').outerHTML;
+            const questionsHTML = document.getElementById('questions-container').innerHTML;
+            printWindow.document.write(printHeader + summaryHTML + '<div class="container">' + questionsHTML + '</div>');
+            printWindow.document.write('</body></html>');
             printWindow.document.close();
             printWindow.focus();
-            setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
+            setTimeout(() => { printWindow.print(); printWindow.close(); }, 300);
+        }
+
+        // --- New Print Modal Logic ---
+        const printBtn = document.getElementById('print-btn');
+        const printModalOverlay = document.getElementById('print-modal-overlay');
+        const cancelPrintBtn = document.getElementById('cancel-print');
+        const confirmPrintBtn = document.getElementById('confirm-print');
+
+        printBtn.addEventListener('click', () => {
+            document.getElementById('student-name').value = localStorage.getItem('studentName') || '';
+            document.getElementById('student-roll').value = localStorage.getItem('studentRoll') || '';
+            printModalOverlay.style.display = 'flex';
         });
 
-        window.addEventListener('load', () => {
-            displayQuestions(currentSeries, activeFilter);
+        cancelPrintBtn.addEventListener('click', () => {
+            printModalOverlay.style.display = 'none';
+        });
+
+        confirmPrintBtn.addEventListener('click', () => {
+            const name = document.getElementById('student-name').value;
+            const rollNo = document.getElementById('student-roll').value;
+            if (!name || !rollNo) {
+                alert("नाम और रोल नंबर दोनों आवश्यक हैं।");
+                return;
+            }
+            localStorage.setItem('studentName', name);
+            localStorage.setItem('studentRoll', rollNo);
+            printModalOverlay.style.display = 'none';
+            executePrint(name, rollNo);
+        });
+
+        window.addEventListener('load', () => { 
+            document.querySelector('.filter-buttons button[data-filter="skipped"]').textContent = 'Skip (E)';
+            displayQuestions(currentSeries, activeFilter); 
         });
     </script>
 </body>
