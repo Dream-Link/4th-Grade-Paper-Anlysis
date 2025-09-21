@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4th Grade Anlysis By MP Salodiya</title>
+    <title>4th Grade Analysis By MP Salodiya</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
@@ -60,7 +60,6 @@
         #skipped-item { background-color: var(--special-bg); color: var(--special-text); }
         #right-que-item, #raw-marks-item { background-color: #e0f2fe; color: #0c4a6e; }
         
-        /* PC MODE: WIDE CONTAINER */
         .container { max-width: 1100px; margin: 25px auto; background-color: var(--container-bg); padding: 25px 30px; border-radius: 16px; box-shadow: 0 5px 25px var(--shadow-color); }
         
         .controls-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
@@ -88,27 +87,55 @@
         #cancel-print { background-color: #f1f5f9; color: var(--text-color); }
         #confirm-print { background-color: var(--accent-color); color: white; }
 
-        /* ANDROID MODE / MOBILE STYLES */
         @media (max-width: 768px) {
             #shift-selector-page { padding: 0; }
-            .selector-container { width: 100%; min-height: 100vh; border-radius: 0; border-top: none; box-shadow: none; padding: 30px 20px; display: flex; flex-direction: column; justify-content: center; }
+            .selector-container { 
+                width: 100%; min-height: 100vh; border-radius: 0; 
+                border-top: none; box-shadow: none; padding: 30px 20px; 
+                display: flex; flex-direction: column; justify-content: center; 
+            }
             .selector-container h1 { font-size: 2em; }
-            /* PHONE MODE: FULL-WIDTH CONTAINER */
-            .container { margin: 0; padding: 20px 15px; border-radius: 0; box-shadow: none; }
+            .container { margin: 0; padding: 15px 10px; border-radius: 0; box-shadow: none; }
+
+            /* --- START: ANDROID ALIGNMENT & COMPACT LAYOUT IMPROVEMENTS --- */
+            .header { padding: 8px 10px; justify-content: center; }
+            .header h1 { font-size: 1.1em; width: 100%; order: -1; /* शीर्षक को सबसे ऊपर ले जाएं */ }
+            .header-controls { width: 100%; justify-content: center; }
+            .header #back-to-main-btn { position: absolute; left: 10px; top: 10px; /* वापस जाएं बटन को कोने में रखें */ }
+            
+            .summary-bar { gap: 5px; padding: 8px; }
+            .summary-item .count { font-size: 1.1em; }
+            .summary-item .label { font-size: 0.6em; }
+            .controls-bar { padding: 10px 0; margin-bottom: 15px; }
+            .filter-buttons button { padding: 5px 12px; font-size: 0.85em; }
+            #print-btn { padding: 6px 15px; font-size: 0.85em; }
+            .question-block { padding: 15px; margin-bottom: 20px; }
+            .question-block h3 { font-size: 1em; }
+            /* --- END: ANDROID ALIGNMENT & COMPACT LAYOUT IMPROVEMENTS --- */
         }
 
-        /* PRINT STYLES (WITH FIX FOR ANDROID) */
         @media print {
             body { font-size: 10pt; background-color: #fff !important; }
-            .container, .question-block { box-shadow: none !important; border-color: #ccc !important; }
-            .top-sticky-bar, .controls-bar, #print-modal-overlay, #shift-selector-page, #back-to-main-btn { display: none !important; }
-            #print-header { display: block !important; text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin: 20px; }
-            #question-paper-page, #print-summary-container { display: block !important; }
-            .print-summary-bar { display: grid !important; grid-template-columns: repeat(7, 1fr) !important; gap: 10px; padding: 10px; border: 1px solid #e2e8f0; }
+            .top-sticky-bar, .controls-bar, #print-modal-overlay, #shift-selector-page, #back-to-main-btn { 
+                display: none !important; 
+            }
+            .container, .question-block { 
+                box-shadow: none !important; 
+                border-color: #ccc !important; 
+                margin: 10px 0;
+            }
+            #question-paper-page { display: block !important; }
+            #print-only-header, #print-only-summary-container { display: block !important; }
+            #print-only-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin: 20px; }
+            .print-summary-bar {
+                display: grid !important;
+                grid-template-columns: repeat(7, 1fr) !important;
+                gap: 10px; padding: 10px; border: 1px solid #e2e8f0; margin: 0 20px;
+            }
             .print-summary-bar .summary-item { border: 2px solid; }
             .question-block { page-break-inside: avoid; }
-            /* ANDROID PRINTING FIX: Force background colors to print */
-            .print-summary-bar .summary-item, .options-list li.correct, .options-list li.incorrect, .options-list li.special {
+            .print-summary-bar .summary-item, .options-list li.correct, 
+            .options-list li.incorrect, .options-list li.special {
                 -webkit-print-color-adjust: exact !important;
                 color-adjust: exact !important;
             }
@@ -136,8 +163,9 @@
     </div>
 
     <div id="question-paper-page">
-        <div id="print-header"></div>
-        <div id="print-summary-container"></div>
+        <div id="print-only-header" style="display: none;"></div>
+        <div id="print-only-summary-container" style="display: none;"></div>
+
         <div class="top-sticky-bar">
             <div class="header">
                  <button id="back-to-main-btn">&larr; वापस जाएं</button>
@@ -182,19 +210,16 @@
     </div>
     
     <script>
+    // --- START: QUESTION IDs UPDATED TO 4-DIGIT STRINGS ---
     const allShiftData = {
-        'shift1':{title:'1st Grade 1st Shift (21/09/2025)',questions:[{id:101,question:"राजस्थान की राजधानी क्या है?",options:["A) उदयपुर","B) जोधपुर","C) जयपुर","D) अजमेर","E) इनमें से कोई नहीं"],answer:"C) जयपुर"},{id:102,question:"भारत का राष्ट्रीय पक्षी कौन है?",options:["A) तोता","B) मोर","C) कबूतर","D) गौरेया","E) इनमें से कोई नहीं"],answer:"B) मोर"},{id:103,question:"पृथ्वी पर कितने महासागर हैं?",options:["A) 7","B) 4","C) 5","D) 8","E) इनमें से कोई नहीं"],answer:"C) 5"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{'101':{'A':[0,1,2,3],'B':[3,2,1,0],'C':[1,0,3,2]},'102':{'A':[0,1,2,3],'B':[3,2,1,0],'C':[1,0,3,2]}}},
-      
-        'shift2':{title:'4th Grade 2nd Shift (20/09/2025)',questions:[{id:201,question:"भारत की राष्ट्रीय नदी कौन सी है?",options:["A) यमुना","B) ब्रह्मपुत्र","C) गंगा","D) गोदावरी","E) इनमें से कोई नहीं"],answer:"C) गंगा"},{id:202,question:"सौर मंडल का सबसे बड़ा ग्रह कौन सा है?",options:["A) पृथ्वी","B) बृहस्पति","C) मंगल","D) शनि","E) इनमें से कोई नहीं"],answer:"B) बृहस्पति"},{id:203,question:"'ताजमहल' किस शहर में स्थित है?",options:["A) दिल्ली","B) जयपुर","C) मुंबई","D) आगरा","E) इनमें से कोई नहीं"],answer:"D) आगरा"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
-      
-        'shift3':{title:'3rd Grade 3rd Shift (22/09/2025)',questions:[{id:301,question:"भारत के प्रथम प्रधानमंत्री कौन थे?",options:["A) महात्मा गांधी","B) जवाहरलाल नेहरू","C) सरदार पटेल","D) राजेंद्र प्रसाद","E) इनमें से कोई नहीं"],answer:"B) जवाहरलाल नेहरू"},{id:302,question:"प्रकाश की गति कितनी होती है?",options:["A) 3 लाख किमी/सेकंड","B) 2 लाख किमी/सेकंड","C) 1.5 लाख किमी/सेकंड","D) 5 लाख किमी/सेकंड","E) इनमें से कोई नहीं"],answer:"A) 3 लाख किमी/सेकंड"},{id:303,question:"विश्व का सबसे ऊँचा पर्वत कौन सा है?",options:["A) कंचनजंघा","B) K2","C) माउंट एवरेस्ट","D) मकालू","E) इनमें से कोई नहीं"],answer:"C) माउंट एवरेस्ट"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
-      
-        'shift4':{title:'1st Grade 4th Shift (23/09/2025)',questions:[{id:401,question:"मानव शरीर में कितनी हड्डियाँ होती हैं?",options:["A) 206","B) 306","C) 106","D) 256","E) इनमें से कोई नहीं"],answer:"A) 206"},{id:402,question:"गुलाबी शहर किसे कहा जाता है?",options:["A) जोधपुर","B) उदयपुर","C) दिल्ली","D) जयपुर","E) इनमें से कोई नहीं"],answer:"D) जयपुर"},{id:403,question:"एक वर्ष में कितने दिन होते हैं?",options:["A) 360","B) 365","C) 355","D) 370","E) इनमें से कोई नहीं"],answer:"B) 365"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
-      
-        'shift5':{title:'2nd Grade 5th Shift (24/09/2025)',questions:[{id:501,question:"भारत की मुद्रा क्या है?",options:["A) डॉलर","B) यूरो","C) रुपया","D) येन","E) इनमें से कोई नहीं"],answer:"C) रुपया"},{id:502,question:"कंप्यूटर का आविष्कार किसने किया?",options:["A) न्यूटन","B) आइंस्टीन","C) चार्ल्स बैबेज","D) ग्राहम बेल","E) इनमें से कोई नहीं"],answer:"C) चार्ल्स बैबेज"},{id:503,question:"भारत का राष्ट्रीय फूल कौन सा है?",options:["A) गुलाब","B) कमल","C) गेंदा","D) सूरजमुखी","E) इनमें से कोई नहीं"],answer:"B) कमल"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
-      
-        'shift6':{title:'4th Grade 6th Shift (25/09/2025)',questions:[{id:601,question:"जापान की राजधानी क्या है?",options:["A) बीजिंग","B) सियोल","C) टोक्यो","D) बैंकॉक","E) इनमें से कोई नहीं"],answer:"C) टोक्यो"},{id:602,question:"सबसे छोटा महाद्वीप कौन सा है?",options:["A) एशिया","B) अफ्रीका","C) यूरोप","D) ऑस्ट्रेलिया","E) इनमें से कोई नहीं"],answer:"D) ऑस्ट्रेलिया"},{id:603,question:"'स्टैच्यू ऑफ यूनिटी' किस राज्य में है?",options:["A) महाराष्ट्र","B) गुजरात","C) राजस्थान","D) उत्तर प्रदेश","E) इनमें से कोई नहीं"],answer:"B) गुजरात"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}}
+        'shift1':{title:'1st Grade 1st Shift (21/09/2025)',questions:[{id:'0101',question:"राजस्थान की राजधानी क्या है?",options:["A) उदयपुर","B) जोधपुर","C) जयपुर","D) अजमेर","E) इनमें से कोई नहीं"],answer:"C) जयपुर"},{id:'0102',question:"भारत का राष्ट्रीय पक्षी कौन है?",options:["A) तोता","B) मोर","C) कबूतर","D) गौरेया","E) इनमें से कोई नहीं"],answer:"B) मोर"},{id:'0103',question:"पृथ्वी पर कितने महासागर हैं?",options:["A) 7","B) 4","C) 5","D) 8","E) इनमें से कोई नहीं"],answer:"C) 5"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{'0101':{'A':[0,1,2,3],'B':[3,2,1,0],'C':[1,0,3,2]},'0102':{'A':[0,1,2,3],'B':[3,2,1,0],'C':[1,0,3,2]}}},
+        'shift2':{title:'4th Grade 2nd Shift (20/09/2025)',questions:[{id:'0201',question:"भारत की राष्ट्रीय नदी कौन सी है?",options:["A) यमुना","B) ब्रह्मपुत्र","C) गंगा","D) गोदावरी","E) इनमें से कोई नहीं"],answer:"C) गंगा"},{id:'0202',question:"सौर मंडल का सबसे बड़ा ग्रह कौन सा है?",options:["A) पृथ्वी","B) बृहस्पति","C) मंगल","D) शनि","E) इनमें से कोई नहीं"],answer:"B) बृहस्पति"},{id:'0203',question:"'ताजमहल' किस शहर में स्थित है?",options:["A) दिल्ली","B) जयपुर","C) मुंबई","D) आगरा","E) इनमें से कोई नहीं"],answer:"D) आगरा"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
+        'shift3':{title:'3rd Grade 3rd Shift (22/09/2025)',questions:[{id:'0301',question:"भारत के प्रथम प्रधानमंत्री कौन थे?",options:["A) महात्मा गांधी","B) जवाहरलाल नेहरू","C) सरदार पटेल","D) राजेंद्र प्रसाद","E) इनमें से कोई नहीं"],answer:"B) जवाहरलाल नेहरू"},{id:'0302',question:"प्रकाश की गति कितनी होती है?",options:["A) 3 लाख किमी/सेकंड","B) 2 लाख किमी/सेकंड","C) 1.5 लाख किमी/सेकंड","D) 5 लाख किमी/सेकंड","E) इनमें से कोई नहीं"],answer:"A) 3 लाख किमी/सेकंड"},{id:'0303',question:"विश्व का सबसे ऊँचा पर्वत कौन सा है?",options:["A) कंचनजंघा","B) K2","C) माउंट एवरेस्ट","D) मकालू","E) इनमें से कोई नहीं"],answer:"C) माउंट एवरेस्ट"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
+        'shift4':{title:'1st Grade 4th Shift (23/09/2025)',questions:[{id:'0401',question:"मानव शरीर में कितनी हड्डियाँ होती हैं?",options:["A) 206","B) 306","C) 106","D) 256","E) इनमें से कोई नहीं"],answer:"A) 206"},{id:'0402',question:"गुलाबी शहर किसे कहा जाता है?",options:["A) जोधपुर","B) उदयपुर","C) दिल्ली","D) जयपुर","E) इनमें से कोई नहीं"],answer:"D) जयपुर"},{id:'0403',question:"एक वर्ष में कितने दिन होते हैं?",options:["A) 360","B) 365","C) 355","D) 370","E) इनमें से कोई नहीं"],answer:"B) 365"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
+        'shift5':{title:'2nd Grade 5th Shift (24/09/2025)',questions:[{id:'0501',question:"भारत की मुद्रा क्या है?",options:["A) डॉलर","B) यूरो","C) रुपया","D) येन","E) इनमें से कोई नहीं"],answer:"C) रुपया"},{id:'0502',question:"कंप्यूटर का आविष्कार किसने किया?",options:["A) न्यूटन","B) आइंस्टीन","C) चार्ल्स बैबेज","D) ग्राहम बेल","E) इनमें से कोई नहीं"],answer:"C) चार्ल्स बैबेज"},{id:'0503',question:"भारत का राष्ट्रीय फूल कौन सा है?",options:["A) गुलाब","B) कमल","C) गेंदा","D) सूरजमुखी","E) इनमें से कोई नहीं"],answer:"B) कमल"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
+        'shift6':{title:'4th Grade 6th Shift (25/09/2025)',questions:[{id:'0601',question:"जापान की राजधानी क्या है?",options:["A) बीजिंग","B) सियोल","C) टोक्यो","D) बैंकॉक","E) इनमें से कोई नहीं"],answer:"C) टोक्यो"},{id:'0602',question:"सबसे छोटा महाद्वीप कौन सा है?",options:["A) एशिया","B) अफ्रीका","C) यूरोप","D) ऑस्ट्रेलिया","E) इनमें से कोई नहीं"],answer:"D) ऑस्ट्रेलिया"},{id:'0603',question:"'स्टैच्यू ऑफ यूनITY' किस राज्य में है?",options:["A) महाराष्ट्र","B) गुजरात","C) राजस्थान","D) उत्तर प्रदेश","E) इनमें से कोई नहीं"],answer:"B) गुजरात"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}}
     };
+    // --- END: QUESTION IDs UPDATED ---
       
     let currentShiftId=null,allQuestions=[],userAnswers={},currentSeries='A',activeFilter='all',currentShiftData={};
     const shiftSelectorPage=document.getElementById('shift-selector-page'),questionPaperPage=document.getElementById('question-paper-page');
@@ -215,12 +240,48 @@
     document.getElementById('series-select').addEventListener('change',(e)=>{displayQuestions(e.target.value,activeFilter);saveData();});
     document.querySelectorAll('.filter-buttons button').forEach(b=>b.addEventListener('click',()=>{activeFilter=b.dataset.filter;displayQuestions(currentSeries,activeFilter);}));
     document.getElementById('toggle-summary-btn').addEventListener('click',(e)=>{const sB=document.querySelector('.summary-bar');sB.classList.toggle('hidden');e.target.textContent=sB.classList.contains('hidden')?'Show Result':'Hide Result';});
-    function triggerPrint(name,rollNo){const pH=document.getElementById('print-header');const sT=document.getElementById('shift-title').textContent;pH.innerHTML=`<h2>${sT}</h2><p><strong>नाम:</strong> ${name} | <strong>रोल नंबर:</strong> ${rollNo}</p>`;const sBO=document.querySelector('.summary-bar');const wH=sBO.classList.contains('hidden');if(wH)sBO.classList.remove('hidden');const sBC=sBO.cloneNode(true);sBC.className='print-summary-bar';document.getElementById('print-summary-container').innerHTML='';document.getElementById('print-summary-container').appendChild(sBC);if(wH)sBO.classList.add('hidden');document.body.classList.add('print-mode');setTimeout(()=>{window.print();},150);}
-    window.addEventListener('afterprint',()=>{document.body.classList.remove('print-mode');document.getElementById('print-header').innerHTML='';document.getElementById('print-summary-container').innerHTML='';});
-    const printBtn=document.getElementById('print-btn');const pMO=document.getElementById('print-modal-overlay');printBtn.addEventListener('click',()=>{pMO.style.display='flex';});
-    document.getElementById('cancel-print').addEventListener('click',()=>{pMO.style.display='none';});
-    document.getElementById('confirm-print').addEventListener('click',()=>{const name=document.getElementById('student-name').value;const rollNo=document.getElementById('student-roll').value;if(!name||!rollNo){alert("नाम और रोल नंबर दोनों आवश्यक हैं।");return;}
-    pMO.style.display='none';triggerPrint(name,rollNo);});
+    
+    function triggerPrint(name, rollNo) {
+        const shiftTitle = document.getElementById('shift-title').textContent;
+        const summaryBarOriginal = document.querySelector('.summary-bar');
+        
+        const printHeader = document.getElementById('print-only-header');
+        printHeader.innerHTML = `<h2>${shiftTitle}</h2><p><strong>नाम:</strong> ${name} | <strong>रोल नंबर:</strong> ${rollNo}</p>`;
+
+        const summaryBarClone = summaryBarOriginal.cloneNode(true);
+        summaryBarClone.className = 'print-summary-bar';
+        summaryBarClone.classList.remove('hidden'); 
+        
+        const printSummaryContainer = document.getElementById('print-only-summary-container');
+        printSummaryContainer.innerHTML = ''; 
+        printSummaryContainer.appendChild(summaryBarClone);
+
+        setTimeout(() => {
+             window.print();
+        }, 150);
+    }
+
+    window.addEventListener('afterprint', () => {
+        document.getElementById('print-only-header').innerHTML = '';
+        document.getElementById('print-only-summary-container').innerHTML = '';
+    });
+
+    const printBtn = document.getElementById('print-btn');
+    const pMO = document.getElementById('print-modal-overlay');
+    printBtn.addEventListener('click', () => { pMO.style.display = 'flex'; });
+    
+    document.getElementById('cancel-print').addEventListener('click', () => { pMO.style.display = 'none'; });
+    
+    document.getElementById('confirm-print').addEventListener('click', () => {
+        const name = document.getElementById('student-name').value;
+        const rollNo = document.getElementById('student-roll').value;
+        if (!name || !rollNo) {
+            alert("नाम और रोल नंबर दोनों आवश्यक हैं।");
+            return;
+        }
+        pMO.style.display = 'none';
+        triggerPrint(name, rollNo);
+    });
     </script>
 </body>
 </html>
