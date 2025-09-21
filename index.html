@@ -143,40 +143,39 @@
                  <button id="back-to-main-btn">&larr; वापस जाएं</button>
                  <h1 id="shift-title">Shift Title</h1>
                 <div class="header-controls">
-                    <label for="series-select">सीरीज़:</label>
-                    <select id="series-select"> <option value="A">Series A</option> <option value="B">Series B</option> <option value="C">Series C</option> </select>
+                    <label for="series-select">PAPER Code:</label>
+                    <select id="series-select"> <option value="A"> A</option> <option value="B">B</option> <option value="C">C</option> </select>
                     <button id="toggle-summary-btn">Show Result</button>
                 </div>
             </div>
             <div class="summary-bar hidden">
-                <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">कुल प्रश्न</div></div>
-                <div id="attempted-item" class="summary-item"><div id="attempted-count" class="count">0</div><div class="label">प्रयास</div></div>
-                <div id="correct-item" class="summary-item"><div id="correct-count" class="count">0</div><div class="label">सही</div></div>
-                <div id="incorrect-item" class="summary-item"><div id="incorrect-count" class="count">0</div><div class="label">गलत</div></div>
+                <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">Total Que.</div></div>
+                <div id="attempted-item" class="summary-item"><div id="attempted-count" class="count">0</div><div class="label">Attempt</div></div>
+                <div id="correct-item" class="summary-item"><div id="correct-count" class="count">0</div><div class="label">Right</div></div>
+                <div id="incorrect-item" class="summary-item"><div id="incorrect-count" class="count">0</div><div class="label">Wrong</div></div>
                 <div id="skipped-item" class="summary-item"><div id="skipped-count" class="count">0</div><div class="label">Skip (E)</div></div>
-                <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Right Que</div></div>
+                <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Final R.Q. </div></div>
                 <div id="raw-marks-item" class="summary-item"><div id="raw-marks-value" class="count">0.00</div><div class="label">RAW Marks</div></div>
             </div>
         </div>
         <div class="container">
             <div class="controls-bar">
                 <div class="filter-buttons">
-                    <button class="active" data-filter="all">सभी</button> <button data-filter="correct">सही</button> <button data-filter="incorrect">गलत</button> <button data-filter="skipped">Skip (E)</button>
+                    <button class="active" data-filter="all">All</button> <button data-filter="correct">Right</button> <button data-filter="incorrect">Wrong</button> <button data-filter="skipped">Skip (E)</button>
                 </div>
-                <button id="print-btn">प्रिंट</button>
+                <button id="print-btn">Print</button>
             </div>
             <div id="questions-container"></div>
         </div>
         <div id="print-modal-overlay">
             <div id="print-modal">
-                <h2>प्रिंट जानकारी</h2>
-                <p>प्रिंट करने के लिए अपना नाम और रोल नंबर दर्ज करें।</p>
-                <label for="student-name">नाम:</label>
-                <input type="text" id="student-name" placeholder="अपना नाम यहाँ लिखें">
-                <label for="student-roll">रोल नंबर:</label>
-                <input type="text" id="student-roll" placeholder="अपना रोल नंबर यहाँ लिखें">
+                <h2>Print info</h2>
+                <label for="student-name">Name:</label>
+                <input type="text" id="student-name" placeholder="Your Name">
+                <label for="student-roll">Roll No.:</label>
+                <input type="text" id="student-roll" placeholder="Your Roll No.">
                 <div class="modal-buttons">
-                    <button id="cancel-print">रद्द करें</button> <button id="confirm-print">प्रिंट करें</button>
+                    <button id="cancel-print">Cancel</button> <button id="confirm-print">Print</button>
                 </div>
             </div>
         </div>
@@ -185,12 +184,18 @@
     <script>
     const allShiftData = {
         'shift1':{title:'1st Grade 1st Shift (21/09/2025)',questions:[{id:101,question:"राजस्थान की राजधानी क्या है?",options:["A) उदयपुर","B) जोधपुर","C) जयपुर","D) अजमेर","E) इनमें से कोई नहीं"],answer:"C) जयपुर"},{id:102,question:"भारत का राष्ट्रीय पक्षी कौन है?",options:["A) तोता","B) मोर","C) कबूतर","D) गौरेया","E) इनमें से कोई नहीं"],answer:"B) मोर"},{id:103,question:"पृथ्वी पर कितने महासागर हैं?",options:["A) 7","B) 4","C) 5","D) 8","E) इनमें से कोई नहीं"],answer:"C) 5"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{'101':{'A':[0,1,2,3],'B':[3,2,1,0],'C':[1,0,3,2]},'102':{'A':[0,1,2,3],'B':[3,2,1,0],'C':[1,0,3,2]}}},
+      
         'shift2':{title:'4th Grade 2nd Shift (20/09/2025)',questions:[{id:201,question:"भारत की राष्ट्रीय नदी कौन सी है?",options:["A) यमुना","B) ब्रह्मपुत्र","C) गंगा","D) गोदावरी","E) इनमें से कोई नहीं"],answer:"C) गंगा"},{id:202,question:"सौर मंडल का सबसे बड़ा ग्रह कौन सा है?",options:["A) पृथ्वी","B) बृहस्पति","C) मंगल","D) शनि","E) इनमें से कोई नहीं"],answer:"B) बृहस्पति"},{id:203,question:"'ताजमहल' किस शहर में स्थित है?",options:["A) दिल्ली","B) जयपुर","C) मुंबई","D) आगरा","E) इनमें से कोई नहीं"],answer:"D) आगरा"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
+      
         'shift3':{title:'3rd Grade 3rd Shift (22/09/2025)',questions:[{id:301,question:"भारत के प्रथम प्रधानमंत्री कौन थे?",options:["A) महात्मा गांधी","B) जवाहरलाल नेहरू","C) सरदार पटेल","D) राजेंद्र प्रसाद","E) इनमें से कोई नहीं"],answer:"B) जवाहरलाल नेहरू"},{id:302,question:"प्रकाश की गति कितनी होती है?",options:["A) 3 लाख किमी/सेकंड","B) 2 लाख किमी/सेकंड","C) 1.5 लाख किमी/सेकंड","D) 5 लाख किमी/सेकंड","E) इनमें से कोई नहीं"],answer:"A) 3 लाख किमी/सेकंड"},{id:303,question:"विश्व का सबसे ऊँचा पर्वत कौन सा है?",options:["A) कंचनजंघा","B) K2","C) माउंट एवरेस्ट","D) मकालू","E) इनमें से कोई नहीं"],answer:"C) माउंट एवरेस्ट"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
+      
         'shift4':{title:'1st Grade 4th Shift (23/09/2025)',questions:[{id:401,question:"मानव शरीर में कितनी हड्डियाँ होती हैं?",options:["A) 206","B) 306","C) 106","D) 256","E) इनमें से कोई नहीं"],answer:"A) 206"},{id:402,question:"गुलाबी शहर किसे कहा जाता है?",options:["A) जोधपुर","B) उदयपुर","C) दिल्ली","D) जयपुर","E) इनमें से कोई नहीं"],answer:"D) जयपुर"},{id:403,question:"एक वर्ष में कितने दिन होते हैं?",options:["A) 360","B) 365","C) 355","D) 370","E) इनमें से कोई नहीं"],answer:"B) 365"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
+      
         'shift5':{title:'2nd Grade 5th Shift (24/09/2025)',questions:[{id:501,question:"भारत की मुद्रा क्या है?",options:["A) डॉलर","B) यूरो","C) रुपया","D) येन","E) इनमें से कोई नहीं"],answer:"C) रुपया"},{id:502,question:"कंप्यूटर का आविष्कार किसने किया?",options:["A) न्यूटन","B) आइंस्टीन","C) चार्ल्स बैबेज","D) ग्राहम बेल","E) इनमें से कोई नहीं"],answer:"C) चार्ल्स बैबेज"},{id:503,question:"भारत का राष्ट्रीय फूल कौन सा है?",options:["A) गुलाब","B) कमल","C) गेंदा","D) सूरजमुखी","E) इनमें से कोई नहीं"],answer:"B) कमल"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
+      
         'shift6':{title:'4th Grade 6th Shift (25/09/2025)',questions:[{id:601,question:"जापान की राजधानी क्या है?",options:["A) बीजिंग","B) सियोल","C) टोक्यो","D) बैंकॉक","E) इनमें से कोई नहीं"],answer:"C) टोक्यो"},{id:602,question:"सबसे छोटा महाद्वीप कौन सा है?",options:["A) एशिया","B) अफ्रीका","C) यूरोप","D) ऑस्ट्रेलिया","E) इनमें से कोई नहीं"],answer:"D) ऑस्ट्रेलिया"},{id:603,question:"'स्टैच्यू ऑफ यूनिटी' किस राज्य में है?",options:["A) महाराष्ट्र","B) गुजरात","C) राजस्थान","D) उत्तर प्रदेश","E) इनमें से कोई नहीं"],answer:"B) गुजरात"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}}
     };
+      
     let currentShiftId=null,allQuestions=[],userAnswers={},currentSeries='A',activeFilter='all',currentShiftData={};
     const shiftSelectorPage=document.getElementById('shift-selector-page'),questionPaperPage=document.getElementById('question-paper-page');
     function showHomePage(){shiftSelectorPage.style.display='flex';questionPaperPage.style.display='none';currentShiftId=null;history.replaceState(null,'',window.location.pathname);}
@@ -205,7 +210,7 @@
     function displayQuestions(series,filter='all'){const qC=document.getElementById('questions-container');qC.innerHTML='';currentSeries=series;document.getElementById('series-select').value=series;updateSummary();updateActiveFilterButton(filter);const seriesOrder=currentShiftData.seriesOrder||{};const qIds=allQuestions.map(q=>q.id);const order=(seriesOrder[series]||[]).map(i=>qIds[i-1]).filter(id=>id);let dC=0;order.forEach(qId=>{const qData=allQuestions.find(q=>q.id===qId);const status=getQuestionStatus(qId);if(filter!=='all'&&filter!==status)return;dC++;const qB=document.createElement('div');qB.className='question-block';const iB=document.createElement('div');iB.className='question-info-bar';iB.textContent=findQuestionPositions(qId);qB.appendChild(iB);const qT=document.createElement('h3');qT.textContent=`प्रश्न ${dC}: ${qData.question}`;const oL=document.createElement('ul');oL.className='options-list';let orderedOptions;const lastOption=qData.options[qData.options.length-1];let firstFourOptions=qData.options.slice(0,-1);const optionOrderMap=currentShiftData.seriesOptionOrder?.[qData.id]?.[series];if(optionOrderMap){orderedOptions=optionOrderMap.map(index=>firstFourOptions[index]);}else{orderedOptions=firstFourOptions;}
     orderedOptions.push(lastOption);orderedOptions.forEach(oT=>{const oI=document.createElement('li');oI.textContent=oT;const uA=userAnswers[qId];if(uA&&uA===oT){if(status==='correct')oI.classList.add('correct');else if(status==='incorrect')oI.classList.add('incorrect');else if(status==='skipped')oI.classList.add('special');}
     oL.appendChild(oI);});qB.appendChild(qT);qB.appendChild(oL);if(status==='correct'||status==='incorrect'||status==='skipped'){const aD=document.createElement('div');aD.className='correct-answer-display';aD.innerHTML=`Correct Ans. is - <strong>${qData.answer}</strong>`;qB.appendChild(aD);}
-    qC.appendChild(qB);oL.addEventListener('click',(e)=>{if(e.target.tagName==='LI'){userAnswers[qData.id]=e.target.textContent;displayQuestions(currentSeries,activeFilter);saveData();}});});if(dC===0){qC.innerHTML=`<p style="text-align:center; color: var(--light-text);">इस श्रेणी में कोई प्रश्न नहीं है।</p>`;}}
+    qC.appendChild(qB);oL.addEventListener('click',(e)=>{if(e.target.tagName==='LI'){userAnswers[qData.id]=e.target.textContent;displayQuestions(currentSeries,activeFilter);saveData();}});});if(dC===0){qC.innerHTML=`<p style="text-align:center; color: var(--light-text);">Empty</p>`;}}
     function updateActiveFilterButton(filter){document.querySelectorAll('.filter-buttons button').forEach(btn=>btn.classList.remove('active'));document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active');}
     document.getElementById('series-select').addEventListener('change',(e)=>{displayQuestions(e.target.value,activeFilter);saveData();});
     document.querySelectorAll('.filter-buttons button').forEach(b=>b.addEventListener('click',()=>{activeFilter=b.dataset.filter;displayQuestions(currentSeries,activeFilter);}));
