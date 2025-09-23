@@ -265,10 +265,10 @@
 
 
     <!-- Firebase SDK -->
-    <script type="module">
+   <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { 
             getFirestore, doc, collection, addDoc, getDocs, onSnapshot, 
             updateDoc, deleteDoc, query, where, writeBatch 
@@ -282,23 +282,23 @@
         let studySessions = [];
         let studyTimeChart;
 
+        // 1. __app_id को global (सबसे ऊपर) बनाया गया है ताकि सभी functions इसे इस्तेमाल कर सकें।
+        const __app_id = "study-planner-pro";
+
         // --- FIREBASE SETUP ---
-       // --- FIREBASE SETUP ---
+        // 2. initializeFirebase function को सिंटैक्स एरर के लिए ठीक किया गया है।
         function initializeFirebase() {
             try {
-                // 1. स्टेप 1 से कॉपी किया हुआ अपना firebaseConfig कोड यहाँ पेस्ट करें।
+                // यहाँ आपकी Firebase कॉन्फ़िगरेशन है
                 const firebaseConfig = {
-  apiKey: "AIzaSyApJFN9a_iqI5xKvhU20N6pkkmNe12Cb2s",
-  authDomain: "study-manage-83992.firebaseapp.com",
-  projectId: "study-manage-83992",
-  storageBucket: "study-manage-83992.firebasestorage.app",
-  messagingSenderId: "827804856712",
-  appId: "1:827804856712:web:2e5629989deb773eb6ca3d",
-  measurementId: "G-EFPR7MLJW5"
-};
-
-                // 2. अपने ऐप के लिए एक यूनिक नाम दें। यह डेटाबेस पाथ बनाने के काम आएगा।
-                const __app_id = "study-planner-pro";
+                    apiKey: "AIzaSyApJFN9a_iqI5xKvhU20N6pkkmNe12Cb2s",
+                    authDomain: "study-manage-83992.firebaseapp.com",
+                    projectId: "study-manage-83992",
+                    storageBucket: "study-manage-83992.firebasestorage.app",
+                    messagingSenderId: "827804856712",
+                    appId: "1:827804856712:web:2e5629989deb773eb6ca3d",
+                    measurementId: "G-EFPR7MLJW5"
+                };
 
                 // Firebase ऐप को शुरू करें
                 const app = initializeApp(firebaseConfig);
@@ -329,11 +329,6 @@
                 showError("Could not connect to the database. Please check your connection and refresh.");
             }
         }
-            } catch (e) {
-                console.error("Firebase initialization error:", e);
-                showError("Could not connect to the database. Please check your connection and refresh.");
-            }
-        }
         
         function hideLoadingIndicator() {
             document.getElementById('loading-indicator').classList.add('hidden');
@@ -349,26 +344,24 @@
         // --- DATA FETCHING & RENDERING ---
         async function fetchAllData() {
             if (!userId) return;
+            const basePath = `artifacts/${__app_id}/users/${userId}`;
 
             // Subjects listener
-            const subjectsQuery = collection(db, `artifacts/${__app_id}/users/${userId}/subjects`);
-            onSnapshot(subjectsQuery, (snapshot) => {
+            onSnapshot(collection(db, `${basePath}/subjects`), (snapshot) => {
                 subjects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderSubjects();
                 updateAllUI();
             });
 
             // Tasks listener
-            const tasksQuery = collection(db, `artifacts/${__app_id}/users/${userId}/tasks`);
-            onSnapshot(tasksQuery, (snapshot) => {
+            onSnapshot(collection(db, `${basePath}/tasks`), (snapshot) => {
                 tasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderAllTasks(); // Rerender tasks within subjects
+                renderAllTasks();
                 updateAllUI();
             });
 
             // Study Sessions listener
-            const sessionsQuery = collection(db, `artifacts/${__app_id}/users/${userId}/studySessions`);
-            onSnapshot(sessionsQuery, (snapshot) => {
+            onSnapshot(collection(db, `${basePath}/studySessions`), (snapshot) => {
                 studySessions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 updateAllUI();
             });
@@ -411,9 +404,7 @@
                         <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${progress}%"></div>
                     </div>
                     <div class="mt-4">
-                        <div class="task-list space-y-2" data-subject-id="${subject.id}">
-                            <!-- Tasks for this subject will be rendered here -->
-                        </div>
+                        <div class="task-list space-y-2" data-subject-id="${subject.id}"></div>
                     </div>
                     <button class="add-task-btn mt-3 text-blue-500 hover:text-blue-700 text-sm font-semibold" data-subject-id="${subject.id}">
                         <i class="fas fa-plus-circle mr-1"></i>Naya Task Jodein
@@ -462,7 +453,6 @@
             progressBar.style.width = `${progress}%`;
             document.getElementById('overall-progress-text').textContent = `${Math.round(progress)}% poora hua.`;
 
-            // Today's tasks
             const today = new Date().toISOString().split('T')[0];
             const todaysTasks = tasks.filter(t => t.dueDate === today && !t.isCompleted);
             const todaysTasksList = document.getElementById('todays-tasks-list');
@@ -505,11 +495,7 @@
             const dataBySubject = {};
 
             subjects.forEach(subject => {
-                dataBySubject[subject.id] = {
-                    name: subject.name,
-                    color: subject.color,
-                    time: 0
-                };
+                dataBySubject[subject.id] = { name: subject.name, color: subject.color, time: 0 };
             });
             
             studySessions.forEach(session => {
@@ -529,22 +515,12 @@
                         label: 'Study Time (minutes)',
                         data: chartData.map(d => d.time),
                         backgroundColor: chartData.map(d => d.color),
-                        borderColor: chartData.map(d => d.color),
-                        borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: false } }
                 }
             });
         }
@@ -554,14 +530,9 @@
             e.preventDefault();
             const name = document.getElementById('subject-name').value;
             const color = document.getElementById('subject-color').value;
-
-            try {
-                const subjectCollection = collection(db, `artifacts/${__app_id}/users/${userId}/subjects`);
-                await addDoc(subjectCollection, { name, color, createdAt: new Date() });
-                closeSubjectModal();
-            } catch (error) {
-                console.error("Error adding subject: ", error);
-            }
+            const subjectCollection = collection(db, `artifacts/${__app_id}/users/${userId}/subjects`);
+            await addDoc(subjectCollection, { name, color, createdAt: new Date() });
+            closeSubjectModal();
         }
 
         async function handleTaskForm(e) {
@@ -569,48 +540,46 @@
             const name = document.getElementById('task-name').value;
             const dueDate = document.getElementById('task-due-date').value;
             const subjectId = document.getElementById('task-subject-id').value;
-
-            try {
-                const taskCollection = collection(db, `artifacts/${__app_id}/users/${userId}/tasks`);
-                await addDoc(taskCollection, { name, dueDate, subjectId, isCompleted: false, createdAt: new Date() });
-                closeTaskModal();
-            } catch (error) {
-                console.error("Error adding task: ", error);
-            }
+            const taskCollection = collection(db, `artifacts/${__app_id}/users/${userId}/tasks`);
+            await addDoc(taskCollection, { name, dueDate, subjectId, isCompleted: false, createdAt: new Date() });
+            closeTaskModal();
         }
         
         async function toggleTaskCompletion(taskId, isCompleted) {
-             try {
-                const taskRef = doc(db, `artifacts/${__app_id}/users/${userId}/tasks`, taskId);
-                await updateDoc(taskRef, { isCompleted });
-            } catch (error) {
-                console.error("Error updating task: ", error);
-            }
+            const taskRef = doc(db, `artifacts/${__app_id}/users/${userId}/tasks`, taskId);
+            await updateDoc(taskRef, { isCompleted });
         }
 
+        // 3. Subject delete करने पर उससे जुड़े study sessions भी अब delete हो जाएंगे।
         async function deleteSubject(subjectId) {
             if (!confirm(`Kya aap is subject ko delete karna chahte hain? Iske sabhi tasks bhi delete ho jayenge.`)) return;
             
             try {
                 const batch = writeBatch(db);
+                const basePath = `artifacts/${__app_id}/users/${userId}`;
 
                 // Delete subject
-                const subjectRef = doc(db, `artifacts/${__app_id}/users/${userId}/subjects`, subjectId);
-                batch.delete(subjectRef);
+                batch.delete(doc(db, `${basePath}/subjects`, subjectId));
 
                 // Find and delete associated tasks
                 const tasksToDelete = tasks.filter(t => t.subjectId === subjectId);
-                tasksToDelete.forEach(task => {
-                    const taskRef = doc(db, `artifacts/${__app_id}/users/${userId}/tasks`, task.id);
-                    batch.delete(taskRef);
+                const taskIdsToDelete = tasksToDelete.map(t => t.id);
+                taskIdsToDelete.forEach(taskId => {
+                    batch.delete(doc(db, `${basePath}/tasks`, taskId));
                 });
+
+                // Find and delete associated study sessions
+                if (taskIdsToDelete.length > 0) {
+                    const sessionsQuery = query(collection(db, `${basePath}/studySessions`), where('taskId', 'in', taskIdsToDelete));
+                    const sessionsSnapshot = await getDocs(sessionsQuery);
+                    sessionsSnapshot.forEach(sessionDoc => {
+                        batch.delete(sessionDoc.ref);
+                    });
+                }
                 
-                // TODO: Delete associated study sessions
-
                 await batch.commit();
-
             } catch (error) {
-                console.error("Error deleting subject and tasks: ", error);
+                console.error("Error deleting subject and related data: ", error);
             }
         }
 
@@ -619,7 +588,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             initializeFirebase();
 
-            // Tab navigation
             document.querySelectorAll('.tab-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     const tabName = button.dataset.tab;
@@ -630,39 +598,25 @@
                 });
             });
 
-            // Modal controls
             document.getElementById('add-subject-btn').addEventListener('click', openSubjectModal);
             document.getElementById('cancel-subject-modal').addEventListener('click', closeSubjectModal);
             document.getElementById('subject-form').addEventListener('submit', handleSubjectForm);
-
             document.getElementById('cancel-task-modal').addEventListener('click', closeTaskModal);
             document.getElementById('task-form').addEventListener('submit', handleTaskForm);
+            document.getElementById('close-alert-modal').addEventListener('click', () => document.getElementById('custom-alert-modal').style.display = 'none');
+            document.getElementById('request-notification-permission').addEventListener('click', requestNotificationPermission);
             
-            document.getElementById('close-alert-modal').addEventListener('click', () => {
-                document.getElementById('custom-alert-modal').style.display = 'none';
-            });
-
-            // Dynamic event listeners for subject/task actions
             document.getElementById('subjects-list').addEventListener('click', (e) => {
-                if (e.target.closest('.add-task-btn')) {
-                    const subjectId = e.target.closest('.add-task-btn').dataset.subjectId;
-                    openTaskModal(subjectId);
-                }
-                if (e.target.closest('.delete-subject-btn')) {
-                    const subjectId = e.target.closest('.delete-subject-btn').dataset.id;
-                    deleteSubject(subjectId);
-                }
-                if (e.target.closest('.task-checkbox')) {
-                    const checkbox = e.target.closest('.task-checkbox');
-                    toggleTaskCompletion(checkbox.dataset.id, checkbox.checked);
-                }
+                const addTaskBtn = e.target.closest('.add-task-btn');
+                const deleteSubjectBtn = e.target.closest('.delete-subject-btn');
+                const taskCheckbox = e.target.closest('.task-checkbox');
+
+                if (addTaskBtn) openTaskModal(addTaskBtn.dataset.subjectId);
+                if (deleteSubjectBtn) deleteSubject(deleteSubjectBtn.dataset.id);
+                if (taskCheckbox) toggleTaskCompletion(taskCheckbox.dataset.id, taskCheckbox.checked);
             });
-            
-            // Settings
-             document.getElementById('request-notification-permission').addEventListener('click', requestNotificationPermission);
         });
 
-        // --- MODAL FUNCTIONS ---
         function openSubjectModal() {
             document.getElementById('subject-form').reset();
             document.getElementById('subject-modal').style.display = 'flex';
@@ -681,8 +635,8 @@
 
         // --- TIMER LOGIC ---
         let timerInterval;
-        let timerState = 'stopped'; // stopped, running, paused
-        let timerMode = 'work'; // work, break
+        let timerState = 'stopped';
+        let timerMode = 'work';
         let secondsRemaining = 25 * 60;
         const WORK_DURATION = 25 * 60;
         const BREAK_DURATION = 5 * 60;
@@ -704,11 +658,10 @@
             timerState = 'running';
             startBtn.classList.add('hidden');
             pauseBtn.classList.remove('hidden');
-
             timerInterval = setInterval(() => {
                 secondsRemaining--;
                 updateTimerDisplay();
-                if (secondsRemaining <= 0) {
+                if (secondsRemaining < 0) {
                     clearInterval(timerInterval);
                     handleTimerEnd();
                 }
@@ -737,27 +690,20 @@
         }
         
         async function handleTimerEnd() {
-            // Log session if it was a work session
             if (timerMode === 'work') {
                 const taskId = document.getElementById('task-for-timer').value;
                 if (taskId) {
-                    try {
-                        const sessionCollection = collection(db, `artifacts/${__app_id}/users/${userId}/studySessions`);
-                        await addDoc(sessionCollection, { 
-                            taskId,
-                            duration: WORK_DURATION / 60, // in minutes
-                            completedAt: new Date()
-                        });
-                    } catch (error) {
-                        console.error("Error logging study session:", error);
-                    }
+                    const sessionCollection = collection(db, `artifacts/${__app_id}/users/${userId}/studySessions`);
+                    await addDoc(sessionCollection, { 
+                        taskId,
+                        duration: WORK_DURATION / 60,
+                        completedAt: new Date()
+                    });
                 }
             }
             
-            // Play sound and vibrate
             triggerAlerts();
             
-            // Switch mode
             if (timerMode === 'work') {
                 timerMode = 'break';
                 secondsRemaining = BREAK_DURATION;
@@ -770,7 +716,6 @@
                 showAlert('Break Khatm!', 'Chaliye, padhai par wapas chalte hain.', 'work');
             }
             
-            // Reset UI
             timerState = 'stopped';
             updateTimerDisplay();
             startBtn.classList.remove('hidden');
@@ -795,23 +740,17 @@
         }
         
         function triggerAlerts() {
-            // Browser Notification
             if (Notification.permission === "granted") {
                 const bodyText = timerMode === 'work' ? 'Time for a short break!' : 'Break is over. Time to focus!';
                  new Notification('Study Timer Finished!', { body: bodyText, icon: "https://placehold.co/48x48/3b82f6/ffffff?text=🔔" });
             }
-
-            // Sound
             if (document.getElementById('enable-sound').checked) {
                 try {
-                    const synth = new Tone.Synth().toDestination();
-                    synth.triggerAttackRelease("C4", "8n");
+                    new Tone.Synth().toDestination().triggerAttackRelease("C4", "8n");
                 } catch(e) { console.error("Tone.js error:", e); }
             }
-
-            // Vibration
             if (document.getElementById('enable-vibration').checked && 'vibrate' in navigator) {
-                navigator.vibrate([200, 100, 200]); // Vibrate for 200ms, pause 100ms, vibrate 200ms
+                navigator.vibrate([200, 100, 200]);
             }
         }
         
@@ -820,11 +759,9 @@
             document.getElementById('custom-alert-title').textContent = title;
             document.getElementById('custom-alert-message').textContent = message;
             const iconDiv = document.getElementById('custom-alert-icon');
-            if (type === 'break') {
-                iconDiv.innerHTML = `<i class="fas fa-coffee text-5xl text-yellow-500"></i>`;
-            } else {
-                 iconDiv.innerHTML = `<i class="fas fa-book-reader text-5xl text-green-500"></i>`;
-            }
+            iconDiv.innerHTML = (type === 'break') 
+                ? `<i class="fas fa-coffee text-5xl text-yellow-500"></i>`
+                : `<i class="fas fa-book-reader text-5xl text-green-500"></i>`;
             modal.style.display = 'flex';
         }
 
