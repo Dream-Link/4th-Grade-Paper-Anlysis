@@ -283,41 +283,40 @@
         let studyTimeChart;
 
         // --- FIREBASE SETUP ---
+       // --- FIREBASE SETUP ---
         function initializeFirebase() {
             try {
-                // These global variables are provided by the environment
-                if (typeof __firebase_config === 'undefined' || !__firebase_config) {
-                    showError("Firebase configuration not found. App cannot start.");
-                    return;
-                }
-                
-                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                
-                if (!firebaseConfig.apiKey) {
-                    showError("Firebase configuration is invalid. App cannot start.");
-                    return;
-                }
+                // 1. स्टेप 1 से कॉपी किया हुआ अपना firebaseConfig कोड यहाँ पेस्ट करें।
+                const firebaseConfig = {
+  apiKey: "AIzaSyApJFN9a_iqI5xKvhU20N6pkkmNe12Cb2s",
+  authDomain: "study-manage-83992.firebaseapp.com",
+  projectId: "study-manage-83992",
+  storageBucket: "study-manage-83992.firebasestorage.app",
+  messagingSenderId: "827804856712",
+  appId: "1:827804856712:web:2e5629989deb773eb6ca3d",
+  measurementId: "G-EFPR7MLJW5"
+};
 
+                // 2. अपने ऐप के लिए एक यूनिक नाम दें। यह डेटाबेस पाथ बनाने के काम आएगा।
+                const __app_id = "study-planner-pro";
+
+                // Firebase ऐप को शुरू करें
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
                 
+                // यूजर के लॉग-इन स्टेटस को सुनें
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
+                        // अगर यूजर लॉग-इन है
                         userId = user.uid;
                         document.getElementById('user-id-display').textContent = userId;
                         await fetchAllData();
                         hideLoadingIndicator();
                     } else {
-                         // If no user, try to sign in
+                        // अगर कोई यूजर लॉग-इन नहीं है, तो उसे चुपके से (anonymously) लॉग-इन कराएं
                         try {
-                            if (initialAuthToken) {
-                                await signInWithCustomToken(auth, initialAuthToken);
-                            } else {
-                                await signInAnonymously(auth);
-                            }
+                            await signInAnonymously(auth);
                         } catch (error) {
                             console.error("Authentication error:", error);
                             showError("Authentication failed. Please refresh the page.");
@@ -325,6 +324,11 @@
                     }
                 });
 
+            } catch (e) {
+                console.error("Firebase initialization error:", e);
+                showError("Could not connect to the database. Please check your connection and refresh.");
+            }
+        }
             } catch (e) {
                 console.error("Firebase initialization error:", e);
                 showError("Could not connect to the database. Please check your connection and refresh.");
