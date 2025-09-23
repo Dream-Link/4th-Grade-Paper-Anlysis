@@ -2,468 +2,496 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Study Planner Pro</title>
-
-    <!-- PWA and Mobile App Meta Tags -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#3b82f6">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Study Pro">
-    <link rel="apple-touch-icon" href="https://placehold.co/192x192/3b82f6/ffffff?text=SPP">
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Chart.js for reports -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Tone.js for audio alerts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
-    <!-- Google Fonts: Inter -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4th Grade Check Status 🖊... MP Salodiya</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f0f4f8; -webkit-tap-highlight-color: transparent; }
-        main { padding-bottom: 80px; }
-        .bottom-nav { box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .nav-btn { transition: all 0.2s ease-in-out; }
-        .nav-btn.active { color: #3b82f6; transform: translateY(-4px); }
-        .nav-btn.active .nav-icon { background-color: #dbeafe; padding: 8px; border-radius: 9999px; }
-        .modal-content { animation: scale-up 0.3s cubic-bezier(0.165, 0.840, 0.440, 1.000); }
-        @keyframes scale-up { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .progress-bar-fill { transition: width 0.5s ease-in-out; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #a8a8a8; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        :root {
+            --primary-bg: #f0f4f8; --container-bg: #ffffff; --header-color: #1a2533;
+            --text-color: #334155; --light-text: #64748b; --border-color: #e2e8f0;
+            --accent-color: #2563eb; --accent-dark: #1d4ed8; --accent-light: #eff6ff; 
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --correct-bg: #dcfce7; --correct-border: #86efac; --correct-text: #15803d;
+            --incorrect-bg: #fee2e2; --incorrect-border: #fca5a5; --incorrect-text: #b91c1c;
+            --special-bg: #dbeafe; --special-border: #93c5fd; --special-text: #1e40af;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif; 
+            background-color: var(--primary-bg);
+            color: var(--text-color); margin: 0; line-height: 1.6;
+        }
+        
+        #shift-selector-page {
+            display: flex; justify-content: center; min-height: 100vh;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3); padding: 5vh 20px;
+        }
+        .selector-container {
+            max-width: 900px; width: 100%; padding: 40px; background-color: var(--container-bg);
+            border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); text-align: center;
+            border-top: 5px solid var(--accent-color); transition: all 0.3s ease;
+        }
+        .selector-container h1 { color: var(--header-color); margin-bottom: 10px; font-size: 2.5em; }
+        .selector-container p { color: var(--light-text); font-size: 1.1em; margin-bottom: 40px; }
+        .shift-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .shift-btn { display: flex; align-items: center; text-align: left; background-color: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; text-decoration: none; transition: all 0.3s ease; cursor: pointer; overflow: hidden; }
+        .shift-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2); border-color: var(--accent-color); }
+        .shift-btn .icon { padding: 20px; background-color: var(--accent-light); color: var(--accent-color); font-size: 1.8em; display: flex; align-items: center; justify-content: center; }
+        .shift-btn .text { padding: 20px; color: var(--header-color); font-weight: 500; font-size: 1.1em; }
+
+        #question-paper-page { display: none; flex-direction: column; }
+        .top-sticky-bar { position: sticky; top: 0; z-index: 100; background-color: var(--container-bg); box-shadow: 0 4px 12px var(--shadow-color); }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px; }
+        .header h1 { margin: 0; font-size: 1.2em; color: var(--header-color); text-align: center; flex-grow: 1; }
+        .header-controls { display: flex; align-items: center; gap: 10px; }
+        .summary-bar { padding: 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; align-items: stretch; transition: all 0.3s ease; }
+        .summary-bar.hidden { display: none; }
+        .summary-item { text-align: center; padding: 5px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .summary-item .count { font-size: 1.25em; font-weight: 700; }
+        .summary-item .label { font-size: 0.65em; text-transform: uppercase; font-weight: 500; }
+        #total-item { background-color: #f3e8ff; color: #581c87; } 
+        #attempted-item { background-color: var(--accent-light); color: var(--accent-color); }
+        #correct-item { background-color: var(--correct-bg); color: var(--correct-text); } 
+        #incorrect-item { background-color: var(--incorrect-bg); color: var(--incorrect-text); }
+        #skipped-item { background-color: var(--special-bg); color: var(--special-text); }
+        #right-que-item, #raw-marks-item { background-color: #e0f2fe; color: #0c4a6e; }
+        
+        .container { max-width: 1100px; margin: 25px auto; background-color: var(--container-bg); padding: 25px 30px; border-radius: 16px; box-shadow: 0 5px 25px var(--shadow-color); }
+        
+        .controls-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
+        .filter-buttons button { background: none; border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 15px; cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.9em; }
+        .filter-buttons button.active { background-color: var(--accent-light); color: var(--accent-color); border-color: var(--accent-color); font-weight: 500; }
+        #print-btn { background-color: var(--accent-color); color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background-color 0.2s; }
+        #print-btn:hover { background-color: var(--accent-dark); }
+
+        .question-block { margin-bottom: 30px; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
+        .question-info-bar { font-size: 0.8em; color: var(--light-text); margin-bottom: 15px; display: block; background-color: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); font-weight: 500; }
+        .question-block h3 { margin: 0 0 15px 0; color: var(--header-color); font-size: 1.1em; }
+        .options-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+        .options-list li { border: 1px solid var(--border-color); padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .options-list li.correct, .options-list li.incorrect, .options-list li.special { font-weight: 500; }
+        .options-list li.correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-text); }
+        .options-list li.incorrect { background-color: var(--incorrect-bg); border-color: var(--incorrect-border); color: var(--incorrect-text); }
+        .options-list li.special { background-color: var(--special-bg); border-color: var(--special-border); color: var(--special-text); }
+        .correct-answer-display { margin-top: 15px; font-weight: 500; color: var(--correct-text); }
+        
+        #print-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: center; justify-content: center; }
+        #print-modal { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 90%; max-width: 400px; }
+        #print-modal h2, #print-modal p, #print-modal label { margin: 0 0 15px 0; }
+        #print-modal input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; }
+        .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
+        .modal-buttons button { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 500; font-size: 0.9em; }
+        #cancel-print { background-color: #f1f5f9; color: var(--text-color); }
+        #confirm-print { background-color: var(--accent-color); color: white; }
+        
+        #print-fallback-details { display: none; }
+
+        @media (max-width: 768px) {
+            #shift-selector-page { padding: 0; }
+            .selector-container { 
+                width: 100%; min-height: 100vh; border-radius: 0; 
+                border-top: none; box-shadow: none; padding: 40px 20px; 
+                display: flex; flex-direction: column; justify-content: flex-start;
+            }
+            .selector-container h1 { font-size: 2em; }
+            .container { margin: 0; padding: 15px 10px; border-radius: 0; box-shadow: none; }
+            .header { padding: 8px 10px; justify-content: center; }
+            .header h1 { font-size: 1.1em; width: 100%; order: -1; }
+            .header-controls { width: 100%; justify-content: center; }
+            .summary-bar { gap: 5px; padding: 8px; }
+            .summary-item .count { font-size: 1.1em; }
+            .summary-item .label { font-size: 0.6em; }
+            .controls-bar { padding: 10px 0; margin-bottom: 15px; }
+            .filter-buttons button { padding: 5px 12px; font-size: 0.85em; }
+            #print-btn { padding: 6px 15px; font-size: 0.85em; }
+            .question-block { padding: 15px; margin-bottom: 20px; }
+            .question-block h3 { font-size: 1em; }
+        }
+
         @media print {
-            body * { visibility: hidden; }
-            #reports-tab, #reports-tab * { visibility: visible; }
-            #reports-tab { position: absolute; left: 0; top: 0; width: 100%; }
-            .no-print { display: none !important; }
-            .print-header { visibility: visible !important; text-align: center; margin-bottom: 20px; }
+            body { font-size: 10pt; background-color: #fff !important; }
+            .top-sticky-bar, .controls-bar, #print-modal-overlay, #shift-selector-page, #back-to-main-btn { 
+                display: none !important; 
+            }
+            .container, .question-block { 
+                box-shadow: none !important; 
+                border-color: #ccc !important; 
+                margin: 10px 0;
+                padding: 15px;
+            }
+            #question-paper-page { display: block !important; }
+            
+            #print-fallback-details { 
+                display: block !important;
+                margin: 20px;
+                padding-bottom: 15px;
+                border-bottom: 2px solid #333;
+                font-family: sans-serif;
+                text-align: center;
+            }
+            #print-fallback-details p { margin: 4px 0; }
+            .question-block { page-break-inside: avoid; }
+            .options-list li.correct, .options-list li.incorrect, .options-list li.special {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            .options-list li.correct { background-color: var(--correct-bg) !important; color: var(--correct-text) !important; }
+            .options-list li.incorrect { background-color: var(--incorrect-bg) !important; color: var(--incorrect-text) !important; }
+            .options-list li.special { background-color: var(--special-bg) !important; color: var(--special-text) !important; }
         }
     </style>
 </head>
-<body class="antialiased text-gray-800">
+<body>
 
-    <div id="app-container" class="max-w-4xl mx-auto min-h-screen">
-        <header class="sticky top-0 bg-white/80 backdrop-blur-md z-10 p-4 shadow-sm no-print">
-            <h1 id="header-title" class="text-xl font-bold text-center text-gray-800">Dashboard</h1>
-        </header>
+    <div id="print-fallback-details">
+        <h2 id="print-title"></h2>
+        <p><strong>नाम:</strong> <span id="print-name"></span></p>
+        <p><strong>रोल नंबर:</strong> <span id="print-roll"></span></p>
+        <p>
+            <strong>कुल प्रश्न:</strong> <span id="print-total"></span> | 
+            <strong>हल किए:</strong> <span id="print-attempted"></span> | 
+            <strong>सही:</strong> <span id="print-correct"></span> | 
+            <strong>गलत:</strong> <span id="print-incorrect"></span> | 
+            <strong>छोड़े (E):</strong> <span id="print-skipped"></span>
+        </p>
+        <p><strong>अंतिम सही प्रश्न:</strong> <span id="print-final-rq"></span> | <strong>RAW Marks:</strong> <span id="print-raw-marks"></span></p>
+    </div>
 
-        <div id="loading-indicator" class="flex flex-col items-center justify-center h-screen">
-            <i class="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
-            <p class="mt-4 text-gray-600">App load ho raha hai...</p>
-        </div>
-
-        <main id="main-content" class="hidden p-4">
-            <!-- All tab content will be here -->
-            <div id="tab-content">
-                <div id="dashboard-tab" class="tab-pane active-pane">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-white p-6 rounded-xl shadow-md"><h2 class="text-2xl font-bold mb-4">Aaj ka Overview</h2><div class="space-y-4"><div class="flex justify-between items-center"><span class="text-gray-600"><i class="fas fa-tasks mr-2 text-green-500"></i>Poore kiye gaye Tasks</span><span id="completed-tasks-count" class="font-bold text-lg">0</span></div><div class="flex justify-between items-center"><span class="text-gray-600"><i class="fas fa-hourglass-half mr-2 text-red-500"></i>Baaki Tasks</span><span id="pending-tasks-count" class="font-bold text-lg">0</span></div><div class="flex justify-between items-center"><span class="text-gray-600"><i class="fas fa-stopwatch mr-2 text-blue-500"></i>Total Padhai ka Samay</span><span id="total-study-time" class="font-bold text-lg">0 min</span></div></div></div>
-                        <div class="bg-white p-6 rounded-xl shadow-md"><h2 class="text-2xl font-bold mb-4">Aaj ke Tasks</h2><div id="todays-tasks-list" class="space-y-3 max-h-48 overflow-y-auto"><p class="text-gray-500">Aaj ke liye koi task nahi hai.</p></div></div>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-md mt-6"><h2 class="text-2xl font-bold mb-4">Overall Progress</h2><div class="w-full bg-gray-200 rounded-full h-4"><div id="overall-progress-bar" class="bg-blue-500 h-4 rounded-full progress-bar-fill" style="width: 0%;"></div></div><p id="overall-progress-text" class="text-center mt-2 text-gray-600">0% poora hua.</p></div>
-                </div>
-                <div id="subjects-tab" class="tab-pane hidden"><div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-bold">Aapke Subjects</h2><button id="add-subject-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"><i class="fas fa-plus mr-2"></i>Naya</button></div><div id="subjects-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"><p id="no-subjects-msg" class="text-gray-500 col-span-full text-center py-10">Aapne abhi tak koi subject add nahi kiya hai.</p></div></div>
-                <div id="timer-tab" class="tab-pane hidden"><div class="bg-white p-8 rounded-xl shadow-lg max-w-md mx-auto text-center"><h2 class="text-2xl font-bold mb-4">Focus Timer (Pomodoro)</h2><div id="timer-display" class="text-8xl font-bold my-6 text-gray-800">25:00</div><div class="mb-6"><label for="task-for-timer" class="block text-sm font-medium text-gray-700 mb-2">Focus karne ke liye Task chunein:</label><select id="task-for-timer" class="w-full p-2 border border-gray-300 rounded-md bg-white"></select></div><div class="flex justify-center space-x-4"><button id="start-timer-btn" class="bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow hover:bg-green-600 transition"><i class="fas fa-play mr-2"></i>Start</button><button id="pause-timer-btn" class="bg-yellow-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow hover:bg-yellow-600 transition hidden"><i class="fas fa-pause mr-2"></i>Pause</button><button id="reset-timer-btn" class="bg-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow hover:bg-red-600 transition"><i class="fas fa-sync-alt mr-2"></i>Reset</button></div><p id="timer-status" class="mt-4 text-gray-600">Focus ka samay!</p></div></div>
-                <div id="reports-tab" class="tab-pane hidden"><div class="print-header hidden"><h1 class="text-3xl font-bold">Study Planner Pro - Report</h1><p id="report-date-print" class="text-gray-600"></p></div><div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-bold">Aapki Study Report</h2><button id="print-report-btn" class="bg-gray-700 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-800 transition no-print"><i class="fas fa-print mr-2"></i>Print Report</button></div><div class="bg-white p-6 rounded-xl shadow-md"><h3 class="font-semibold mb-3">Subject ke anusaar Padhai ka Samay</h3><canvas id="study-time-chart" height="150"></canvas></div></div>
-                <div id="settings-tab" class="tab-pane hidden"><div class="bg-white p-6 rounded-xl shadow-md space-y-4"><h2 class="text-2xl font-bold mb-4">Settings</h2><div class="flex items-center justify-between"><label class="font-medium">Browser Notifications</label><button id="request-notification-permission" class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Enable Karein</button></div><div class="flex items-center justify-between"><label class="font-medium">Sound Alert</label><input type="checkbox" id="enable-sound" class="h-6 w-6 rounded text-blue-500 border-gray-300 focus:ring-blue-500"></div><div class="pt-4 border-t"><h3 class="font-semibold mb-2">User ID</h3><p class="text-sm text-gray-500">Yeh aapki unique ID hai. Isse aap data recover kar sakte hain.</p><div class="mt-2 bg-gray-100 p-2 rounded-md text-center"><code id="user-id-display" class="text-gray-700"></code></div></div></div></div>
+    <div id="shift-selector-page">
+        <div class="selector-container">
+            <h1>4th Grade प्रश्न पत्र</h1>
+            <p>अपनी स्थिति जाँचे</p>
+            <div class="shift-selector">
+                <div class="shift-btn" data-shift="shift1"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">1st Shift 19.09.2025</div></div>
+                <div class="shift-btn" data-shift="shift2"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">2nd Shift 19.09.2025</div></div>
+                <div class="shift-btn" data-shift="shift3"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">3rd Shift 20.09.2025</div></div>
+                <div class="shift-btn" data-shift="shift4"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">4th Shift 20.09.2025</div></div>
+                <div class="shift-btn" data-shift="shift5"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">5th Shift 21.09.2025</div></div>
+                <div class="shift-btn" data-shift="shift6"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">6th Shift 21.09.2025</div></div>
             </div>
-        </main>
+        </div>
+    </div>
+
+    <div id="question-paper-page">
+        <div class="top-sticky-bar">
+            <div class="header">
+                 <button id="back-to-main-btn" onclick="showHomePage()" style="background: none; border: none; font-size: 1.2em; cursor: pointer;">&larr; वापस जाएं</button>
+                 <h1 id="shift-title">Shift Title</h1>
+                <div class="header-controls">
+                    <label for="series-select">PAPER Code:</label>
+                    <select id="series-select"></select>
+                    <button id="toggle-summary-btn">Show Result</button>
+                </div>
+            </div>
+            <div class="summary-bar hidden">
+                <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">Total Que.</div></div>
+                <div id="attempted-item" class="summary-item"><div id="attempted-count" class="count">0</div><div class="label">Attempt</div></div>
+                <div id="correct-item" class="summary-item"><div id="correct-count" class="count">0</div><div class="label">Right</div></div>
+                <div id="incorrect-item" class="summary-item"><div id="incorrect-count" class="count">0</div><div class="label">Wrong</div></div>
+                <div id="skipped-item" class="summary-item"><div id="skipped-count" class="count">0</div><div class="label">Skip (E)</div></div>
+                <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Final R.Q. </div></div>
+                <div id="raw-marks-item" class="summary-item"><div id="raw-marks-value" class="count">0.00</div><div class="label">RAW Marks</div></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="controls-bar">
+                <div class="filter-buttons">
+                    <button class="active" data-filter="all">All</button> <button data-filter="correct">Right</button> <button data-filter="incorrect">Wrong</button> <button data-filter="skipped">Skip (E)</button>
+                </div>
+                <button id="print-btn">Print</button>
+            </div>
+            <div id="questions-container"></div>
+        </div>
+        <div id="print-modal-overlay">
+            <div id="print-modal">
+                <h2>Print info</h2>
+                <label for="student-name">Name:</label>
+                <input type="text" id="student-name" placeholder="Your Name">
+                <label for="student-roll">Roll No.:</label>
+                <input type="text" id="student-roll" placeholder="Your Roll No.">
+                <div class="modal-buttons">
+                    <button id="cancel-print">Cancel</button> <button id="confirm-print">Print</button>
+                </div>
+            </div>
+        </div>
     </div>
     
-    <footer class="bottom-nav fixed bottom-0 left-0 right-0 bg-white h-20 flex justify-around items-center max-w-4xl mx-auto rounded-t-2xl no-print">
-        <button class="nav-btn active" data-tab="dashboard" data-title="Dashboard"><span class="nav-icon"><i class="fas fa-tachometer-alt fa-lg"></i></span><span class="text-xs block mt-1">Dashboard</span></button>
-        <button class="nav-btn" data-tab="subjects" data-title="Subjects & Tasks"><span class="nav-icon"><i class="fas fa-book fa-lg"></i></span><span class="text-xs block mt-1">Subjects</span></button>
-        <button class="nav-btn" data-tab="timer" data-title="Focus Timer"><span class="nav-icon"><i class="fas fa-clock fa-lg"></i></span><span class="text-xs block mt-1">Timer</span></button>
-        <button class="nav-btn" data-tab="reports" data-title="Reports"><span class="nav-icon"><i class="fas fa-chart-pie fa-lg"></i></span><span class="text-xs block mt-1">Reports</span></button>
-        <button class="nav-btn" data-tab="settings" data-title="Settings"><span class="nav-icon"><i class="fas fa-cog fa-lg"></i></span><span class="text-xs block mt-1">Settings</span></button>
-    </footer>
+    <script src="questions-data.js"></script>
+    <script>
+        let currentShiftId = null, allQuestions = [], userAnswers = {}, currentSeries = '', activeFilter = 'all', currentShiftData = {};
+        const shiftSelectorPage = document.getElementById('shift-selector-page');
+        const questionPaperPage = document.getElementById('question-paper-page');
+        const seriesSelect = document.getElementById('series-select');
 
-    <!-- All modals will be here -->
-    <div id="subject-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"><div class="modal-content bg-white rounded-lg p-6 w-full max-w-md"><h3 class="text-xl font-bold mb-4" id="subject-modal-title">Naya Subject Jodein</h3><form id="subject-form"><div><label for="subject-name" class="block text-sm font-medium">Subject ka Naam</label><input type="text" id="subject-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required></div><div class="mt-4"><label for="subject-color" class="block text-sm font-medium">Ek Rang Chunein</label><input type="color" id="subject-color" class="mt-1 block w-full h-10" value="#3b82f6"></div><div class="mt-6 flex justify-end space-x-3"><button type="button" id="cancel-subject-modal" class="bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300">Cancel</button><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Save</button></div></form></div></div>
-    <div id="task-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"><div class="modal-content bg-white rounded-lg p-6 w-full max-w-md"><h3 class="text-xl font-bold mb-4" id="task-modal-title">Naya Task Jodein</h3><form id="task-form"><input type="hidden" id="task-subject-id"><input type="hidden" id="task-id"><div><label for="task-name" class="block text-sm font-medium">Task ka Naam</label><input type="text" id="task-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required></div><div class="mt-4"><label for="task-due-date" class="block text-sm font-medium">Due Date</label><input type="date" id="task-due-date" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required></div><div class="mt-6 flex justify-end space-x-3"><button type="button" id="cancel-task-modal" class="bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300">Cancel</button><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Save Task</button></div></form></div></div>
-    <div id="custom-alert-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50"><div class="modal-content bg-white rounded-lg p-8 w-full max-w-sm text-center shadow-2xl"><div id="custom-alert-icon" class="mb-4"></div><h3 class="text-xl font-bold mb-2" id="custom-alert-title">Timer Poora Hua!</h3><p class="text-gray-600 mb-6" id="custom-alert-message">Ab break lene ka samay hai.</p><button id="close-alert-modal" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 w-full">Okay</button></div></div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, collection, addDoc, getDocs, onSnapshot, updateDoc, deleteDoc, query, where, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        let db, auth, userId = null, subjects = [], tasks = [], studySessions = [], studyTimeChart;
-        let app_id = 'default-app-id';
-
-        function initializeFirebase() {
-            try {
-                if (typeof __firebase_config === 'undefined' || !__firebase_config) {
-                    showError("Firebase configuration not found. App cannot start.");
-                    hideLoadingIndicator();
-                    return;
-                }
-                
-                app_id = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        document.getElementById('user-id-display').textContent = userId;
-                        await fetchAllData();
-                        hideLoadingIndicator();
-                    } else {
-                        try {
-                            if (initialAuthToken) {
-                                await signInWithCustomToken(auth, initialAuthToken);
-                            } else {
-                                await signInAnonymously(auth);
-                            }
-                        } catch (authError) {
-                            console.error("Authentication failed:", authError);
-                            showError("Authentication failed. Please refresh.");
-                            hideLoadingIndicator();
-                        }
-                    }
-                });
-            } catch (e) {
-                console.error("Firebase initialization failed:", e);
-                showError("Database se connect nahi ho saka.");
-                hideLoadingIndicator();
-            }
+        function showHomePage() {
+            shiftSelectorPage.style.display = 'flex';
+            questionPaperPage.style.display = 'none';
+            currentShiftId = null;
+            history.pushState({page: 'home'}, 'Home', window.location.pathname);
+            window.location.hash = '';
         }
+
+        window.addEventListener('popstate', (event) => {
+            if (!event.state || event.state.page === 'home') {
+                showHomePage();
+            } else if (event.state.shift) {
+                loadShift(event.state.shift, false); // false to avoid pushing state again
+            }
+        });
+
+        document.querySelectorAll('.shift-btn').forEach(b => b.addEventListener('click', () => loadShift(b.dataset.shift, true)));
+
+        function loadShift(shiftId, shouldPushState = true) {
+            shiftSelectorPage.style.display = 'none';
+            questionPaperPage.style.display = 'flex';
+            currentShiftId = shiftId;
+            currentShiftData = allShiftData[shiftId];
+            allQuestions = currentShiftData.questions;
+            
+            document.getElementById('shift-title').textContent = currentShiftData.title;
+
+            seriesSelect.innerHTML = '';
+            const availableSeries = Object.keys(currentShiftData.seriesOrder || {});
+            if (availableSeries.length > 0) {
+                availableSeries.forEach(seriesKey => {
+                    const option = document.createElement('option');
+                    option.value = seriesKey;
+                    option.textContent = seriesKey;
+                    seriesSelect.appendChild(option);
+                });
+            }
+
+            userAnswers = JSON.parse(localStorage.getItem(`userAnswers_${shiftId}`)) || {};
+            
+            const savedSeries = localStorage.getItem(`currentSeries_${shiftId}`);
+            currentSeries = (savedSeries && availableSeries.includes(savedSeries)) ? savedSeries : availableSeries[0] || '';
+            seriesSelect.value = currentSeries;
+
+            activeFilter = 'all';
+            document.getElementById('toggle-summary-btn').textContent = 'Show Result';
+            document.querySelector('.summary-bar').classList.add('hidden');
+            
+            if (shouldPushState) {
+               history.pushState({ shift: shiftId }, '', `#${shiftId}`);
+            }
+            displayQuestions(currentSeries, activeFilter);
+        }
+
+        function saveData() {
+            if (!currentShiftId) return;
+            localStorage.setItem(`userAnswers_${currentShiftId}`, JSON.stringify(userAnswers));
+            localStorage.setItem(`currentSeries_${currentShiftId}`, currentSeries);
+        }
+
+        function getQuestionStatus(qId) {
+    const uAnsText = userAnswers[qId]; // यह पहले से ही बिना A) B) के है
+    if (!uAnsText) return 'unattempted';
+
+    // अनुत्तरित प्रश्न को उसके टेक्स्ट से पहचानें
+    if (uAnsText === "अनुत्तरित प्रश्न" || uAnsText === "Question not attempted") return 'skipped';
+    
+    const qData = allQuestions.find(q => q.id === qId);
+    // सही उत्तर में से भी A), B) हटाकर तुलना करें
+    const correctAnswerText = qData.answer.substring(3);
+
+    return uAnsText === correctAnswerText ? 'correct' : 'incorrect';
+}
+
+        function updateSummary() {
+            let c = 0, i = 0, s = 0;
+            allQuestions.forEach(q => {
+                const st = getQuestionStatus(q.id);
+                if (st === 'correct') c++;
+                else if (st === 'incorrect') i++;
+                else if (st === 'skipped') s++;
+            });
+            const a = c + i + s;
+            document.getElementById('total-count').textContent = allQuestions.length;
+            document.getElementById('attempted-count').textContent = a;
+            document.getElementById('correct-count').textContent = c;
+            document.getElementById('incorrect-count').textContent = i;
+            document.getElementById('skipped-count').textContent = s;
+            const rQ = c - (i / 3);
+            const rM = rQ * 2; // Assuming 2 marks per question
+            document.getElementById('right-que-value').textContent = rQ.toFixed(3);
+            document.getElementById('raw-marks-value').textContent = rM.toFixed(3);
+        }
+        
+        function findQuestionPositions(qId) {
+            const qIndex = allQuestions.findIndex(q => q.id === qId);
+            let positions = [];
+            if (qIndex === -1 || !currentShiftData.seriesOrder) return "";
+            for (const series in currentShiftData.seriesOrder) {
+                const pos = currentShiftData.seriesOrder[series].indexOf(qIndex + 1);
+                if (pos !== -1) {
+                    positions.push(`Series ${series}: #${pos + 1}`);
+                }
+            }
+            return positions.join(' | ');
+        }
+        
+        function displayQuestions(series, filter = 'all') {
+    const qC = document.getElementById('questions-container');
+    qC.innerHTML = '';
+    currentSeries = series;
+    updateSummary();
+    updateActiveFilterButton(filter);
+
+    const seriesOrder = currentShiftData.seriesOrder || {};
+    const qIndices = seriesOrder[series] || Array.from({length: allQuestions.length}, (_, i) => i + 1);
+    
+    const optionLabels = ['A)', 'B)', 'C)', 'D)', 'E)']; // <<< यह स्टैटिक लेबल हैं
+
+    let displayedCount = 0;
+    qIndices.forEach((qIndex, displayNum) => {
+        const qData = allQuestions[qIndex - 1];
+        if (!qData) return;
+
+        const status = getQuestionStatus(qData.id);
+        if (filter !== 'all' && filter !== status) return;
+        
+        displayedCount++;
+        const qB = document.createElement('div');
+        qB.className = 'question-block';
+        qB.dataset.questionId = qData.id;
+
+        const iB = document.createElement('div');
+        iB.className = 'question-info-bar';
+        iB.textContent = findQuestionPositions(qData.id);
+        qB.appendChild(iB);
+
+        const qT = document.createElement('h3');
+        qT.textContent = `प्रश्न ${displayNum + 1}: ${qData.question}`;
+        qB.appendChild(qT);
+
+        const oL = document.createElement('ul');
+        oL.className = 'options-list';
+        
+        // --- विकल्पों का क्रम बदलने का नया और सही लॉजिक ---
+        // 1. ऑप्शन से "A) " हटाकर सिर्फ टेक्स्ट निकालें
+        const optionTexts = qData.options.map(opt => opt.substring(3));
+
+        // 2. सिर्फ टेक्स्ट को शफल करें
+        let shuffledOptionTexts;
+        const optionOrder = currentShiftData.seriesOptionOrder?.[series];
+        if (optionOrder) {
+            shuffledOptionTexts = optionOrder.map(index => optionTexts[index]);
+        } else {
+            shuffledOptionTexts = optionTexts;
+        }
+
+        // 3. शफल किए हुए टेक्स्ट के आगे A), B) ... वापस जोड़ें
+        const finalOptions = shuffledOptionTexts.map((text, index) => {
+            return `${optionLabels[index]} ${text}`;
+        });
+        // --- लॉजिक का अंत ---
+
+        finalOptions.forEach(oT => {
+            const oI = document.createElement('li');
+            oI.textContent = oT;
+            
+            // यूजर का उत्तर भी अब बिना A), B) के चेक होगा
+            const userAnswerText = userAnswers[qData.id];
+            const currentOptionText = oT.substring(3);
+
+            if (userAnswerText && userAnswerText === currentOptionText) {
+                if (status === 'correct') oI.classList.add('correct');
+                else if (status === 'incorrect') oI.classList.add('incorrect');
+                else if (status === 'skipped') oI.classList.add('special');
+            }
+            oL.appendChild(oI);
+        });
+        qB.appendChild(oL);
+        
+        if (status === 'correct' || status === 'incorrect' || status === 'skipped') {
+            const aD = document.createElement('div');
+            aD.className = 'correct-answer-display';
+            aD.innerHTML = `Correct Ans. is - <strong>${qData.answer}</strong>`;
+            qB.appendChild(aD);
+        }
+
+        qC.appendChild(qB);
+        
+        oL.addEventListener('click', (e) => {
+            if (e.target.tagName === 'LI') {
+                // अब हम यूजर के उत्तर में से A), B) हटाकर सेव करेंगे
+                const selectedOptionText = e.target.textContent.substring(3);
+                userAnswers[qData.id] = selectedOptionText;
+                saveData();
+                displayQuestions(currentSeries, activeFilter);
+            }
+        });
+    });
+
+    if (displayedCount === 0) {
+        qC.innerHTML = `<p style="text-align:center; color: var(--light-text);">इस फ़िल्टर में कोई प्रश्न नहीं है।</p>`;
+    }
+}
+        
+        function updateActiveFilterButton(filter) {
+            document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active');
+        }
+
+        seriesSelect.addEventListener('change', (e) => {
+            displayQuestions(e.target.value, activeFilter);
+            saveData();
+        });
+
+        document.querySelectorAll('.filter-buttons button').forEach(b => b.addEventListener('click', () => {
+            activeFilter = b.dataset.filter;
+            displayQuestions(currentSeries, activeFilter);
+        }));
+
+        document.getElementById('toggle-summary-btn').addEventListener('click', (e) => {
+            const sB = document.querySelector('.summary-bar');
+            sB.classList.toggle('hidden');
+            e.target.textContent = sB.classList.contains('hidden') ? 'Show Result' : 'Hide Result';
+        });
+
+        function triggerPrint(name, rollNo) {
+            document.getElementById('print-title').textContent = document.getElementById('shift-title').textContent;
+            document.getElementById('print-name').textContent = name;
+            document.getElementById('print-roll').textContent = rollNo;
+            document.getElementById('print-total').textContent = document.getElementById('total-count').textContent;
+            document.getElementById('print-attempted').textContent = document.getElementById('attempted-count').textContent;
+            document.getElementById('print-correct').textContent = document.getElementById('correct-count').textContent;
+            document.getElementById('print-incorrect').textContent = document.getElementById('incorrect-count').textContent;
+            document.getElementById('print-skipped').textContent = document.getElementById('skipped-count').textContent;
+            document.getElementById('print-final-rq').textContent = document.getElementById('right-que-value').textContent;
+            document.getElementById('print-raw-marks').textContent = document.getElementById('raw-marks-value').textContent;
+
+            setTimeout(() => { window.print(); }, 250);
+        }
+
+        const printBtn = document.getElementById('print-btn');
+        const pMO = document.getElementById('print-modal-overlay');
+        printBtn.addEventListener('click', () => { pMO.style.display = 'flex'; });
+        document.getElementById('cancel-print').addEventListener('click', () => { pMO.style.display = 'none'; });
+        document.getElementById('confirm-print').addEventListener('click', () => {
+            const name = document.getElementById('student-name').value;
+            const rollNo = document.getElementById('student-roll').value;
+            if (!name || !rollNo) {
+                alert("नाम और रोल नंबर दोनों आवश्यक हैं।");
+                return;
+            }
+            pMO.style.display = 'none';
+            triggerPrint(name, rollNo);
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
-            initializeFirebase();
-            document.querySelector('.bottom-nav').addEventListener('click', (e) => {
-                const button = e.target.closest('.nav-btn');
-                if (!button) return;
-                const tabName = button.dataset.tab;
-                const tabTitle = button.dataset.title;
-                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.add('hidden'));
-                button.classList.add('active');
-                document.getElementById(`${tabName}-tab`).classList.remove('hidden');
-                document.getElementById('header-title').textContent = tabTitle;
-            });
-            document.getElementById('add-subject-btn').addEventListener('click', openSubjectModal);
-            document.getElementById('cancel-subject-modal').addEventListener('click', closeSubjectModal);
-            document.getElementById('subject-form').addEventListener('submit', handleSubjectForm);
-            document.getElementById('cancel-task-modal').addEventListener('click', closeTaskModal);
-            document.getElementById('task-form').addEventListener('submit', handleTaskForm);
-            document.getElementById('close-alert-modal').addEventListener('click', () => document.getElementById('custom-alert-modal').style.display = 'none');
-            document.getElementById('subjects-list').addEventListener('click', handleSubjectListClicks);
-            document.getElementById('request-notification-permission').addEventListener('click', requestNotificationPermission);
-            document.getElementById('print-report-btn').addEventListener('click', printReport);
+            if (window.location.hash) {
+                const shiftIdFromUrl = window.location.hash.substring(1);
+                if (shiftIdFromUrl && allShiftData[shiftIdFromUrl]) {
+                    loadShift(shiftIdFromUrl);
+                }
+            } else {
+                showHomePage();
+            }
         });
-        
-        async function fetchAllData() {
-            if (!userId) return;
-            const basePath = `artifacts/${app_id}/users/${userId}`;
-            onSnapshot(collection(db, `${basePath}/subjects`), s => { subjects = s.docs.map(d => ({ id: d.id, ...d.data() })); renderSubjects(); updateAllUI(); });
-            onSnapshot(collection(db, `${basePath}/tasks`), s => { tasks = s.docs.map(d => ({ id: d.id, ...d.data() })); renderAllTasks(); updateAllUI(); });
-            onSnapshot(collection(db, `${basePath}/studySessions`), s => { studySessions = s.docs.map(d => ({ id: d.id, ...d.data() })); updateAllUI(); });
-        }
-        
-        function renderSubjects() {
-            const list = document.getElementById('subjects-list');
-            const noSubjectsMsg = document.getElementById('no-subjects-msg');
-            list.innerHTML = '';
-            if (subjects.length === 0) {
-                noSubjectsMsg.classList.remove('hidden'); return;
-            }
-            noSubjectsMsg.classList.add('hidden');
-            subjects.forEach(subject => {
-                const subjectTasks = tasks.filter(t => t.subjectId === subject.id);
-                const completedTasks = subjectTasks.filter(t => t.isCompleted).length;
-                const progress = subjectTasks.length > 0 ? (completedTasks / subjectTasks.length) * 100 : 0;
-                const card = document.createElement('div');
-                card.className = 'bg-white p-4 rounded-xl shadow-md border-l-4';
-                card.style.borderColor = subject.color;
-                card.innerHTML = `<div class="flex justify-between items-start"><h3 class="text-xl font-bold text-gray-800">${subject.name}</h3><div class="flex space-x-2 text-gray-400"><button class="delete-subject-btn hover:text-red-500" data-id="${subject.id}"><i class="fas fa-trash"></i></button></div></div><p class="text-sm text-gray-500 mt-2">${completedTasks} / ${subjectTasks.length} tasks poore hue.</p><div class="w-full bg-gray-200 rounded-full h-2.5 mt-2"><div class="h-2.5 rounded-full" style="width: ${progress}%; background-color: ${subject.color};"></div></div><div class="mt-4"><div class="task-list space-y-2" data-subject-id="${subject.id}"></div></div><button class="add-task-btn mt-3 text-blue-500 hover:text-blue-700 text-sm font-semibold" data-subject-id="${subject.id}"><i class="fas fa-plus-circle mr-1"></i>Naya Task Jodein</button>`;
-                list.appendChild(card);
-            });
-            renderAllTasks();
-        }
-
-        function renderAllTasks() {
-            document.querySelectorAll('.task-list').forEach(list => {
-                const subjectId = list.dataset.subjectId;
-                const subjectTasks = tasks.filter(t => t.subjectId === subjectId).sort((a,b) => a.isCompleted - b.isCompleted);
-                list.innerHTML = subjectTasks.length > 0 ? subjectTasks.map(task => `<div class="flex items-center justify-between bg-gray-50 p-2 rounded-md hover:bg-gray-100"><div class="flex items-center"><input type="checkbox" class="task-checkbox h-5 w-5 rounded text-blue-500 border-gray-300 mr-3" data-id="${task.id}" ${task.isCompleted ? 'checked' : ''}><span class="${task.isCompleted ? 'line-through text-gray-400' : ''}">${task.name}</span></div><span class="text-xs text-gray-500">${new Date(task.dueDate).toLocaleDateString('hi-IN', {day:'numeric', month:'short'})}</span></div>`).join('') : `<p class="text-xs text-gray-400 italic">Is subject ke liye koi task nahi hai.</p>`;
-            });
-        }
-        
-        function updateAllUI() { renderDashboard(); renderTimerTaskOptions(); renderReports(); }
-        
-        function handleSubjectListClicks(e) {
-            const addTaskBtn = e.target.closest('.add-task-btn');
-            const deleteSubjectBtn = e.target.closest('.delete-subject-btn');
-            const taskCheckbox = e.target.closest('.task-checkbox');
-            if (addTaskBtn) openTaskModal(addTaskBtn.dataset.subjectId);
-            if (deleteSubjectBtn) deleteSubject(deleteSubjectBtn.dataset.id);
-            if (taskCheckbox) toggleTaskCompletion(taskCheckbox.dataset.id, taskCheckbox.checked);
-        }
-
-        async function handleSubjectForm(e) {
-            e.preventDefault();
-            const name = document.getElementById('subject-name').value.trim();
-            const color = document.getElementById('subject-color').value;
-            if (!name) return;
-            await addDoc(collection(db, `artifacts/${app_id}/users/${userId}/subjects`), { name, color, createdAt: new Date() });
-            closeSubjectModal();
-        }
-
-        async function handleTaskForm(e) {
-            e.preventDefault();
-            const name = document.getElementById('task-name').value.trim();
-            const dueDate = document.getElementById('task-due-date').value;
-            const subjectId = document.getElementById('task-subject-id').value;
-            if (!name || !dueDate || !subjectId) return;
-            await addDoc(collection(db, `artifacts/${app_id}/users/${userId}/tasks`), { name, dueDate, subjectId, isCompleted: false, createdAt: new Date() });
-            closeTaskModal();
-        }
-
-        async function toggleTaskCompletion(taskId, isCompleted) {
-            await updateDoc(doc(db, `artifacts/${app_id}/users/${userId}/tasks`, taskId), { isCompleted });
-        }
-        
-        async function deleteSubject(subjectId) {
-            if (!confirm("Kya aap sach mein is subject ko delete karna chahte hain? Iske sabhi tasks aur study data bhi delete ho jayenge.")) return;
-            const batch = writeBatch(db);
-            const basePath = `artifacts/${app_id}/users/${userId}`;
-            batch.delete(doc(db, `${basePath}/subjects`, subjectId));
-            const tasksToDelete = tasks.filter(t => t.subjectId === subjectId);
-            const taskIdsToDelete = tasksToDelete.map(t => t.id);
-            taskIdsToDelete.forEach(id => batch.delete(doc(db, `${basePath}/tasks`, id)));
-            const sessionsQuery = query(collection(db, `${basePath}/studySessions`), where('taskId', 'in', taskIdsToDelete.length > 0 ? taskIdsToDelete : ['']));
-            const sessionsSnapshot = await getDocs(sessionsQuery);
-            sessionsSnapshot.forEach(sessionDoc => batch.delete(sessionDoc.ref));
-            await batch.commit();
-        }
-
-        function printReport() {
-            document.getElementById('report-date-print').textContent = `Report generated on: ${new Date().toLocaleDateString('hi-IN')}`;
-            window.print();
-        }
-        
-        function hideLoadingIndicator() {
-            document.getElementById('loading-indicator').classList.add('hidden');
-            document.getElementById('main-content').classList.remove('hidden');
-        }
-        
-        function showError(message) {
-            const loadingIndicator = document.getElementById('loading-indicator');
-            loadingIndicator.innerHTML = `<p class="text-red-500 font-bold p-4">${message}</p>`;
-            loadingIndicator.classList.remove('h-screen');
-        }
-        
-        function openSubjectModal() { document.getElementById('subject-form').reset(); document.getElementById('subject-modal').style.display = 'flex'; }
-        function closeSubjectModal() { document.getElementById('subject-modal').style.display = 'none'; }
-        function openTaskModal(subjectId) { document.getElementById('task-form').reset(); document.getElementById('task-subject-id').value = subjectId; document.getElementById('task-modal').style.display = 'flex'; }
-        function closeTaskModal() { document.getElementById('task-modal').style.display = 'none'; }
-        
-        function renderDashboard() {
-            const completedTasks = tasks.filter(t => t.isCompleted).length;
-            const pendingTasks = tasks.length - completedTasks;
-            const totalStudyTime = studySessions.reduce((acc, s) => acc + s.duration, 0);
-            const progress = tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
-
-            document.getElementById("completed-tasks-count").textContent = completedTasks;
-            document.getElementById("pending-tasks-count").textContent = pendingTasks;
-            document.getElementById("total-study-time").textContent = `${totalStudyTime} min`;
-            document.getElementById("overall-progress-bar").style.width = `${progress}%`;
-            document.getElementById("overall-progress-text").textContent = `${Math.round(progress)}% poora hua.`;
-
-            const today = new Date().toISOString().split("T")[0];
-            const todaysTasks = tasks.filter(t => t.dueDate === today && !t.isCompleted);
-            const todaysTasksList = document.getElementById("todays-tasks-list");
-            todaysTasksList.innerHTML = "";
-
-            if (todaysTasks.length > 0) {
-                todaysTasks.forEach(task => {
-                    const subject = subjects.find(s => s.id === task.subjectId);
-                    const taskEl = document.createElement("div");
-                    taskEl.className = "flex items-center justify-between text-sm";
-                    taskEl.innerHTML = `<span>${task.name}</span> <span class="text-xs font-semibold px-2 py-1 rounded-full" style="background-color:${subject?.color}20; color:${subject?.color};">${subject?.name || "General"}</span>`;
-                    todaysTasksList.appendChild(taskEl);
-                });
-            } else {
-                todaysTasksList.innerHTML = '<p class="text-gray-500">Shabash! Aaj ke liye koi pending task nahi hai.</p>';
-            }
-        }
-
-        function renderTimerTaskOptions() {
-            const select = document.getElementById("task-for-timer");
-            const pendingTasks = tasks.filter(t => !t.isCompleted);
-            select.innerHTML = '<option value="">Koi task nahi chuna</option>';
-            pendingTasks.forEach(task => {
-                const subject = subjects.find(s => s.id === task.subjectId);
-                const option = document.createElement("option");
-                option.value = task.id;
-                option.textContent = `[${subject ? subject.name : "N/A"}] ${task.name}`;
-                select.appendChild(option);
-            });
-        }
-
-        function renderReports() {
-            if (studyTimeChart) {
-                studyTimeChart.destroy();
-            }
-            const ctx = document.getElementById("study-time-chart").getContext("2d");
-            const dataBySubject = {};
-            subjects.forEach(subject => {
-                dataBySubject[subject.id] = { name: subject.name, color: subject.color, time: 0 };
-            });
-            studySessions.forEach(session => {
-                const task = tasks.find(t => t.id === session.taskId);
-                if (task && dataBySubject[task.subjectId]) {
-                    dataBySubject[task.subjectId].time += session.duration;
-                }
-            });
-            const chartData = Object.values(dataBySubject);
-            studyTimeChart = new Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels: chartData.map(d => d.name),
-                    datasets: [{
-                        label: "Study Time (minutes)",
-                        data: chartData.map(d => d.time),
-                        backgroundColor: chartData.map(d => d.color),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: { y: { beginAtZero: true } },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
-        
-        let timerInterval, timerState = "stopped", timerMode = "work", secondsRemaining = 1500;
-        const WORK_DURATION = 1500, BREAK_DURATION = 300;
-        const timerDisplay = document.getElementById("timer-display");
-        const startBtn = document.getElementById("start-timer-btn"), pauseBtn = document.getElementById("pause-timer-btn"), resetBtn = document.getElementById("reset-timer-btn");
-        const timerStatus = document.getElementById("timer-status");
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(secondsRemaining / 60);
-            const seconds = secondsRemaining % 60;
-            timerDisplay.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-        }
-
-        function startTimer() {
-            if (timerState === "running") return;
-            timerState = "running";
-            startBtn.classList.add("hidden");
-            pauseBtn.classList.remove("hidden");
-            timerInterval = setInterval(() => {
-                secondsRemaining--;
-                updateTimerDisplay();
-                if (secondsRemaining < 0) {
-                    clearInterval(timerInterval);
-                    handleTimerEnd();
-                }
-            }, 1000);
-        }
-
-        function pauseTimer() {
-            if (timerState !== "running") return;
-            timerState = "paused";
-            clearInterval(timerInterval);
-            startBtn.classList.remove("hidden");
-            startBtn.textContent = "Resume";
-            pauseBtn.classList.add("hidden");
-        }
-
-        function resetTimer() {
-            clearInterval(timerInterval);
-            timerState = "stopped";
-            timerMode = "work";
-            secondsRemaining = WORK_DURATION;
-            updateTimerDisplay();
-            startBtn.classList.remove("hidden");
-            startBtn.innerHTML = '<i class="fas fa-play mr-2"></i>Start';
-            pauseBtn.classList.add("hidden");
-            timerStatus.textContent = "Focus ka samay!";
-        }
-
-        async function handleTimerEnd() {
-            if (timerMode === "work") {
-                const taskId = document.getElementById("task-for-timer").value;
-                if (taskId) {
-                    await addDoc(collection(db, `artifacts/${app_id}/users/${userId}/studySessions`), {
-                        taskId: taskId,
-                        duration: WORK_DURATION / 60,
-                        completedAt: new Date()
-                    });
-                }
-            }
-            triggerAlerts();
-            if (timerMode === "work") {
-                timerMode = "break";
-                secondsRemaining = BREAK_DURATION;
-                timerStatus.textContent = "Chhota break!";
-                showAlert("Timer Poora Hua!", "Ab break lene ka samay hai.", "break");
-            } else {
-                timerMode = "work";
-                secondsRemaining = WORK_DURATION;
-                timerStatus.textContent = "Focus ka samay!";
-                showAlert("Break Khatm!", "Chaliye, padhai par wapas chalte hain.", "work");
-            }
-            timerState = "stopped";
-            updateTimerDisplay();
-            startBtn.classList.remove("hidden");
-            startBtn.innerHTML = '<i class="fas fa-play mr-2"></i>Start';
-            pauseBtn.classList.add("hidden");
-        }
-        
-        startBtn.addEventListener("click", startTimer);
-        pauseBtn.addEventListener("click", pauseTimer);
-        resetBtn.addEventListener("click", resetTimer);
-        
-        function requestNotificationPermission() {
-            Notification.requestPermission().then(e => { "granted" === e && new Notification("Notifications Enabled!", { body: "Aapko timer poora hone par alert milega.", icon: "https://placehold.co/48x48/3b82f6/ffffff?text=OK" }) })
-        }
-
-        function triggerAlerts() {
-            if ("granted" === Notification.permission) {
-                const e = "work" === timerMode ? "Time for a short break!" : "Break is over. Time to focus!";
-                new Notification("Study Timer Finished!", { body: e, icon: "https://placehold.co/48x48/3b82f6/ffffff?text=🔔" })
-            }
-            document.getElementById("enable-sound").checked && new Tone.Synth().toDestination().triggerAttackRelease("C4", "8n");
-            "vibrate" in navigator && navigator.vibrate([200, 100, 200]);
-        }
-
-        function showAlert(e, t, o) {
-            const n = document.getElementById("custom-alert-modal");
-            document.getElementById("custom-alert-title").textContent = e;
-            document.getElementById("custom-alert-message").textContent = t;
-            document.getElementById("custom-alert-icon").innerHTML = "break" === o ? '<i class="fas fa-coffee text-5xl text-yellow-500"></i>' : '<i class="fas fa-book-reader text-5xl text-green-500"></i>';
-            n.style.display = "flex"
-        }
     </script>
-    
-    <script class="no-print">
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('Service worker registered.', reg))
-                    .catch(err => console.log('Service worker registration failed: ', err));
-            });
-        }
-    </script>
-
 </body>
 </html>
-
