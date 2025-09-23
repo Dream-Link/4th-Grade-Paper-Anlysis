@@ -3,285 +3,828 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4th Grade Analysis By MP Salodiya</title>
+    <title>Daily Study Management App</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js for reports -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Tone.js for audio alerts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-bg: #f0f4f8; --container-bg: #ffffff; --header-color: #1a2533;
-            --text-color: #334155; --light-text: #64748b; --border-color: #e2e8f0;
-            --accent-color: #2563eb; --accent-dark: #1d4ed8; --accent-light: #eff6ff; 
-            --shadow-color: rgba(0, 0, 0, 0.08);
-            --correct-bg: #dcfce7; --correct-border: #86efac; --correct-text: #15803d;
-            --incorrect-bg: #fee2e2; --incorrect-border: #fca5a5; --incorrect-text: #b91c1c;
-            --special-bg: #dbeafe; --special-border: #93c5fd; --special-text: #1e40af;
-        }
-        * { box-sizing: border-box; }
+        /* Custom styles */
         body {
-            font-family: 'Noto Sans Devanagari', sans-serif; 
-            background-color: var(--primary-bg);
-            color: var(--text-color); margin: 0; line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
         }
-        
-        #shift-selector-page {
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            background: linear-gradient(135deg, #e0eafc, #cfdef3); padding: 20px;
+        .tab-active {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background-color: #eff6ff;
         }
-        .selector-container {
-            max-width: 900px; width: 100%; padding: 40px; background-color: var(--container-bg);
-            border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); text-align: center;
-            border-top: 5px solid var(--accent-color); transition: all 0.3s ease;
+        .modal {
+            display: none; /* Hidden by default */
         }
-        .selector-container h1 { color: var(--header-color); margin-bottom: 10px; font-size: 2.5em; }
-        .selector-container p { color: var(--light-text); font-size: 1.1em; margin-bottom: 40px; }
-        .shift-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .shift-btn { display: flex; align-items: center; text-align: left; background-color: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; text-decoration: none; transition: all 0.3s ease; cursor: pointer; overflow: hidden; }
-        .shift-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2); border-color: var(--accent-color); }
-        .shift-btn .icon { padding: 20px; background-color: var(--accent-light); color: var(--accent-color); font-size: 1.8em; display: flex; align-items: center; justify-content: center; }
-        .shift-btn .text { padding: 20px; color: var(--header-color); font-weight: 500; font-size: 1.1em; }
-
-        #question-paper-page { display: none; flex-direction: column; }
-        #back-to-main-btn { display: none !important; }
-        .top-sticky-bar { position: sticky; top: 0; z-index: 100; background-color: var(--container-bg); box-shadow: 0 4px 12px var(--shadow-color); }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px; }
-        .header h1 { margin: 0; font-size: 1.2em; color: var(--header-color); text-align: center; flex-grow: 1; }
-        .header-controls { display: flex; align-items: center; gap: 10px; }
-        .summary-bar { padding: 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; align-items: stretch; transition: all 0.3s ease; }
-        .summary-bar.hidden { display: none; }
-        .summary-item { text-align: center; padding: 5px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .summary-item .count { font-size: 1.25em; font-weight: 700; }
-        .summary-item .label { font-size: 0.65em; text-transform: uppercase; font-weight: 500; }
-        #total-item { background-color: #f3e8ff; color: #581c87; } 
-        #attempted-item { background-color: var(--accent-light); color: var(--accent-color); }
-        #correct-item { background-color: var(--correct-bg); color: var(--correct-text); } 
-        #incorrect-item { background-color: var(--incorrect-bg); color: var(--incorrect-text); }
-        #skipped-item { background-color: var(--special-bg); color: var(--special-text); }
-        #right-que-item, #raw-marks-item { background-color: #e0f2fe; color: #0c4a6e; }
-        
-        .container { max-width: 1100px; margin: 25px auto; background-color: var(--container-bg); padding: 25px 30px; border-radius: 16px; box-shadow: 0 5px 25px var(--shadow-color); }
-        
-        .controls-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
-        .filter-buttons button { background: none; border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 15px; cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.9em; }
-        .filter-buttons button.active { background-color: var(--accent-light); color: var(--accent-color); border-color: var(--accent-color); font-weight: 500; }
-        #print-btn { background-color: var(--accent-color); color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background-color 0.2s; }
-        #print-btn:hover { background-color: var(--accent-dark); }
-        .question-block { margin-bottom: 30px; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
-        .question-info-bar { font-size: 0.8em; color: var(--light-text); margin-bottom: 15px; display: block; background-color: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); font-weight: 500; }
-        .question-block h3 { margin: 0 0 15px 0; color: var(--header-color); font-size: 1.1em; }
-        .options-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-        .options-list li { border: 1px solid var(--border-color); padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-        .options-list li.correct, .options-list li.incorrect, .options-list li.special { font-weight: 500; }
-        .options-list li.correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-text); }
-        .options-list li.incorrect { background-color: var(--incorrect-bg); border-color: var(--incorrect-border); color: var(--incorrect-text); }
-        .options-list li.special { background-color: var(--special-bg); border-color: var(--special-border); color: var(--special-text); }
-        .correct-answer-display { margin-top: 15px; font-weight: 500; color: var(--correct-text); }
-        
-        #print-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: center; justify-content: center; }
-        #print-modal { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 90%; max-width: 400px; }
-        #print-modal h2, #print-modal p, #print-modal label { margin: 0 0 15px 0; }
-        #print-modal input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; }
-        .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
-        .modal-buttons button { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 500; font-size: 0.9em; }
-        #cancel-print { background-color: #f1f5f9; color: var(--text-color); }
-        #confirm-print { background-color: var(--accent-color); color: white; }
-
-        @media (max-width: 768px) {
-            #shift-selector-page { padding: 0; }
-            .selector-container { 
-                width: 100%; min-height: 100vh; border-radius: 0; 
-                border-top: none; box-shadow: none; padding: 30px 20px; 
-                display: flex; flex-direction: column; justify-content: center; 
-            }
-            .selector-container h1 { font-size: 2em; }
-            .container { margin: 0; padding: 15px 10px; border-radius: 0; box-shadow: none; }
-
-            /* --- START: ANDROID ALIGNMENT & COMPACT LAYOUT IMPROVEMENTS --- */
-            .header { padding: 8px 10px; justify-content: center; }
-            .header h1 { font-size: 1.1em; width: 100%; order: -1; /* शीर्षक को सबसे ऊपर ले जाएं */ }
-            .header-controls { width: 100%; justify-content: center; }
-            .header #back-to-main-btn { position: absolute; left: 10px; top: 10px; /* वापस जाएं बटन को कोने में रखें */ }
-            
-            .summary-bar { gap: 5px; padding: 8px; }
-            .summary-item .count { font-size: 1.1em; }
-            .summary-item .label { font-size: 0.6em; }
-            .controls-bar { padding: 10px 0; margin-bottom: 15px; }
-            .filter-buttons button { padding: 5px 12px; font-size: 0.85em; }
-            #print-btn { padding: 6px 15px; font-size: 0.85em; }
-            .question-block { padding: 15px; margin-bottom: 20px; }
-            .question-block h3 { font-size: 1em; }
-            /* --- END: ANDROID ALIGNMENT & COMPACT LAYOUT IMPROVEMENTS --- */
+        .modal-content {
+            animation: slide-up 0.3s ease-out;
         }
-
-        @media print {
-            body { font-size: 10pt; background-color: #fff !important; }
-            .top-sticky-bar, .controls-bar, #print-modal-overlay, #shift-selector-page, #back-to-main-btn { 
-                display: none !important; 
-            }
-            .container, .question-block { 
-                box-shadow: none !important; 
-                border-color: #ccc !important; 
-                margin: 10px 0;
-            }
-            #question-paper-page { display: block !important; }
-            #print-only-header, #print-only-summary-container { display: block !important; }
-            #print-only-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin: 20px; }
-            .print-summary-bar {
-                display: grid !important;
-                grid-template-columns: repeat(7, 1fr) !important;
-                gap: 10px; padding: 10px; border: 1px solid #e2e8f0; margin: 0 20px;
-            }
-            .print-summary-bar .summary-item { border: 2px solid; }
-            .question-block { page-break-inside: avoid; }
-            .print-summary-bar .summary-item, .options-list li.correct, 
-            .options-list li.incorrect, .options-list li.special {
-                -webkit-print-color-adjust: exact !important;
-                color-adjust: exact !important;
-            }
-            .options-list li.correct { background-color: var(--correct-bg) !important; color: var(--correct-text) !important; }
-            .options-list li.incorrect { background-color: var(--incorrect-bg) !important; color: var(--incorrect-text) !important; }
-            .options-list li.special { background-color: var(--special-bg) !important; color: var(--special-text) !important; }
+        @keyframes slide-up {
+            from { transform: translateY(20%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .progress-bar-fill {
+            transition: width 0.5s ease-in-out;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
     </style>
 </head>
-<body>
+<body class="antialiased text-gray-800">
 
-    <div id="shift-selector-page">
-        <div class="selector-container">
-            <h1>4th Grade Exam 2024</h1>
-            <p>फिलहाल उत्तर विभिन्न कोचिंग के बताए अनुसार है, Official Key आने पर UPDATE कर दिए जाएंगे</p>
-            <div class="shift-selector">
-                <div class="shift-btn" data-shift="shift1"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">1st Shift 19.09.2025</div></div>
-                <div class="shift-btn" data-shift="shift2"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">2nd Shift 19.09.2025</div></div>
-                <div class="shift-btn" data-shift="shift3"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">3rd Shift 20.09.2025</div></div>
-                <div class="shift-btn" data-shift="shift4"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">4th Shift 20.09.2025</div></div>
-                <div class="shift-btn" data-shift="shift5"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">5th Shift 21.09.2025</div></div>
-                <div class="shift-btn" data-shift="shift6"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">6th Shift 21.09.2025</div></div>
+    <div id="app-container" class="max-w-4xl mx-auto p-4 min-h-screen">
+        <!-- Header -->
+        <header class="text-center my-6">
+            <h1 class="text-4xl font-bold text-gray-800">Study Planner Pro</h1>
+            <p class="text-gray-500 mt-2">Apni padhai ko manage karein, smart tarike se.</p>
+        </header>
+
+        <!-- Loading state -->
+        <div id="loading-indicator" class="text-center py-10">
+            <i class="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
+            <p class="mt-4 text-gray-600">App load ho raha hai...</p>
+        </div>
+
+        <!-- Main Content (hidden until loaded) -->
+        <main id="main-content" class="hidden">
+            <!-- Navigation Tabs -->
+            <div class="mb-6 border-b border-gray-200">
+                <nav class="flex space-x-2 sm:space-x-4" aria-label="Tabs">
+                    <button class="tab-btn tab-active" data-tab="dashboard">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                    </button>
+                    <button class="tab-btn" data-tab="subjects">
+                        <i class="fas fa-book mr-2"></i>Subjects & Tasks
+                    </button>
+                    <button class="tab-btn" data-tab="timer">
+                        <i class="fas fa-clock mr-2"></i>Focus Timer
+                    </button>
+                    <button class="tab-btn" data-tab="reports">
+                        <i class="fas fa-chart-pie mr-2"></i>Reports
+                    </button>
+                    <button class="tab-btn" data-tab="settings">
+                        <i class="fas fa-cog mr-2"></i>Settings
+                    </button>
+                </nav>
             </div>
+
+            <!-- Tab Content -->
+            <div id="tab-content">
+                <!-- Dashboard Tab -->
+                <div id="dashboard-tab" class="tab-pane active-pane">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Welcome & Stats -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <h2 class="text-2xl font-bold mb-4">Aaj ka Overview</h2>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600"><i class="fas fa-tasks mr-2 text-green-500"></i>Poore kiye gaye Tasks</span>
+                                    <span id="completed-tasks-count" class="font-bold text-lg">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600"><i class="fas fa-hourglass-half mr-2 text-red-500"></i>Baaki Tasks</span>
+                                    <span id="pending-tasks-count" class="font-bold text-lg">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600"><i class="fas fa-stopwatch mr-2 text-blue-500"></i>Total Padhai ka Samay</span>
+                                    <span id="total-study-time" class="font-bold text-lg">0 min</span>
+                                </div>
+                            </div>
+                        </div>
+                         <!-- Today's Tasks -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <h2 class="text-2xl font-bold mb-4">Aaj ke Tasks</h2>
+                            <div id="todays-tasks-list" class="space-y-3 max-h-48 overflow-y-auto">
+                                <!-- Tasks will be injected here -->
+                                <p class="text-gray-500">Aaj ke liye koi task nahi hai.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Overall Progress -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm mt-6">
+                        <h2 class="text-2xl font-bold mb-4">Overall Progress</h2>
+                        <div class="w-full bg-gray-200 rounded-full h-4">
+                            <div id="overall-progress-bar" class="bg-blue-500 h-4 rounded-full progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                        <p id="overall-progress-text" class="text-center mt-2 text-gray-600">0% poora hua.</p>
+                    </div>
+                </div>
+
+                <!-- Subjects & Tasks Tab -->
+                <div id="subjects-tab" class="tab-pane hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold">Aapke Subjects</h2>
+                        <button id="add-subject-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition">
+                            <i class="fas fa-plus mr-2"></i>Naya Subject
+                        </button>
+                    </div>
+                    <div id="subjects-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Subjects will be rendered here -->
+                         <p id="no-subjects-msg" class="text-gray-500 col-span-full text-center py-10">Aapne abhi tak koi subject add nahi kiya hai.</p>
+                    </div>
+                </div>
+
+                <!-- Focus Timer Tab -->
+                <div id="timer-tab" class="tab-pane hidden">
+                     <div class="bg-white p-8 rounded-xl shadow-lg max-w-md mx-auto text-center">
+                        <h2 class="text-2xl font-bold mb-4">Focus Timer (Pomodoro)</h2>
+                        <div id="timer-display" class="text-8xl font-bold my-6 text-gray-800">25:00</div>
+                        <div class="mb-6">
+                            <label for="task-for-timer" class="block text-sm font-medium text-gray-700 mb-2">Focus karne ke liye Task chunein:</label>
+                            <select id="task-for-timer" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="">Koi task nahi chuna</option>
+                            </select>
+                        </div>
+                        <div class="flex justify-center space-x-4">
+                            <button id="start-timer-btn" class="bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow hover:bg-green-600 transition"><i class="fas fa-play mr-2"></i>Start</button>
+                            <button id="pause-timer-btn" class="bg-yellow-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow hover:bg-yellow-600 transition hidden"><i class="fas fa-pause mr-2"></i>Pause</button>
+                            <button id="reset-timer-btn" class="bg-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow hover:bg-red-600 transition"><i class="fas fa-sync-alt mr-2"></i>Reset</button>
+                        </div>
+                        <p id="timer-status" class="mt-4 text-gray-600">Focus ka samay!</p>
+                    </div>
+                </div>
+
+                <!-- Reports Tab -->
+                <div id="reports-tab" class="tab-pane hidden">
+                    <h2 class="text-2xl font-bold mb-4">Aapki Study Report</h2>
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="font-semibold mb-3">Subject ke anusaar Padhai ka Samay</h3>
+                        <canvas id="study-time-chart" height="150"></canvas>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settings-tab" class="tab-pane hidden">
+                    <h2 class="text-2xl font-bold mb-4">Settings</h2>
+                    <div class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <label for="enable-notifications" class="font-medium">Browser Notifications</label>
+                            <button id="request-notification-permission" class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Enable Karein</button>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label for="enable-sound" class="font-medium">Sound Alert</label>
+                            <input type="checkbox" id="enable-sound" class="h-6 w-6 rounded text-blue-500 border-gray-300 focus:ring-blue-500">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label for="enable-vibration" class="font-medium">Vibration Alert (Mobile par)</label>
+                            <input type="checkbox" id="enable-vibration" class="h-6 w-6 rounded text-blue-500 border-gray-300 focus:ring-blue-500">
+                        </div>
+                         <div class="pt-4 border-t">
+                            <h3 class="font-semibold mb-2">User ID</h3>
+                            <p class="text-sm text-gray-500">Apna data anya devices par access karne ke liye is ID ka upyog karein (future feature).</p>
+                            <div class="mt-2 bg-gray-100 p-2 rounded-md text-center">
+                                <code id="user-id-display" class="text-gray-700"></code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Subject Modal -->
+    <div id="subject-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-xl font-bold mb-4" id="subject-modal-title">Naya Subject Jodein</h3>
+            <form id="subject-form">
+                <div>
+                    <label for="subject-name" class="block text-sm font-medium text-gray-700">Subject ka Naam</label>
+                    <input type="text" id="subject-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                </div>
+                <div class="mt-4">
+                    <label for="subject-color" class="block text-sm font-medium text-gray-700">Ek Rang Chunein</label>
+                    <input type="color" id="subject-color" class="mt-1 block w-full" value="#3b82f6">
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button" id="cancel-subject-modal" class="bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <div id="question-paper-page">
-        <div id="print-only-header" style="display: none;"></div>
-        <div id="print-only-summary-container" style="display: none;"></div>
-
-        <div class="top-sticky-bar">
-            <div class="header">
-                 <button id="back-to-main-btn">&larr; वापस जाएं</button>
-                 <h1 id="shift-title">Shift Title</h1>
-                <div class="header-controls">
-                    <label for="series-select">PAPER Code:</label>
-                    <select id="series-select"> <option value="A"> A</option> <option value="B">B</option> <option value="C">C</option> </select>
-                    <button id="toggle-summary-btn">Show Result</button>
+    <!-- Add Task Modal -->
+    <div id="task-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-xl font-bold mb-4" id="task-modal-title">Naya Task Jodein</h3>
+            <form id="task-form">
+                <input type="hidden" id="task-subject-id">
+                <input type="hidden" id="task-id">
+                <div>
+                    <label for="task-name" class="block text-sm font-medium text-gray-700">Task ka Naam</label>
+                    <input type="text" id="task-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
                 </div>
-            </div>
-            <div class="summary-bar hidden">
-                <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">Total Que.</div></div>
-                <div id="attempted-item" class="summary-item"><div id="attempted-count" class="count">0</div><div class="label">Attempt</div></div>
-                <div id="correct-item" class="summary-item"><div id="correct-count" class="count">0</div><div class="label">Right</div></div>
-                <div id="incorrect-item" class="summary-item"><div id="incorrect-count" class="count">0</div><div class="label">Wrong</div></div>
-                <div id="skipped-item" class="summary-item"><div id="skipped-count" class="count">0</div><div class="label">Skip (E)</div></div>
-                <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Final R.Q. </div></div>
-                <div id="raw-marks-item" class="summary-item"><div id="raw-marks-value" class="count">0.00</div><div class="label">RAW Marks</div></div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="controls-bar">
-                <div class="filter-buttons">
-                    <button class="active" data-filter="all">All</button> <button data-filter="correct">Right</button> <button data-filter="incorrect">Wrong</button> <button data-filter="skipped">Skip (E)</button>
+                <div class="mt-4">
+                    <label for="task-due-date" class="block text-sm font-medium text-gray-700">Due Date</label>
+                    <input type="date" id="task-due-date" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
                 </div>
-                <button id="print-btn">Print</button>
-            </div>
-            <div id="questions-container"></div>
-        </div>
-        <div id="print-modal-overlay">
-            <div id="print-modal">
-                <h2>Print info</h2>
-                <label for="student-name">Name:</label>
-                <input type="text" id="student-name" placeholder="Your Name">
-                <label for="student-roll">Roll No.:</label>
-                <input type="text" id="student-roll" placeholder="Your Roll No.">
-                <div class="modal-buttons">
-                    <button id="cancel-print">Cancel</button> <button id="confirm-print">Print</button>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button" id="cancel-task-modal" class="bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Save Task</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
     
-    <script>
-    // --- START: QUESTION IDs UPDATED TO 4-DIGIT STRINGS ---
-    const allShiftData = {
-        'shift1':{title:'1st Grade 1st Shift (21/09/2025)',questions:[{id:'0101',question:"राजस्थान की राजधानी क्या है?",options:["A) उदयपुर","B) जोधपुर","C) जयपुर","D) अजमेर","E) इनमें से कोई नहीं"],answer:"C) जयपुर"},{id:'0102',question:"भारत का राष्ट्रीय पक्षी कौन है?",options:["A) तोता","B) मोर","C) कबूतर","D) गौरेया","E) इनमें से कोई नहीं"],answer:"B) मोर"},{id:'0103',question:"पृथ्वी पर कितने महासागर हैं?",options:["A) 7","B) 4","C) 5","D) 8","E) इनमें से कोई नहीं"],answer:"C) 5"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{'0101':{'A':[0,1,2,3],'B':[3,2,1,0],'C':[1,0,3,2]},'0102':{'A':[0,1,2,3],'B':[3,2,1,0],'C':[1,0,3,2]}}},
-        'shift2':{title:'4th Grade 2nd Shift (20/09/2025)',questions:[{id:'0201',question:"भारत की राष्ट्रीय नदी कौन सी है?",options:["A) यमुना","B) ब्रह्मपुत्र","C) गंगा","D) गोदावरी","E) इनमें से कोई नहीं"],answer:"C) गंगा"},{id:'0202',question:"सौर मंडल का सबसे बड़ा ग्रह कौन सा है?",options:["A) पृथ्वी","B) बृहस्पति","C) मंगल","D) शनि","E) इनमें से कोई नहीं"],answer:"B) बृहस्पति"},{id:'0203',question:"'ताजमहल' किस शहर में स्थित है?",options:["A) दिल्ली","B) जयपुर","C) मुंबई","D) आगरा","E) इनमें से कोई नहीं"],answer:"D) आगरा"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
-        'shift3':{title:'3rd Grade 3rd Shift (22/09/2025)',questions:[{id:'0301',question:"भारत के प्रथम प्रधानमंत्री कौन थे?",options:["A) महात्मा गांधी","B) जवाहरलाल नेहरू","C) सरदार पटेल","D) राजेंद्र प्रसाद","E) इनमें से कोई नहीं"],answer:"B) जवाहरलाल नेहरू"},{id:'0302',question:"प्रकाश की गति कितनी होती है?",options:["A) 3 लाख किमी/सेकंड","B) 2 लाख किमी/सेकंड","C) 1.5 लाख किमी/सेकंड","D) 5 लाख किमी/सेकंड","E) इनमें से कोई नहीं"],answer:"A) 3 लाख किमी/सेकंड"},{id:'0303',question:"विश्व का सबसे ऊँचा पर्वत कौन सा है?",options:["A) कंचनजंघा","B) K2","C) माउंट एवरेस्ट","D) मकालू","E) इनमें से कोई नहीं"],answer:"C) माउंट एवरेस्ट"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
-        'shift4':{title:'1st Grade 4th Shift (23/09/2025)',questions:[{id:'0401',question:"मानव शरीर में कितनी हड्डियाँ होती हैं?",options:["A) 206","B) 306","C) 106","D) 256","E) इनमें से कोई नहीं"],answer:"A) 206"},{id:'0402',question:"गुलाबी शहर किसे कहा जाता है?",options:["A) जोधपुर","B) उदयपुर","C) दिल्ली","D) जयपुर","E) इनमें से कोई नहीं"],answer:"D) जयपुर"},{id:'0403',question:"एक वर्ष में कितने दिन होते हैं?",options:["A) 360","B) 365","C) 355","D) 370","E) इनमें से कोई नहीं"],answer:"B) 365"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
-        'shift5':{title:'2nd Grade 5th Shift (24/09/2025)',questions:[{id:'0501',question:"भारत की मुद्रा क्या है?",options:["A) डॉलर","B) यूरो","C) रुपया","D) येन","E) इनमें से कोई नहीं"],answer:"C) रुपया"},{id:'0502',question:"कंप्यूटर का आविष्कार किसने किया?",options:["A) न्यूटन","B) आइंस्टीन","C) चार्ल्स बैबेज","D) ग्राहम बेल","E) इनमें से कोई नहीं"],answer:"C) चार्ल्स बैबेज"},{id:'0503',question:"भारत का राष्ट्रीय फूल कौन सा है?",options:["A) गुलाब","B) कमल","C) गेंदा","D) सूरजमुखी","E) इनमें से कोई नहीं"],answer:"B) कमल"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}},
-        'shift6':{title:'4th Grade 6th Shift (25/09/2025)',questions:[{id:'0601',question:"जापान की राजधानी क्या है?",options:["A) बीजिंग","B) सियोल","C) टोक्यो","D) बैंकॉक","E) इनमें से कोई नहीं"],answer:"C) टोक्यो"},{id:'0602',question:"सबसे छोटा महाद्वीप कौन सा है?",options:["A) एशिया","B) अफ्रीका","C) यूरोप","D) ऑस्ट्रेलिया","E) इनमें से कोई नहीं"],answer:"D) ऑस्ट्रेलिया"},{id:'0603',question:"'स्टैच्यू ऑफ यूनITY' किस राज्य में है?",options:["A) महाराष्ट्र","B) गुजरात","C) राजस्थान","D) उत्तर प्रदेश","E) इनमें से कोई नहीं"],answer:"B) गुजरात"}],seriesOrder:{A:[1,2,3],B:[3,1,2],C:[2,3,1]},seriesOptionOrder:{}}
-    };
-    // --- END: QUESTION IDs UPDATED ---
-      
-    let currentShiftId=null,allQuestions=[],userAnswers={},currentSeries='A',activeFilter='all',currentShiftData={};
-    const shiftSelectorPage=document.getElementById('shift-selector-page'),questionPaperPage=document.getElementById('question-paper-page');
-    function showHomePage(){shiftSelectorPage.style.display='flex';questionPaperPage.style.display='none';currentShiftId=null;history.replaceState(null,'',window.location.pathname);}
-    window.addEventListener('popstate',showHomePage);
-    document.querySelectorAll('.shift-btn').forEach(b=>b.addEventListener('click',()=>loadShift(b.dataset.shift)));
-    function loadShift(shiftId){shiftSelectorPage.style.display='none';questionPaperPage.style.display='flex';currentShiftId=shiftId;currentShiftData=allShiftData[shiftId];allQuestions=currentShiftData.questions;document.getElementById('shift-title').textContent=currentShiftData.title;userAnswers=JSON.parse(localStorage.getItem(`userAnswers_${shiftId}`))||{};currentSeries=localStorage.getItem(`currentSeries_${shiftId}`)||'A';activeFilter='all';document.getElementById('toggle-summary-btn').textContent='Show Result';document.querySelector('.summary-bar').classList.add('hidden');history.pushState({shift:shiftId},'',`#${shiftId}`);displayQuestions(currentSeries,activeFilter);}
-    function saveData(){if(!currentShiftId)return;localStorage.setItem(`userAnswers_${currentShiftId}`,JSON.stringify(userAnswers));localStorage.setItem(`currentSeries_${currentShiftId}`,currentSeries);}
-    function getQuestionStatus(qId){const uAns=userAnswers[qId];if(!uAns)return'unattempted';if(uAns.startsWith('E)'))return'skipped';const qData=allQuestions.find(q=>q.id===qId);return uAns===qData.answer?'correct':'incorrect';}
-    function updateSummary(){let c=0,i=0,s=0;allQuestions.forEach(q=>{const st=getQuestionStatus(q.id);if(st==='correct')c++;else if(st==='incorrect')i++;else if(st==='skipped')s++;});const a=c+i+s;document.getElementById('total-count').textContent=allQuestions.length;document.getElementById('attempted-count').textContent=a;document.getElementById('correct-count').textContent=c;document.getElementById('incorrect-count').textContent=i;document.getElementById('skipped-count').textContent=s;const rQ=c-(i/3);const rM=rQ*1.6666666;document.getElementById('right-que-value').textContent=rQ.toFixed(3);document.getElementById('raw-marks-value').textContent=rM.toFixed(3);}
-    function findQuestionPositions(qId){const qIndex=allQuestions.findIndex(q=>q.id===qId);let positions=[];if(qIndex===-1||!currentShiftData.seriesOrder)return"";for(const series in currentShiftData.seriesOrder){const pos=currentShiftData.seriesOrder[series].indexOf(qIndex+1);if(pos!==-1){positions.push(`Series ${series}: #${pos+1}`);}}
-    return positions.join(' | ');}
-    function displayQuestions(series,filter='all'){const qC=document.getElementById('questions-container');qC.innerHTML='';currentSeries=series;document.getElementById('series-select').value=series;updateSummary();updateActiveFilterButton(filter);const seriesOrder=currentShiftData.seriesOrder||{};const qIds=allQuestions.map(q=>q.id);const order=(seriesOrder[series]||[]).map(i=>qIds[i-1]).filter(id=>id);let dC=0;order.forEach(qId=>{const qData=allQuestions.find(q=>q.id===qId);const status=getQuestionStatus(qId);if(filter!=='all'&&filter!==status)return;dC++;const qB=document.createElement('div');qB.className='question-block';const iB=document.createElement('div');iB.className='question-info-bar';iB.textContent=findQuestionPositions(qId);qB.appendChild(iB);const qT=document.createElement('h3');qT.textContent=`प्रश्न ${dC}: ${qData.question}`;const oL=document.createElement('ul');oL.className='options-list';let orderedOptions;const lastOption=qData.options[qData.options.length-1];let firstFourOptions=qData.options.slice(0,-1);const optionOrderMap=currentShiftData.seriesOptionOrder?.[qData.id]?.[series];if(optionOrderMap){orderedOptions=optionOrderMap.map(index=>firstFourOptions[index]);}else{orderedOptions=firstFourOptions;}
-    orderedOptions.push(lastOption);orderedOptions.forEach(oT=>{const oI=document.createElement('li');oI.textContent=oT;const uA=userAnswers[qId];if(uA&&uA===oT){if(status==='correct')oI.classList.add('correct');else if(status==='incorrect')oI.classList.add('incorrect');else if(status==='skipped')oI.classList.add('special');}
-    oL.appendChild(oI);});qB.appendChild(qT);qB.appendChild(oL);if(status==='correct'||status==='incorrect'||status==='skipped'){const aD=document.createElement('div');aD.className='correct-answer-display';aD.innerHTML=`Correct Ans. is - <strong>${qData.answer}</strong>`;qB.appendChild(aD);}
-    qC.appendChild(qB);oL.addEventListener('click',(e)=>{if(e.target.tagName==='LI'){userAnswers[qData.id]=e.target.textContent;displayQuestions(currentSeries,activeFilter);saveData();}});});if(dC===0){qC.innerHTML=`<p style="text-align:center; color: var(--light-text);">Empty</p>`;}}
-    function updateActiveFilterButton(filter){document.querySelectorAll('.filter-buttons button').forEach(btn=>btn.classList.remove('active'));document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active');}
-    document.getElementById('series-select').addEventListener('change',(e)=>{displayQuestions(e.target.value,activeFilter);saveData();});
-    document.querySelectorAll('.filter-buttons button').forEach(b=>b.addEventListener('click',()=>{activeFilter=b.dataset.filter;displayQuestions(currentSeries,activeFilter);}));
-    document.getElementById('toggle-summary-btn').addEventListener('click',(e)=>{const sB=document.querySelector('.summary-bar');sB.classList.toggle('hidden');e.target.textContent=sB.classList.contains('hidden')?'Show Result':'Hide Result';});
-    
-    function triggerPrint(name, rollNo) {
-        const shiftTitle = document.getElementById('shift-title').textContent;
-        const summaryBarOriginal = document.querySelector('.summary-bar');
-        
-        const printHeader = document.getElementById('print-only-header');
-        printHeader.innerHTML = `<h2>${shiftTitle}</h2><p><strong>नाम:</strong> ${name} | <strong>रोल नंबर:</strong> ${rollNo}</p>`;
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
+        <div class="modal-content bg-white rounded-lg p-8 w-full max-w-sm text-center shadow-2xl">
+            <div id="custom-alert-icon" class="mb-4"></div>
+            <h3 class="text-xl font-bold mb-2" id="custom-alert-title">Timer Poora Hua!</h3>
+            <p class="text-gray-600 mb-6" id="custom-alert-message">Ab break lene ka samay hai.</p>
+            <button id="close-alert-modal" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 w-full">Okay</button>
+        </div>
+    </div>
 
-        const summaryBarClone = summaryBarOriginal.cloneNode(true);
-        summaryBarClone.className = 'print-summary-bar';
-        summaryBarClone.classList.remove('hidden'); 
-        
-        const printSummaryContainer = document.getElementById('print-only-summary-container');
-        printSummaryContainer.innerHTML = ''; 
-        printSummaryContainer.appendChild(summaryBarClone);
 
-        setTimeout(() => {
-             window.print();
-        }, 150);
-    }
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, doc, collection, addDoc, getDocs, onSnapshot, 
+            updateDoc, deleteDoc, query, where, writeBatch 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    window.addEventListener('afterprint', () => {
-        document.getElementById('print-only-header').innerHTML = '';
-        document.getElementById('print-only-summary-container').innerHTML = '';
-    });
+        // --- GLOBAL APP STATE ---
+        let db, auth;
+        let userId = null;
+        let subjects = [];
+        let tasks = [];
+        let studySessions = [];
+        let studyTimeChart;
 
-    const printBtn = document.getElementById('print-btn');
-    const pMO = document.getElementById('print-modal-overlay');
-    printBtn.addEventListener('click', () => { pMO.style.display = 'flex'; });
-    
-    document.getElementById('cancel-print').addEventListener('click', () => { pMO.style.display = 'none'; });
-    
-    document.getElementById('confirm-print').addEventListener('click', () => {
-        const name = document.getElementById('student-name').value;
-        const rollNo = document.getElementById('student-roll').value;
-        if (!name || !rollNo) {
-            alert("नाम और रोल नंबर दोनों आवश्यक हैं।");
-            return;
+        // --- FIREBASE SETUP ---
+        function initializeFirebase() {
+            try {
+                // These global variables are provided by the environment
+                if (typeof __firebase_config === 'undefined' || !__firebase_config) {
+                    showError("Firebase configuration not found. App cannot start.");
+                    return;
+                }
+                
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                
+                if (!firebaseConfig.apiKey) {
+                    showError("Firebase configuration is invalid. App cannot start.");
+                    return;
+                }
+
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        document.getElementById('user-id-display').textContent = userId;
+                        await fetchAllData();
+                        hideLoadingIndicator();
+                    } else {
+                         // If no user, try to sign in
+                        try {
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            console.error("Authentication error:", error);
+                            showError("Authentication failed. Please refresh the page.");
+                        }
+                    }
+                });
+
+            } catch (e) {
+                console.error("Firebase initialization error:", e);
+                showError("Could not connect to the database. Please check your connection and refresh.");
+            }
         }
-        pMO.style.display = 'none';
-        triggerPrint(name, rollNo);
-    });
+        
+        function hideLoadingIndicator() {
+            document.getElementById('loading-indicator').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+        }
+
+        function showError(message) {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            loadingIndicator.innerHTML = `<p class="text-red-500 font-bold p-4">${message}</p>`;
+        }
+
+
+        // --- DATA FETCHING & RENDERING ---
+        async function fetchAllData() {
+            if (!userId) return;
+
+            // Subjects listener
+            const subjectsQuery = collection(db, `artifacts/${__app_id}/users/${userId}/subjects`);
+            onSnapshot(subjectsQuery, (snapshot) => {
+                subjects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderSubjects();
+                updateAllUI();
+            });
+
+            // Tasks listener
+            const tasksQuery = collection(db, `artifacts/${__app_id}/users/${userId}/tasks`);
+            onSnapshot(tasksQuery, (snapshot) => {
+                tasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderAllTasks(); // Rerender tasks within subjects
+                updateAllUI();
+            });
+
+            // Study Sessions listener
+            const sessionsQuery = collection(db, `artifacts/${__app_id}/users/${userId}/studySessions`);
+            onSnapshot(sessionsQuery, (snapshot) => {
+                studySessions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                updateAllUI();
+            });
+        }
+        
+        function updateAllUI() {
+            renderDashboard();
+            renderTimerTaskOptions();
+            renderReports();
+        }
+
+        function renderSubjects() {
+            const list = document.getElementById('subjects-list');
+            const noSubjectsMsg = document.getElementById('no-subjects-msg');
+            list.innerHTML = '';
+            if (subjects.length === 0) {
+                 noSubjectsMsg.classList.remove('hidden');
+                return;
+            }
+            noSubjectsMsg.classList.add('hidden');
+
+            subjects.forEach(subject => {
+                const subjectTasks = tasks.filter(t => t.subjectId === subject.id);
+                const completedTasks = subjectTasks.filter(t => t.isCompleted).length;
+                const progress = subjectTasks.length > 0 ? (completedTasks / subjectTasks.length) * 100 : 0;
+
+                const card = document.createElement('div');
+                card.className = 'bg-white p-4 rounded-xl shadow-sm border-l-4';
+                card.style.borderColor = subject.color;
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-bold text-gray-800">${subject.name}</h3>
+                        <div class="flex space-x-2 text-gray-400">
+                           <button class="edit-subject-btn hover:text-blue-500" data-id="${subject.id}"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="delete-subject-btn hover:text-red-500" data-id="${subject.id}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">${completedTasks} / ${subjectTasks.length} tasks poore hue.</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${progress}%"></div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="task-list space-y-2" data-subject-id="${subject.id}">
+                            <!-- Tasks for this subject will be rendered here -->
+                        </div>
+                    </div>
+                    <button class="add-task-btn mt-3 text-blue-500 hover:text-blue-700 text-sm font-semibold" data-subject-id="${subject.id}">
+                        <i class="fas fa-plus-circle mr-1"></i>Naya Task Jodein
+                    </button>
+                `;
+                list.appendChild(card);
+            });
+            renderAllTasks();
+        }
+
+        function renderAllTasks() {
+            document.querySelectorAll('.task-list').forEach(list => {
+                const subjectId = list.dataset.subjectId;
+                const subjectTasks = tasks.filter(t => t.subjectId === subjectId).sort((a,b) => a.isCompleted - b.isCompleted);
+                list.innerHTML = '';
+                if (subjectTasks.length > 0) {
+                    subjectTasks.forEach(task => {
+                        const taskEl = document.createElement('div');
+                        taskEl.className = 'flex items-center justify-between bg-gray-50 p-2 rounded-md';
+                        taskEl.innerHTML = `
+                            <div class="flex items-center">
+                                <input type="checkbox" class="task-checkbox h-5 w-5 rounded text-blue-500 border-gray-300 focus:ring-blue-500 mr-3" data-id="${task.id}" ${task.isCompleted ? 'checked' : ''}>
+                                <span class="${task.isCompleted ? 'line-through text-gray-400' : ''}">${task.name}</span>
+                            </div>
+                            <span class="text-xs text-gray-500">${task.dueDate}</span>
+                        `;
+                        list.appendChild(taskEl);
+                    });
+                } else {
+                    list.innerHTML = `<p class="text-xs text-gray-400 italic">Is subject ke liye koi task nahi hai.</p>`;
+                }
+            });
+        }
+        
+        function renderDashboard() {
+            const completedTasks = tasks.filter(t => t.isCompleted).length;
+            const pendingTasks = tasks.length - completedTasks;
+            const totalStudyTime = studySessions.reduce((acc, s) => acc + s.duration, 0);
+            const progress = tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
+
+            document.getElementById('completed-tasks-count').textContent = completedTasks;
+            document.getElementById('pending-tasks-count').textContent = pendingTasks;
+            document.getElementById('total-study-time').textContent = `${totalStudyTime} min`;
+            
+            const progressBar = document.getElementById('overall-progress-bar');
+            progressBar.style.width = `${progress}%`;
+            document.getElementById('overall-progress-text').textContent = `${Math.round(progress)}% poora hua.`;
+
+            // Today's tasks
+            const today = new Date().toISOString().split('T')[0];
+            const todaysTasks = tasks.filter(t => t.dueDate === today && !t.isCompleted);
+            const todaysTasksList = document.getElementById('todays-tasks-list');
+            todaysTasksList.innerHTML = '';
+            if (todaysTasks.length > 0) {
+                todaysTasks.forEach(task => {
+                    const subject = subjects.find(s => s.id === task.subjectId);
+                    const taskEl = document.createElement('div');
+                    taskEl.className = 'flex items-center justify-between text-sm';
+                    taskEl.innerHTML = `
+                        <span>${task.name}</span>
+                        <span class="text-xs font-semibold px-2 py-1 rounded-full" style="background-color:${subject?.color}20; color:${subject?.color};">${subject?.name || 'General'}</span>
+                    `;
+                    todaysTasksList.appendChild(taskEl);
+                });
+            } else {
+                todaysTasksList.innerHTML = `<p class="text-gray-500">Shabash! Aaj ke liye koi pending task nahi hai.</p>`;
+            }
+        }
+        
+        function renderTimerTaskOptions() {
+            const select = document.getElementById('task-for-timer');
+            const pendingTasks = tasks.filter(t => !t.isCompleted);
+            select.innerHTML = '<option value="">Koi task nahi chuna</option>';
+            pendingTasks.forEach(task => {
+                const subject = subjects.find(s => s.id === task.subjectId);
+                const option = document.createElement('option');
+                option.value = task.id;
+                option.textContent = `[${subject ? subject.name : 'N/A'}] ${task.name}`;
+                select.appendChild(option);
+            });
+        }
+        
+        function renderReports() {
+            if (studyTimeChart) {
+                studyTimeChart.destroy();
+            }
+
+            const ctx = document.getElementById('study-time-chart').getContext('2d');
+            const dataBySubject = {};
+
+            subjects.forEach(subject => {
+                dataBySubject[subject.id] = {
+                    name: subject.name,
+                    color: subject.color,
+                    time: 0
+                };
+            });
+            
+            studySessions.forEach(session => {
+                const task = tasks.find(t => t.id === session.taskId);
+                if (task && dataBySubject[task.subjectId]) {
+                    dataBySubject[task.subjectId].time += session.duration;
+                }
+            });
+
+            const chartData = Object.values(dataBySubject);
+
+            studyTimeChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(d => d.name),
+                    datasets: [{
+                        label: 'Study Time (minutes)',
+                        data: chartData.map(d => d.time),
+                        backgroundColor: chartData.map(d => d.color),
+                        borderColor: chartData.map(d => d.color),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- DATA MANIPULATION ---
+        async function handleSubjectForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('subject-name').value;
+            const color = document.getElementById('subject-color').value;
+
+            try {
+                const subjectCollection = collection(db, `artifacts/${__app_id}/users/${userId}/subjects`);
+                await addDoc(subjectCollection, { name, color, createdAt: new Date() });
+                closeSubjectModal();
+            } catch (error) {
+                console.error("Error adding subject: ", error);
+            }
+        }
+
+        async function handleTaskForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('task-name').value;
+            const dueDate = document.getElementById('task-due-date').value;
+            const subjectId = document.getElementById('task-subject-id').value;
+
+            try {
+                const taskCollection = collection(db, `artifacts/${__app_id}/users/${userId}/tasks`);
+                await addDoc(taskCollection, { name, dueDate, subjectId, isCompleted: false, createdAt: new Date() });
+                closeTaskModal();
+            } catch (error) {
+                console.error("Error adding task: ", error);
+            }
+        }
+        
+        async function toggleTaskCompletion(taskId, isCompleted) {
+             try {
+                const taskRef = doc(db, `artifacts/${__app_id}/users/${userId}/tasks`, taskId);
+                await updateDoc(taskRef, { isCompleted });
+            } catch (error) {
+                console.error("Error updating task: ", error);
+            }
+        }
+
+        async function deleteSubject(subjectId) {
+            if (!confirm(`Kya aap is subject ko delete karna chahte hain? Iske sabhi tasks bhi delete ho jayenge.`)) return;
+            
+            try {
+                const batch = writeBatch(db);
+
+                // Delete subject
+                const subjectRef = doc(db, `artifacts/${__app_id}/users/${userId}/subjects`, subjectId);
+                batch.delete(subjectRef);
+
+                // Find and delete associated tasks
+                const tasksToDelete = tasks.filter(t => t.subjectId === subjectId);
+                tasksToDelete.forEach(task => {
+                    const taskRef = doc(db, `artifacts/${__app_id}/users/${userId}/tasks`, task.id);
+                    batch.delete(taskRef);
+                });
+                
+                // TODO: Delete associated study sessions
+
+                await batch.commit();
+
+            } catch (error) {
+                console.error("Error deleting subject and tasks: ", error);
+            }
+        }
+
+
+        // --- UI & EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeFirebase();
+
+            // Tab navigation
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabName = button.dataset.tab;
+                    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.add('hidden'));
+                    button.classList.add('tab-active');
+                    document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+                });
+            });
+
+            // Modal controls
+            document.getElementById('add-subject-btn').addEventListener('click', openSubjectModal);
+            document.getElementById('cancel-subject-modal').addEventListener('click', closeSubjectModal);
+            document.getElementById('subject-form').addEventListener('submit', handleSubjectForm);
+
+            document.getElementById('cancel-task-modal').addEventListener('click', closeTaskModal);
+            document.getElementById('task-form').addEventListener('submit', handleTaskForm);
+            
+            document.getElementById('close-alert-modal').addEventListener('click', () => {
+                document.getElementById('custom-alert-modal').style.display = 'none';
+            });
+
+            // Dynamic event listeners for subject/task actions
+            document.getElementById('subjects-list').addEventListener('click', (e) => {
+                if (e.target.closest('.add-task-btn')) {
+                    const subjectId = e.target.closest('.add-task-btn').dataset.subjectId;
+                    openTaskModal(subjectId);
+                }
+                if (e.target.closest('.delete-subject-btn')) {
+                    const subjectId = e.target.closest('.delete-subject-btn').dataset.id;
+                    deleteSubject(subjectId);
+                }
+                if (e.target.closest('.task-checkbox')) {
+                    const checkbox = e.target.closest('.task-checkbox');
+                    toggleTaskCompletion(checkbox.dataset.id, checkbox.checked);
+                }
+            });
+            
+            // Settings
+             document.getElementById('request-notification-permission').addEventListener('click', requestNotificationPermission);
+        });
+
+        // --- MODAL FUNCTIONS ---
+        function openSubjectModal() {
+            document.getElementById('subject-form').reset();
+            document.getElementById('subject-modal').style.display = 'flex';
+        }
+        function closeSubjectModal() {
+            document.getElementById('subject-modal').style.display = 'none';
+        }
+        function openTaskModal(subjectId) {
+            document.getElementById('task-form').reset();
+            document.getElementById('task-subject-id').value = subjectId;
+            document.getElementById('task-modal').style.display = 'flex';
+        }
+        function closeTaskModal() {
+            document.getElementById('task-modal').style.display = 'none';
+        }
+
+        // --- TIMER LOGIC ---
+        let timerInterval;
+        let timerState = 'stopped'; // stopped, running, paused
+        let timerMode = 'work'; // work, break
+        let secondsRemaining = 25 * 60;
+        const WORK_DURATION = 25 * 60;
+        const BREAK_DURATION = 5 * 60;
+
+        const timerDisplay = document.getElementById('timer-display');
+        const startBtn = document.getElementById('start-timer-btn');
+        const pauseBtn = document.getElementById('pause-timer-btn');
+        const resetBtn = document.getElementById('reset-timer-btn');
+        const timerStatus = document.getElementById('timer-status');
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(secondsRemaining / 60);
+            const seconds = secondsRemaining % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function startTimer() {
+            if (timerState === 'running') return;
+            timerState = 'running';
+            startBtn.classList.add('hidden');
+            pauseBtn.classList.remove('hidden');
+
+            timerInterval = setInterval(() => {
+                secondsRemaining--;
+                updateTimerDisplay();
+                if (secondsRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimerEnd();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            if (timerState !== 'running') return;
+            timerState = 'paused';
+            clearInterval(timerInterval);
+            startBtn.classList.remove('hidden');
+            startBtn.textContent = 'Resume';
+            pauseBtn.classList.add('hidden');
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerState = 'stopped';
+            timerMode = 'work';
+            secondsRemaining = WORK_DURATION;
+            updateTimerDisplay();
+            startBtn.classList.remove('hidden');
+            startBtn.innerHTML = '<i class="fas fa-play mr-2"></i>Start';
+            pauseBtn.classList.add('hidden');
+            timerStatus.textContent = 'Focus ka samay!';
+        }
+        
+        async function handleTimerEnd() {
+            // Log session if it was a work session
+            if (timerMode === 'work') {
+                const taskId = document.getElementById('task-for-timer').value;
+                if (taskId) {
+                    try {
+                        const sessionCollection = collection(db, `artifacts/${__app_id}/users/${userId}/studySessions`);
+                        await addDoc(sessionCollection, { 
+                            taskId,
+                            duration: WORK_DURATION / 60, // in minutes
+                            completedAt: new Date()
+                        });
+                    } catch (error) {
+                        console.error("Error logging study session:", error);
+                    }
+                }
+            }
+            
+            // Play sound and vibrate
+            triggerAlerts();
+            
+            // Switch mode
+            if (timerMode === 'work') {
+                timerMode = 'break';
+                secondsRemaining = BREAK_DURATION;
+                timerStatus.textContent = "Chhota break!";
+                showAlert('Timer Poora Hua!', 'Ab break lene ka samay hai.', 'break');
+            } else {
+                timerMode = 'work';
+                secondsRemaining = WORK_DURATION;
+                timerStatus.textContent = "Focus ka samay!";
+                showAlert('Break Khatm!', 'Chaliye, padhai par wapas chalte hain.', 'work');
+            }
+            
+            // Reset UI
+            timerState = 'stopped';
+            updateTimerDisplay();
+            startBtn.classList.remove('hidden');
+            startBtn.innerHTML = '<i class="fas fa-play mr-2"></i>Start';
+            pauseBtn.classList.add('hidden');
+        }
+
+        startBtn.addEventListener('click', startTimer);
+        pauseBtn.addEventListener('click', pauseTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        
+        // --- NOTIFICATIONS & ALERTS ---
+        function requestNotificationPermission() {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    new Notification("Notifications Enabled!", {
+                        body: "Aapko timer poora hone par alert milega.",
+                        icon: "https://placehold.co/48x48/3b82f6/ffffff?text=OK"
+                    });
+                }
+            });
+        }
+        
+        function triggerAlerts() {
+            // Browser Notification
+            if (Notification.permission === "granted") {
+                const bodyText = timerMode === 'work' ? 'Time for a short break!' : 'Break is over. Time to focus!';
+                 new Notification('Study Timer Finished!', { body: bodyText, icon: "https://placehold.co/48x48/3b82f6/ffffff?text=🔔" });
+            }
+
+            // Sound
+            if (document.getElementById('enable-sound').checked) {
+                try {
+                    const synth = new Tone.Synth().toDestination();
+                    synth.triggerAttackRelease("C4", "8n");
+                } catch(e) { console.error("Tone.js error:", e); }
+            }
+
+            // Vibration
+            if (document.getElementById('enable-vibration').checked && 'vibrate' in navigator) {
+                navigator.vibrate([200, 100, 200]); // Vibrate for 200ms, pause 100ms, vibrate 200ms
+            }
+        }
+        
+        function showAlert(title, message, type) {
+            const modal = document.getElementById('custom-alert-modal');
+            document.getElementById('custom-alert-title').textContent = title;
+            document.getElementById('custom-alert-message').textContent = message;
+            const iconDiv = document.getElementById('custom-alert-icon');
+            if (type === 'break') {
+                iconDiv.innerHTML = `<i class="fas fa-coffee text-5xl text-yellow-500"></i>`;
+            } else {
+                 iconDiv.innerHTML = `<i class="fas fa-book-reader text-5xl text-green-500"></i>`;
+            }
+            modal.style.display = 'flex';
+        }
+
     </script>
 </body>
 </html>
+
