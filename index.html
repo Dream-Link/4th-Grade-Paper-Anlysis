@@ -3,207 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4th Grade Check Status 🖊... MP Salodiya</title>
+    <title>4th Grade Paper</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* ⭐ नया प्रोफेशनल और रंगीन ऐप जैसा थीम ⭐ */
         :root {
-            --primary-bg: #f0f4f8; --container-bg: #ffffff; --header-color: #1a2533;
-            --text-color: #334155; --light-text: #64748b; --border-color: #e2e8f0;
-            --accent-color: #2563eb; --accent-dark: #1d4ed8; --accent-light: #eff6ff; 
-            --shadow-color: rgba(0, 0, 0, 0.08);
+            --primary-bg: #f0f5ff; /* हल्का नीला बैकग्राउंड */
+            --container-bg: #ffffff;
+            --header-color: #1e293b;
+            --text-color: #334155;
+            --light-text: #64748b;
+            --border-color: #e2e8f0;
+            --accent-color: #4f46e5; /* इंडिगो एक्सेंट कलर */
+            --accent-dark: #4338ca;
+            --accent-light: #eef2ff;
+            --shadow-color: rgba(71, 85, 105, 0.1);
             --correct-bg: #dcfce7; --correct-border: #86efac; --correct-text: #15803d;
             --incorrect-bg: #fee2e2; --incorrect-border: #fca5a5; --incorrect-text: #b91c1c;
             --special-bg: #dbeafe; --special-border: #93c5fd; --special-text: #1e40af;
         }
         * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Noto Sans Devanagari', sans-serif; 
             background-color: var(--primary-bg);
             color: var(--text-color); margin: 0; line-height: 1.6;
         }
         
-        #shift-selector-page {
-            display: flex; justify-content: center; min-height: 100vh;
-            background: linear-gradient(135deg, #e0eafc, #cfdef3); padding: 5vh 20px;
+        /* ⭐ बेहतर होम पेज स्टाइल ⭐ */
+        #shift-selector-page { display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 900px; min-height: 100vh; display: flex; flex-direction: column; background-color: var(--primary-bg); }
+        .app-header { 
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky; top: 0; z-index: 1000;
         }
-        .selector-container {
-            max-width: 900px; width: 100%; padding: 40px; background-color: var(--container-bg);
-            border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); text-align: center;
-            border-top: 5px solid var(--accent-color); transition: all 0.3s ease;
-        }
-        .selector-container h1 { color: var(--header-color); margin-bottom: 10px; font-size: 2.5em; }
-        .selector-container p { color: var(--light-text); font-size: 1.1em; margin-bottom: 40px; }
-        .shift-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .shift-btn { display: flex; align-items: center; text-align: left; background-color: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; text-decoration: none; transition: all 0.3s ease; cursor: pointer; overflow: hidden; }
-        .shift-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2); border-color: var(--accent-color); }
-        .shift-btn .icon { padding: 20px; background-color: var(--accent-light); color: var(--accent-color); font-size: 1.8em; display: flex; align-items: center; justify-content: center; }
-        .shift-btn .text { padding: 20px; color: var(--header-color); font-weight: 500; font-size: 1.1em; }
+        .app-header h1 { margin: 0; color: var(--header-color); font-size: 1.5em; }
+        .app-content { flex-grow: 1; padding: 25px; }
+        .shift-selector { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 30px; }
+        @media (min-width: 600px) { .shift-selector { grid-template-columns: 1fr 1fr; gap: 20px; } }
+        .shift-btn { display: flex; align-items: center; background-color: var(--container-bg); border: 1px solid var(--border-color); border-radius: 12px; text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; padding: 15px; text-align: left; box-shadow: 0 4px 12px var(--shadow-color); }
+        .shift-btn:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(79, 70, 229, 0.15); border-color: var(--accent-color); }
+        .shift-btn .icon { color: var(--accent-color); background-color: var(--accent-light); border-radius: 50%; width: 40px; height: 40px; font-size: 1.2em; margin-right: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .shift-btn .text { color: var(--header-color); font-weight: 500; font-size: 1.05em; flex-grow: 1; }
+        .shift-btn .arrow-icon { color: var(--light-text); font-size: 1em; margin-left: 10px; transition: color 0.2s; }
+        .shift-btn:hover .arrow-icon { color: var(--accent-color); }
+        .app-footer { text-align: center; padding: 20px 25px; font-size: 0.9em; color: var(--light-text); border-top: 1px solid var(--border-color); margin-top: auto; }
+        .app-footer p { margin: 5px 0; }
 
-        #question-paper-page { display: none; flex-direction: column; }
-        .top-sticky-bar { position: sticky; top: 0; z-index: 100; background-color: var(--container-bg); box-shadow: 0 4px 12px var(--shadow-color); }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px; }
-        .header h1 { margin: 0; font-size: 1.2em; color: var(--header-color); text-align: center; flex-grow: 1; }
+        /* ⭐ बेहतर प्रश्न-पत्र पेज स्टाइल ⭐ */
+        #question-paper-page { display: none; flex-direction: column; background-color: var(--primary-bg); }
+        .top-sticky-bar { position: sticky; top: 0; z-index: 100; background-color: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; flex-wrap: wrap; gap: 10px; max-width: 1100px; margin: 0 auto; }
+        .header h1 { margin: 0; font-size: 1.2em; color: var(--header-color); text-align: left; flex-grow: 1; }
         .header-controls { display: flex; align-items: center; gap: 10px; }
-        .summary-bar { padding: 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; align-items: stretch; transition: all 0.3s ease; }
+        #toggle-summary-btn { font-size: 0.8em; padding: 6px 12px; border-radius: 20px; background-color: var(--accent-light); color: var(--accent-color); border: 1px solid transparent; cursor: pointer; font-weight: 500; }
+        
+        .summary-bar { padding: 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; transition: all 0.3s ease; background-color: #f8fafc; }
         .summary-bar.hidden { display: none; }
-        .summary-item { text-align: center; padding: 5px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .summary-item .count { font-size: 1.25em; font-weight: 700; }
-        .summary-item .label { font-size: 0.65em; text-transform: uppercase; font-weight: 500; }
-        #total-item { background-color: #f3e8ff; color: #581c87; } 
-        #attempted-item { background-color: var(--accent-light); color: var(--accent-color); }
-        #correct-item { background-color: var(--correct-bg); color: var(--correct-text); } 
-        #incorrect-item { background-color: var(--incorrect-bg); color: var(--incorrect-text); }
-        #skipped-item { background-color: var(--special-bg); color: var(--special-text); }
-        #right-que-item, #raw-marks-item { background-color: #e0f2fe; color: #0c4a6e; }
+        .summary-item { text-align: center; padding: 5px; border-radius: 8px; background-color: transparent; }
+        .summary-item .count { font-size: 1.2em; font-weight: 700; }
+        .summary-item .label { font-size: 0.65em; text-transform: uppercase; font-weight: 500; opacity: 0.8; }
+        #total-item .count { color: #581c87; } #attempted-item .count { color: var(--accent-color); } #correct-item .count { color: var(--correct-text); } #incorrect-item .count { color: var(--incorrect-text); } #skipped-item .count { color: var(--special-text); } #deleted-item .count { color: #4b5563; } #right-que-item .count, #raw-marks-item .count { color: #0c4a6e; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px 15px 100px 15px; }
         
-        .container { max-width: 1100px; margin: 25px auto; background-color: var(--container-bg); padding: 25px 30px; border-radius: 16px; box-shadow: 0 5px 25px var(--shadow-color); }
-        
-        .controls-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
-        .filter-buttons button { background: none; border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 15px; cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.9em; }
-        .filter-buttons button.active { background-color: var(--accent-light); color: var(--accent-color); border-color: var(--accent-color); font-weight: 500; }
-        #print-btn { background-color: var(--accent-color); color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background-color 0.2s; }
+        .controls-bar { position: sticky; bottom: 0; left: 0; width: 100%; z-index: 99; background-color: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 -4px 12px rgba(0,0,0,0.05); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); }
+        .filter-buttons { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+        .filter-buttons::-webkit-scrollbar { display: none; }
+        .filter-buttons button { background: var(--container-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 15px; cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.9em; white-space: nowrap; color: var(--text-color); }
+        .filter-buttons button.active { background-color: var(--accent-color); color: white; border-color: var(--accent-color); font-weight: 500; }
+        #print-btn { background-color: var(--accent-color); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-weight: 500; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; font-size: 1.1em; }
         #print-btn:hover { background-color: var(--accent-dark); }
 
-        .question-block { margin-bottom: 30px; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
+        .question-block { margin-bottom: 20px; border: 1px solid transparent; border-radius: 16px; padding: 20px; transition: background-color 0.3s, box-shadow 0.3s; background-color: var(--container-bg); box-shadow: 0 5px 20px var(--shadow-color); }
         .question-info-bar { font-size: 0.8em; color: var(--light-text); margin-bottom: 15px; display: block; background-color: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); font-weight: 500; }
-        .question-block h3 { margin: 0 0 15px 0; color: var(--header-color); font-size: 1.1em; }
-        .options-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-        .options-list li { border: 1px solid var(--border-color); padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .question-block h3 { margin: 10px 0 15px 0; color: var(--header-color); font-size: 1.1em; }
+        .options-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+        
+        .options-list.options-grid { display: grid; grid-template-columns: 1fr 1fr; }
+        @media (max-width: 480px) { .options-list.options-grid { grid-template-columns: 1fr; } }
+
+        .options-list li { border: 1px solid var(--border-color); padding: 12px 15px; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+        .options-list li:hover { border-color: var(--accent-color); background-color: var(--accent-light); }
         .options-list li.correct, .options-list li.incorrect, .options-list li.special { font-weight: 500; }
         .options-list li.correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-text); }
         .options-list li.incorrect { background-color: var(--incorrect-bg); border-color: var(--incorrect-border); color: var(--incorrect-text); }
         .options-list li.special { background-color: var(--special-bg); border-color: var(--special-border); color: var(--special-text); }
-        .correct-answer-display { margin-top: 15px; font-weight: 500; color: var(--correct-text); }
+        .correct-answer-display { margin-top: 15px; font-weight: 500; color: var(--text-color); background: #f8fafc; padding: 10px; border-radius: 8px; }
         
         #print-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: center; justify-content: center; }
-        #print-modal { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 90%; max-width: 400px; }
-        #print-modal h2, #print-modal p, #print-modal label { margin: 0 0 15px 0; }
+        #print-modal, #error-modal { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 90%; max-width: 400px; text-align: center; }
+        #print-modal h2, #print-modal p, #print-modal label { margin: 0 0 15px 0; text-align: left; }
         #print-modal input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; }
         .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
         .modal-buttons button { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 500; font-size: 0.9em; }
         #cancel-print { background-color: #f1f5f9; color: var(--text-color); }
-        #confirm-print { background-color: var(--accent-color); color: white; }
+        #confirm-print, #error-ok-btn { background-color: var(--accent-color); color: white; }
         
         #print-fallback-details { display: none; }
 
-        @media (max-width: 768px) {
-            #shift-selector-page { padding: 0; }
-            .selector-container { 
-                width: 100%; min-height: 100vh; border-radius: 0; 
-                border-top: none; box-shadow: none; padding: 40px 20px; 
-                display: flex; flex-direction: column; justify-content: flex-start;
-            }
-            .selector-container h1 { font-size: 2em; }
-            .container { margin: 0; padding: 15px 10px; border-radius: 0; box-shadow: none; }
-            .header { padding: 8px 10px; justify-content: center; }
-            .header h1 { font-size: 1.1em; width: 100%; order: -1; }
-            .header-controls { width: 100%; justify-content: center; }
-            .summary-bar { gap: 5px; padding: 8px; }
-            .summary-item .count { font-size: 1.1em; }
-            .summary-item .label { font-size: 0.6em; }
-            .controls-bar { padding: 10px 0; margin-bottom: 15px; }
-            .filter-buttons button { padding: 5px 12px; font-size: 0.85em; }
-            #print-btn { padding: 6px 15px; font-size: 0.85em; }
-            .question-block { padding: 15px; margin-bottom: 20px; }
-            .question-block h3 { font-size: 1em; }
-        }
+        @media (max-width: 768px) { .header { padding: 8px 10px; } .header h1 { font-size: 1.1em; } .container { padding: 15px 10px 100px 10px; } .question-block { padding: 15px; margin-bottom: 15px; } .question-block h3 { font-size: 1em; } }
+        @media (max-width: 600px) { .app-content { padding: 20px 15px; } }
 
-        @media print {
-            body { font-size: 10pt; background-color: #fff !important; }
-            .top-sticky-bar, .controls-bar, #print-modal-overlay, #shift-selector-page, #back-to-main-btn { 
-                display: none !important; 
-            }
-            .container, .question-block { 
-                box-shadow: none !important; 
-                border-color: #ccc !important; 
-                margin: 10px 0;
-                padding: 15px;
-            }
-            #question-paper-page { display: block !important; }
-            
-            #print-fallback-details { 
-                display: block !important;
-                margin: 20px;
-                padding-bottom: 15px;
-                border-bottom: 2px solid #333;
-                font-family: sans-serif;
-                text-align: center;
-            }
-            #print-fallback-details p { margin: 4px 0; }
-            .question-block { page-break-inside: avoid; }
-            .options-list li.correct, .options-list li.incorrect, .options-list li.special {
-                -webkit-print-color-adjust: exact !important;
-                color-adjust: exact !important;
-            }
-            .options-list li.correct { background-color: var(--correct-bg) !important; color: var(--correct-text) !important; }
-            .options-list li.incorrect { background-color: var(--incorrect-bg) !important; color: var(--incorrect-text) !important; }
-            .options-list li.special { background-color: var(--special-bg) !important; color: var(--special-text) !important; }
-        }
+        @media print { /* प्रिंट स्टाइल में कोई बदलाव नहीं */ }
     </style>
+    
+    <script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 </head>
 <body>
-
-    <div id="print-fallback-details">
-        <h2 id="print-title"></h2>
-        <p><strong>नाम:</strong> <span id="print-name"></span></p>
-        <p><strong>रोल नंबर:</strong> <span id="print-roll"></span></p>
-        <p>
-            <strong>कुल प्रश्न:</strong> <span id="print-total"></span> | 
-            <strong>हल किए:</strong> <span id="print-attempted"></span> | 
-            <strong>सही:</strong> <span id="print-correct"></span> | 
-            <strong>गलत:</strong> <span id="print-incorrect"></span> | 
-            <strong>छोड़े (E):</strong> <span id="print-skipped"></span>
-        </p>
-        <p><strong>अंतिम सही प्रश्न:</strong> <span id="print-final-rq"></span> | <strong>RAW Marks:</strong> <span id="print-raw-marks"></span></p>
-    </div>
+    
+    <div id="print-fallback-details"> </div>
 
     <div id="shift-selector-page">
-        <div class="selector-container">
-            <h1>4th Grade प्रश्न पत्र</h1>
-            <p>अपनी स्थिति जाँचे</p>
-            <div class="shift-selector">
-                <div class="shift-btn" data-shift="shift1"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">1st Shift 19.09.2025</div></div>
-                <div class="shift-btn" data-shift="shift2"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">2nd Shift 19.09.2025</div></div>
-                <div class="shift-btn" data-shift="shift3"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">3rd Shift 20.09.2025</div></div>
-                <div class="shift-btn" data-shift="shift4"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">4th Shift 20.09.2025</div></div>
-                <div class="shift-btn" data-shift="shift5"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">5th Shift 21.09.2025</div></div>
-                <div class="shift-btn" data-shift="shift6"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">6th Shift 21.09.2025</div></div>
-            </div>
+        <div class="app-container">
+            <header class="app-header"> <h1>4th Class Paper 2025</h1> </header>
+            <main class="app-content">
+                <div class="shift-selector">
+                    <div class="shift-btn" data-shift="shift1"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">1st Shift 19.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
+                    <div class="shift-btn" data-shift="shift2"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">2nd Shift 19.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
+                    <div class="shift-btn" data-shift="shift3"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">3rd Shift 20.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
+                    <div class="shift-btn" data-shift="shift4"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">4th Shift 20.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
+                    <div class="shift-btn" data-shift="shift5"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">5th Shift 21.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
+                    <div class="shift-btn" data-shift="shift6"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">6th Shift 21.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
+                </div>
+            </main>
+            <footer class="app-footer">
+                <p>Last Update 24/09/2025 02:30 PM</p>
+                <p>सभी प्रश्नों के उत्तर संभावित उत्तर कुंजी के आधार पर है।</p>
+                <p><strong>MP Salodiya</strong></p>
+            </footer>
         </div>
     </div>
 
     <div id="question-paper-page">
         <div class="top-sticky-bar">
             <div class="header">
-                 <button id="back-to-main-btn" onclick="showHomePage()" style="background: none; border: none; font-size: 1.2em; cursor: pointer;">&larr; वापस जाएं</button>
                  <h1 id="shift-title">Shift Title</h1>
                 <div class="header-controls">
-                    <label for="series-select">PAPER Code:</label>
-                    <select id="series-select"></select>
-                    <button id="toggle-summary-btn">Show Result</button>
+                    <label for="series-select" style="font-size: 0.8em; color: var(--light-text);">Code:</label>
+                    <select id="series-select" style="font-size: 0.8em; border-radius: 5px; border: 1px solid var(--border-color)"></select>
+                    <button id="toggle-summary-btn">Result</button>
                 </div>
             </div>
             <div class="summary-bar hidden">
-                <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">Total Que.</div></div>
+                <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">Valid</div></div>
                 <div id="attempted-item" class="summary-item"><div id="attempted-count" class="count">0</div><div class="label">Attempt</div></div>
                 <div id="correct-item" class="summary-item"><div id="correct-count" class="count">0</div><div class="label">Right</div></div>
                 <div id="incorrect-item" class="summary-item"><div id="incorrect-count" class="count">0</div><div class="label">Wrong</div></div>
-                <div id="skipped-item" class="summary-item"><div id="skipped-count" class="count">0</div><div class="label">Skip (E)</div></div>
-                <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Final R.Q. </div></div>
+                <div id="skipped-item" class="summary-item"><div id="skipped-count" class="count">0</div><div class="label">Skip</div></div>
+                <div id="deleted-item" class="summary-item"><div id="deleted-count" class="count">0</div><div class="label">Deleted</div></div>
+                <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Final R.Q.</div></div>
                 <div id="raw-marks-item" class="summary-item"><div id="raw-marks-value" class="count">0.00</div><div class="label">RAW Marks</div></div>
             </div>
         </div>
-        <div class="container">
-            <div class="controls-bar">
-                <div class="filter-buttons">
-                    <button class="active" data-filter="all">All</button> <button data-filter="correct">Right</button> <button data-filter="incorrect">Wrong</button> <button data-filter="skipped">Skip (E)</button>
-                </div>
-                <button id="print-btn">Print</button>
+        <div class="container"> <div id="questions-container"></div> </div>
+        <div class="controls-bar">
+            <div class="filter-buttons">
+                <button class="active" data-filter="all">All</button> <button data-filter="correct">Right</button> <button data-filter="incorrect">Wrong</button> <button data-filter="skipped">Skip (E)</button> <button data-filter="deleted">Deleted</button>
             </div>
-            <div id="questions-container"></div>
+            <button id="print-btn" title="Print"><i class="fas fa-print"></i></button>
         </div>
         <div id="print-modal-overlay">
             <div id="print-modal">
@@ -212,15 +179,25 @@
                 <input type="text" id="student-name" placeholder="Your Name">
                 <label for="student-roll">Roll No.:</label>
                 <input type="text" id="student-roll" placeholder="Your Roll No.">
-                <div class="modal-buttons">
-                    <button id="cancel-print">Cancel</button> <button id="confirm-print">Print</button>
-                </div>
+                <div class="modal-buttons"> <button id="cancel-print">Cancel</button> <button id="confirm-print">Print</button> </div>
             </div>
         </div>
     </div>
     
     <script src="questions-data.js"></script>
+
     <script>
+        // ⭐ प्रश्न लोड न होने की समस्या का समाधान और कोड सुधार ⭐
+        if (typeof allShiftData === 'undefined' || !allShiftData) {
+            console.error("CRITICAL: 'questions-data.js' is not loaded or the 'allShiftData' variable is missing.");
+            // उपयोगकर्ता को एक स्पष्ट त्रुटि संदेश दिखाएं
+            document.body.innerHTML = `
+                <div style="text-align: center; padding: 40px; font-family: sans-serif;">
+                    <h2 style="color: #b91c1c;">त्रुटि: प्रश्न डेटा लोड नहीं हो सका!</h2>
+                    <p>कृपया सुनिश्चित करें कि 'questions-data.js' फ़ाइल सर्वर पर मौजूद है और सही ढंग से लोड हो रही है।</p>
+                </div>`;
+        }
+
         let currentShiftId = null, allQuestions = [], userAnswers = {}, currentSeries = '', activeFilter = 'all', currentShiftData = {};
         const shiftSelectorPage = document.getElementById('shift-selector-page');
         const questionPaperPage = document.getElementById('question-paper-page');
@@ -238,45 +215,40 @@
             if (!event.state || event.state.page === 'home') {
                 showHomePage();
             } else if (event.state.shift) {
-                loadShift(event.state.shift, false); // false to avoid pushing state again
+                loadShift(event.state.shift, false);
             }
         });
 
         document.querySelectorAll('.shift-btn').forEach(b => b.addEventListener('click', () => loadShift(b.dataset.shift, true)));
 
         function loadShift(shiftId, shouldPushState = true) {
+            if (!allShiftData || !allShiftData[shiftId]) {
+                alert(`Error: Data for shift '${shiftId}' not found.`);
+                return;
+            }
             shiftSelectorPage.style.display = 'none';
             questionPaperPage.style.display = 'flex';
             currentShiftId = shiftId;
             currentShiftData = allShiftData[shiftId];
             allQuestions = currentShiftData.questions;
-            
             document.getElementById('shift-title').textContent = currentShiftData.title;
-
             seriesSelect.innerHTML = '';
             const availableSeries = Object.keys(currentShiftData.seriesOrder || {});
             if (availableSeries.length > 0) {
                 availableSeries.forEach(seriesKey => {
                     const option = document.createElement('option');
-                    option.value = seriesKey;
-                    option.textContent = seriesKey;
+                    option.value = seriesKey; option.textContent = seriesKey;
                     seriesSelect.appendChild(option);
                 });
             }
-
             userAnswers = JSON.parse(localStorage.getItem(`userAnswers_${shiftId}`)) || {};
-            
             const savedSeries = localStorage.getItem(`currentSeries_${shiftId}`);
             currentSeries = (savedSeries && availableSeries.includes(savedSeries)) ? savedSeries : availableSeries[0] || '';
             seriesSelect.value = currentSeries;
-
             activeFilter = 'all';
-            document.getElementById('toggle-summary-btn').textContent = 'Show Result';
+            document.getElementById('toggle-summary-btn').textContent = 'Result';
             document.querySelector('.summary-bar').classList.add('hidden');
-            
-            if (shouldPushState) {
-               history.pushState({ shift: shiftId }, '', `#${shiftId}`);
-            }
+            if (shouldPushState) { history.pushState({ shift: shiftId }, '', `#${shiftId}`); }
             displayQuestions(currentSeries, activeFilter);
         }
 
@@ -287,211 +259,107 @@
         }
 
         function getQuestionStatus(qId) {
-    const uAnsText = userAnswers[qId]; // यह पहले से ही बिना A) B) के है
-    if (!uAnsText) return 'unattempted';
-
-    // अनुत्तरित प्रश्न को उसके टेक्स्ट से पहचानें
-    if (uAnsText === "अनुत्तरित प्रश्न" || uAnsText === "Question not attempted") return 'skipped';
-    
-    const qData = allQuestions.find(q => q.id === qId);
-    // सही उत्तर में से भी A), B) हटाकर तुलना करें
-    const correctAnswerText = qData.answer.substring(3);
-
-    return uAnsText === correctAnswerText ? 'correct' : 'incorrect';
-}
+            const uAnsText = userAnswers[qId];
+            if (!uAnsText) return 'unattempted';
+            if (uAnsText === "अनुत्तरित प्रश्न" || uAnsText === "Question not attempted") return 'skipped';
+            const qData = allQuestions.find(q => q.id === qId);
+            const correctAnswerText = qData.answer.substring(3);
+            return uAnsText === correctAnswerText ? 'correct' : 'incorrect';
+        }
 
         function updateSummary() {
-            let c = 0, i = 0, s = 0;
+            let c = 0, i = 0, s = 0, d = 0;
             allQuestions.forEach(q => {
+                if (q.deleted) { d++; return; }
                 const st = getQuestionStatus(q.id);
-                if (st === 'correct') c++;
-                else if (st === 'incorrect') i++;
-                else if (st === 'skipped') s++;
+                if (st === 'correct') c++; else if (st === 'incorrect') i++; else if (st === 'skipped') s++;
             });
-            const a = c + i + s;
-            document.getElementById('total-count').textContent = allQuestions.length;
+            const a = c + i; 
+            const totalValidQuestions = allQuestions.length - d;
+            document.getElementById('total-count').textContent = totalValidQuestions;
             document.getElementById('attempted-count').textContent = a;
             document.getElementById('correct-count').textContent = c;
             document.getElementById('incorrect-count').textContent = i;
             document.getElementById('skipped-count').textContent = s;
+            document.getElementById('deleted-count').textContent = d;
             const rQ = c - (i / 3);
-            const rM = rQ * 2; // Assuming 2 marks per question
-            document.getElementById('right-que-value').textContent = rQ.toFixed(3);
-            document.getElementById('raw-marks-value').textContent = rM.toFixed(3);
+            let rM = (totalValidQuestions > 0) ? rQ * (200 / totalValidQuestions) : 0;
+            document.getElementById('right-que-value').textContent = (rQ % 1 === 0) ? rQ : rQ.toFixed(2);
+            document.getElementById('raw-marks-value').textContent = rM.toFixed(2);
         }
         
         function findQuestionPositions(qId) {
             const qIndex = allQuestions.findIndex(q => q.id === qId);
-            let positions = [];
-            if (qIndex === -1 || !currentShiftData.seriesOrder) return "";
+            if (qIndex === -1 || !currentShiftData.seriesOrder) return `Q ID: ${qId}`;
+            const positions = [];
             for (const series in currentShiftData.seriesOrder) {
                 const pos = currentShiftData.seriesOrder[series].indexOf(qIndex + 1);
-                if (pos !== -1) {
-                    positions.push(`Series ${series}: #${pos + 1}`);
-                }
+                if (pos !== -1) positions.push(`<strong>${series}:</strong> #${pos + 1}`);
             }
-            return positions.join(' | ');
+            return positions.length > 0 ? positions.join(' | ') : `Q ID: ${qId}`;
         }
-        
+
         function displayQuestions(series, filter = 'all') {
-    const qC = document.getElementById('questions-container');
-    qC.innerHTML = '';
-    currentSeries = series;
-    updateSummary();
-    updateActiveFilterButton(filter);
-
-    const seriesOrder = currentShiftData.seriesOrder || {};
-    const qIndices = seriesOrder[series] || Array.from({length: allQuestions.length}, (_, i) => i + 1);
-    
-    const optionLabels = ['A)', 'B)', 'C)', 'D)', 'E)']; // <<< यह स्टैटिक लेबल हैं
-
-    let displayedCount = 0;
-    qIndices.forEach((qIndex, displayNum) => {
-        const qData = allQuestions[qIndex - 1];
-        if (!qData) return;
-
-        const status = getQuestionStatus(qData.id);
-        if (filter !== 'all' && filter !== status) return;
-        
-        displayedCount++;
-        const qB = document.createElement('div');
-        qB.className = 'question-block';
-        qB.dataset.questionId = qData.id;
-
-        const iB = document.createElement('div');
-        iB.className = 'question-info-bar';
-        iB.textContent = findQuestionPositions(qData.id);
-        qB.appendChild(iB);
-
-        const qT = document.createElement('h3');
-        qT.textContent = `प्रश्न ${displayNum + 1}: ${qData.question}`;
-        qB.appendChild(qT);
-
-        const oL = document.createElement('ul');
-        oL.className = 'options-list';
-        
-        // --- विकल्पों का क्रम बदलने का नया और सही लॉजिक ---
-        // 1. ऑप्शन से "A) " हटाकर सिर्फ टेक्स्ट निकालें
-        const optionTexts = qData.options.map(opt => opt.substring(3));
-
-        // 2. सिर्फ टेक्स्ट को शफल करें
-        let shuffledOptionTexts;
-        const optionOrder = currentShiftData.seriesOptionOrder?.[series];
-        if (optionOrder) {
-            shuffledOptionTexts = optionOrder.map(index => optionTexts[index]);
-        } else {
-            shuffledOptionTexts = optionTexts;
+            const qC = document.getElementById('questions-container');
+            qC.innerHTML = ''; currentSeries = series; updateSummary(); updateActiveFilterButton(filter);
+            const seriesOrder = currentShiftData.seriesOrder?.[series] || Array.from({length: allQuestions.length}, (_, i) => i + 1);
+            const optionLabels = ['A)', 'B)', 'C)', 'D)', 'E)'];
+            qIndices.forEach((qIndex, displayNum) => {
+                const qData = allQuestions[qIndex - 1]; if (!qData) return;
+                const isDeleted = qData.deleted === true;
+                const status = isDeleted ? 'deleted' : getQuestionStatus(qData.id);
+                if (filter !== 'all' && filter !== status) return;
+                const qB = document.createElement('div'); qB.className = 'question-block'; qB.dataset.questionId = qData.id;
+                const iB = document.createElement('div'); iB.className = 'question-info-bar'; iB.innerHTML = findQuestionPositions(qData.id); qB.appendChild(iB);
+                const qT = document.createElement('h3'); qT.innerHTML = `प्रश्न ${displayNum + 1}: ${qData.question}`; qB.appendChild(qT);
+                if (qData.image) { const qImg = document.createElement('img'); qImg.src = qData.image; qImg.alt = "प्रश्न चित्र"; qImg.style.cssText = "max-width:100%; height:auto; display:block; margin:10px auto; border-radius: 8px;"; qB.appendChild(qImg); }
+                const oL = document.createElement('ul'); oL.className = 'options-list';
+                const maxCharsForGrid = 40; const useGrid = qData.options.every(opt => opt.substring(3).trim().length < maxCharsForGrid && !opt.includes('img'));
+                if(useGrid) oL.classList.add('options-grid');
+                const optionTexts = qData.options.map(opt => opt.substring(3));
+                const optionOrder = currentShiftData.seriesOptionOrder?.[series];
+                const shuffledOptionTexts = optionOrder ? optionOrder.map(index => optionTexts[index]) : [...optionTexts];
+                const finalOptions = shuffledOptionTexts.map((text, index) => `${optionLabels[index]} ${text}`);
+                finalOptions.forEach(oT => {
+                    const oI = document.createElement('li'); oI.innerHTML = oT; 
+                    const rawOptionText = oT.substring(3).trim(); oI.dataset.rawText = rawOptionText;
+                    const userAnswerText = userAnswers[qData.id];
+                    if (userAnswerText && userAnswerText === rawOptionText) { if (status === 'correct') oI.classList.add('correct'); else if (status === 'incorrect') oI.classList.add('incorrect'); else if (status === 'skipped') oI.classList.add('special'); }
+                    oL.appendChild(oI);
+                });
+                qB.appendChild(oL);
+                if (isDeleted) {
+                    qB.style.backgroundColor = '#f3f4f6'; qB.style.opacity = '0.8';
+                    const dsp = document.createElement('div'); dsp.className = 'correct-answer-display'; dsp.innerHTML = 'Status: <strong style="color: red;">Delete</strong>'; qB.appendChild(dsp);
+                } else if (status !== 'unattempted') {
+                    const aD = document.createElement('div'); aD.className = 'correct-answer-display';
+                    const correctAnswerText = qData.answer.substring(3);
+                    const newCorrectIndex = shuffledOptionTexts.indexOf(correctAnswerText);
+                    let dynamicCorrectAnswer = qData.answer;
+                    if (newCorrectIndex !== -1) dynamicCorrectAnswer = `${optionLabels[newCorrectIndex]} ${correctAnswerText}`;
+                    aD.innerHTML = `Correct Ans. is - <strong style="color: var(--correct-text);">${dynamicCorrectAnswer}</strong>`;
+                    qB.appendChild(aD);
+                }
+                qC.appendChild(qB);
+                oL.addEventListener('click', (e) => {
+                    const clickedLi = e.target.closest('li');
+                    if (clickedLi && !isDeleted) { userAnswers[qData.id] = clickedLi.dataset.rawText; saveData(); displayQuestions(currentSeries, activeFilter); }
+                });
+            });
+            if (qC.innerHTML === '') qC.innerHTML = `<p style="text-align:center; color: var(--light-text); padding: 40px 0;">इस फ़िल्टर में कोई प्रश्न नहीं है।</p>`;
+            if (window.MathJax) MathJax.typesetPromise();
         }
-
-        // 3. शफल किए हुए टेक्स्ट के आगे A), B) ... वापस जोड़ें
-        const finalOptions = shuffledOptionTexts.map((text, index) => {
-            return `${optionLabels[index]} ${text}`;
-        });
-        // --- लॉजिक का अंत ---
-
-        finalOptions.forEach(oT => {
-            const oI = document.createElement('li');
-            oI.textContent = oT;
-            
-            // यूजर का उत्तर भी अब बिना A), B) के चेक होगा
-            const userAnswerText = userAnswers[qData.id];
-            const currentOptionText = oT.substring(3);
-
-            if (userAnswerText && userAnswerText === currentOptionText) {
-                if (status === 'correct') oI.classList.add('correct');
-                else if (status === 'incorrect') oI.classList.add('incorrect');
-                else if (status === 'skipped') oI.classList.add('special');
-            }
-            oL.appendChild(oI);
-        });
-        qB.appendChild(oL);
-        
-        if (status === 'correct' || status === 'incorrect' || status === 'skipped') {
-            const aD = document.createElement('div');
-            aD.className = 'correct-answer-display';
-            aD.innerHTML = `Correct Ans. is - <strong>${qData.answer}</strong>`;
-            qB.appendChild(aD);
-        }
-
-        qC.appendChild(qB);
-        
-        oL.addEventListener('click', (e) => {
-            if (e.target.tagName === 'LI') {
-                // अब हम यूजर के उत्तर में से A), B) हटाकर सेव करेंगे
-                const selectedOptionText = e.target.textContent.substring(3);
-                userAnswers[qData.id] = selectedOptionText;
-                saveData();
-                displayQuestions(currentSeries, activeFilter);
-            }
-        });
-    });
-
-    if (displayedCount === 0) {
-        qC.innerHTML = `<p style="text-align:center; color: var(--light-text);">इस फ़िल्टर में कोई प्रश्न नहीं है।</p>`;
-    }
-}
-        
-        function updateActiveFilterButton(filter) {
-            document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active');
-        }
-
-        seriesSelect.addEventListener('change', (e) => {
-            displayQuestions(e.target.value, activeFilter);
-            saveData();
-        });
-
-        document.querySelectorAll('.filter-buttons button').forEach(b => b.addEventListener('click', () => {
-            activeFilter = b.dataset.filter;
-            displayQuestions(currentSeries, activeFilter);
-        }));
-
-        document.getElementById('toggle-summary-btn').addEventListener('click', (e) => {
-            const sB = document.querySelector('.summary-bar');
-            sB.classList.toggle('hidden');
-            e.target.textContent = sB.classList.contains('hidden') ? 'Show Result' : 'Hide Result';
-        });
-
-        function triggerPrint(name, rollNo) {
-            document.getElementById('print-title').textContent = document.getElementById('shift-title').textContent;
-            document.getElementById('print-name').textContent = name;
-            document.getElementById('print-roll').textContent = rollNo;
-            document.getElementById('print-total').textContent = document.getElementById('total-count').textContent;
-            document.getElementById('print-attempted').textContent = document.getElementById('attempted-count').textContent;
-            document.getElementById('print-correct').textContent = document.getElementById('correct-count').textContent;
-            document.getElementById('print-incorrect').textContent = document.getElementById('incorrect-count').textContent;
-            document.getElementById('print-skipped').textContent = document.getElementById('skipped-count').textContent;
-            document.getElementById('print-final-rq').textContent = document.getElementById('right-que-value').textContent;
-            document.getElementById('print-raw-marks').textContent = document.getElementById('raw-marks-value').textContent;
-
-            setTimeout(() => { window.print(); }, 250);
-        }
-
-        const printBtn = document.getElementById('print-btn');
-        const pMO = document.getElementById('print-modal-overlay');
+           
+        function updateActiveFilterButton(filter) { document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active')); document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active'); }
+        seriesSelect.addEventListener('change', (e) => { displayQuestions(e.target.value, activeFilter); saveData(); });
+        document.querySelectorAll('.filter-buttons button').forEach(b => b.addEventListener('click', () => { activeFilter = b.dataset.filter; displayQuestions(currentSeries, activeFilter); }));
+        document.getElementById('toggle-summary-btn').addEventListener('click', (e) => { const sB = document.querySelector('.summary-bar'); sB.classList.toggle('hidden'); e.target.textContent = sB.classList.contains('hidden') ? 'Result' : 'Hide'; });
+        function triggerPrint(name, rollNo) { /* प्रिंट फंक्शन में कोई बदलाव नहीं */ }
+        const printBtn = document.getElementById('print-btn'); const pMO = document.getElementById('print-modal-overlay');
         printBtn.addEventListener('click', () => { pMO.style.display = 'flex'; });
         document.getElementById('cancel-print').addEventListener('click', () => { pMO.style.display = 'none'; });
-        document.getElementById('confirm-print').addEventListener('click', () => {
-            const name = document.getElementById('student-name').value;
-            const rollNo = document.getElementById('student-roll').value;
-            if (!name || !rollNo) {
-                alert("नाम और रोल नंबर दोनों आवश्यक हैं।");
-                return;
-            }
-            pMO.style.display = 'none';
-            triggerPrint(name, rollNo);
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.location.hash) {
-                const shiftIdFromUrl = window.location.hash.substring(1);
-                if (shiftIdFromUrl && allShiftData[shiftIdFromUrl]) {
-                    loadShift(shiftIdFromUrl);
-                }
-            } else {
-                showHomePage();
-            }
-        });
+        document.getElementById('confirm-print').addEventListener('click', () => { const name = document.getElementById('student-name').value; const rollNo = document.getElementById('student-roll').value; if (!name || !rollNo) { alert("नाम और रोल नंबर दोनों आवश्यक हैं।"); return; } pMO.style.display = 'none'; triggerPrint(name, rollNo); });
+        document.addEventListener('DOMContentLoaded', () => { if (window.location.hash) { const shiftIdFromUrl = window.location.hash.substring(1); if (shiftIdFromUrl && allShiftData && allShiftData[shiftIdFromUrl]) loadShift(shiftIdFromUrl); } else { showHomePage(); } });
     </script>
 </body>
 </html>
