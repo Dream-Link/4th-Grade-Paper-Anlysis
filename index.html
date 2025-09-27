@@ -4,362 +4,948 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>4th Grade Paper</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d6efd">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* ⭐ नया प्रोफेशनल और रंगीन ऐप जैसा थीम ⭐ */
+    <style id="main-styles">
         :root {
-            --primary-bg: #f0f5ff; /* हल्का नीला बैकग्राउंड */
-            --container-bg: #ffffff;
-            --header-color: #1e293b;
-            --text-color: #334155;
-            --light-text: #64748b;
-            --border-color: #e2e8f0;
-            --accent-color: #4f46e5; /* इंडिगो एक्सेंट कलर */
-            --accent-dark: #4338ca;
-            --accent-light: #eef2ff;
-            --shadow-color: rgba(71, 85, 105, 0.1);
-            --correct-bg: #dcfce7; --correct-border: #86efac; --correct-text: #15803d;
-            --incorrect-bg: #fee2e2; --incorrect-border: #fca5a5; --incorrect-text: #b91c1c;
-            --special-bg: #dbeafe; --special-border: #93c5fd; --special-text: #1e40af;
+            --primary-color: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --primary-light: #cfe2ff;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #0dcaf0;
+            
+            --bg-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --font-color: #212529;
+            --font-color-light: #6c757d;
+            --border-color: #dee2e6;
+            
+            --success-bg: #d1e7dd;
+            --danger-bg: #f8d7da;
+            --special-bg: #fff3cd;
+            --subtle-bg: #f1f3f5;
+
+            --font-family-primary: 'Noto Sans Devanagari', sans-serif;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --border-radius: 0.5rem;
         }
+
         * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+
+        html { font-size: 16px; }
+
         body {
-            font-family: 'Noto Sans Devanagari', sans-serif; 
-            background-color: var(--primary-bg);
-            color: var(--text-color); margin: 0; line-height: 1.6;
+            font-family: var(--font-family-primary);
+            background-color: var(--bg-color);
+            color: var(--font-color);
+            margin: 0;
+            line-height: 1.6;
         }
         
-        /* ⭐ बेहतर होम पेज स्टाइल ⭐ */
-        #shift-selector-page { display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
-        .app-container { width: 100%; max-width: 900px; min-height: 100vh; display: flex; flex-direction: column; background-color: var(--primary-bg); }
-        .app-header { 
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 15px 20px;
+        #shift-selector-page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .selector-container {
+            width: 100%;
+            max-width: 800px;
+            padding: 1rem;
             text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky; top: 0; z-index: 1000;
         }
-        .app-header h1 { margin: 0; color: var(--header-color); font-size: 1.5em; }
-        .app-content { flex-grow: 1; padding: 25px; }
-        .shift-selector { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 30px; }
-        @media (min-width: 600px) { .shift-selector { grid-template-columns: 1fr 1fr; gap: 20px; } }
-        .shift-btn { display: flex; align-items: center; background-color: var(--container-bg); border: 1px solid var(--border-color); border-radius: 12px; text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; padding: 15px; text-align: left; box-shadow: 0 4px 12px var(--shadow-color); }
-        .shift-btn:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(79, 70, 229, 0.15); border-color: var(--accent-color); }
-        .shift-btn .icon { color: var(--accent-color); background-color: var(--accent-light); border-radius: 50%; width: 40px; height: 40px; font-size: 1.2em; margin-right: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .shift-btn .text { color: var(--header-color); font-weight: 500; font-size: 1.05em; flex-grow: 1; }
-        .shift-btn .arrow-icon { color: var(--light-text); font-size: 1em; margin-left: 10px; transition: color 0.2s; }
-        .shift-btn:hover .arrow-icon { color: var(--accent-color); }
-        .app-footer { text-align: center; padding: 20px 25px; font-size: 0.9em; color: var(--light-text); border-top: 1px solid var(--border-color); margin-top: auto; }
-        .app-footer p { margin: 5px 0; }
+        .selector-container h2 { font-size: 2.25rem; font-weight: 700; margin: 0 0 0.5rem; }
+        .selector-container .subtitle { font-size: 1.1rem; color: var(--font-color-light); margin-bottom: 3rem; }
+        .shift-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .shift-btn {
+            display: flex; align-items: center; gap: 1rem; padding: 1.25rem;
+            background-color: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: var(--border-radius); text-decoration: none; cursor: pointer;
+            text-align: left; box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .shift-btn:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .shift-btn .icon {
+            font-size: 1.5rem; color: var(--primary-color); width: 45px; height: 45px;
+            display: grid; place-items: center; background-color: var(--primary-light);
+            border-radius: 50%; flex-shrink: 0;
+        }
+        .shift-btn .text { font-size: 1.1rem; font-weight: 600; color: var(--font-color); }
+        .selector-footer { margin-top: 3rem; font-size: 0.875rem; color: var(--secondary-color); line-height: 1.5; }
+        .selector-footer p { margin: 0.5rem 0; }
 
-        /* ⭐ बेहतर प्रश्न-पत्र पेज स्टाइल ⭐ */
-        #question-paper-page { display: none; flex-direction: column; background-color: var(--primary-bg); }
-        .top-sticky-bar { position: sticky; top: 0; z-index: 100; background-color: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; flex-wrap: wrap; gap: 10px; max-width: 1100px; margin: 0 auto; }
-        .header h1 { margin: 0; font-size: 1.2em; color: var(--header-color); text-align: left; flex-grow: 1; }
-        .header-controls { display: flex; align-items: center; gap: 10px; }
-        #toggle-summary-btn { font-size: 0.8em; padding: 6px 12px; border-radius: 20px; background-color: var(--accent-light); color: var(--accent-color); border: 1px solid transparent; cursor: pointer; font-weight: 500; }
+        #question-paper-page { display: none; flex-direction: column; }
+        #question-paper-page.hide-q-info .question-info-bar { display: none; }
         
-        .summary-bar { padding: 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; transition: all 0.3s ease; background-color: #f8fafc; }
+        .top-sticky-bar {
+            position: sticky; top: 0; z-index: 1000; background-color: var(--surface-color);
+            box-shadow: var(--shadow-sm); border-bottom: 1px solid var(--border-color);
+        }
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.75rem 1.5rem; flex-wrap: wrap; gap: 1rem;
+        }
+        .header h1 {
+            font-size: 1.25rem; font-weight: 600; margin: 0; flex-grow: 1;
+            text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        #toggle-info-bar-btn {
+            background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--secondary-color);
+            margin: 0 1rem 0 -2rem;
+        }
+        .header-controls { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+        .header-controls label { font-size: 0.875rem; font-weight: 500; }
+        .header-controls select, .header-controls button {
+            padding: 0.5rem 0.85rem; border-radius: 0.375rem; border: 1px solid var(--border-color);
+            background-color: #fff; font-family: inherit; font-size: 0.9rem; cursor: pointer;
+        }
+        #toggle-summary-btn {
+            background-color: var(--primary-light); color: var(--primary-dark);
+            border-color: var(--primary-light); font-weight: 600;
+        }
+        #header-print-btn { background-color: var(--success-color); color: white; border: none; transition: background-color 0.2s; }
+        #header-print-btn:hover { background-color: #157347; }
+
+        .summary-bar {
+            padding: 1rem 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 1rem; border-top: 1px solid var(--border-color); background-color: #fdfdff; transition: all 0.3s ease;
+        }
         .summary-bar.hidden { display: none; }
-        .summary-item { text-align: center; padding: 5px; border-radius: 8px; background-color: transparent; }
-        .summary-item .count { font-size: 1.2em; font-weight: 700; }
-        .summary-item .label { font-size: 0.65em; text-transform: uppercase; font-weight: 500; opacity: 0.8; }
-        #total-item .count { color: #581c87; } #attempted-item .count { color: var(--accent-color); } #correct-item .count { color: var(--correct-text); } #incorrect-item .count { color: var(--incorrect-text); } #skipped-item .count { color: var(--special-text); } #deleted-item .count { color: #4b5563; } #right-que-item .count, #raw-marks-item .count { color: #0c4a6e; }
-
-        .container { max-width: 1100px; margin: 0 auto; padding: 20px 15px 100px 15px; }
+        .summary-item { text-align: center; padding: 0.5rem; border-radius: var(--border-radius); }
+        .summary-item .count { font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
+        .summary-item .label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; opacity: 0.8; }
         
-        .controls-bar { position: sticky; bottom: 0; left: 0; width: 100%; z-index: 99; background-color: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 -4px 12px rgba(0,0,0,0.05); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); }
-        .filter-buttons { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
-        .filter-buttons::-webkit-scrollbar { display: none; }
-        .filter-buttons button { background: var(--container-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 15px; cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.9em; white-space: nowrap; color: var(--text-color); }
-        .filter-buttons button.active { background-color: var(--accent-color); color: white; border-color: var(--accent-color); font-weight: 500; }
-        #print-btn { background-color: var(--accent-color); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-weight: 500; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; font-size: 1.1em; }
-        #print-btn:hover { background-color: var(--accent-dark); }
-
-        .question-block { margin-bottom: 20px; border: 1px solid transparent; border-radius: 16px; padding: 20px; transition: background-color 0.3s, box-shadow 0.3s; background-color: var(--container-bg); box-shadow: 0 5px 20px var(--shadow-color); }
-        .question-info-bar { font-size: 0.8em; color: var(--light-text); margin-bottom: 15px; display: block; background-color: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); font-weight: 500; }
-        .question-block h3 { margin: 10px 0 15px 0; color: var(--header-color); font-size: 1.1em; }
-        .options-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+        #total-item { background-color: #e9ecef; color: #343a40; }
+        #attempted-item { background-color: var(--primary-light); color: var(--primary-dark); }
+        #correct-item { background-color: var(--success-bg); color: var(--success-color); }
+        #incorrect-item { background-color: var(--danger-bg); color: var(--danger-color); }
+        #skipped-item { background-color: var(--special-bg); color: #856404; }
+        #deleted-item { background-color: #e9ecef; color: #495057; }
+        #right-que-item { background-color: #d1e7dd; color: #0f5132; }
+        #raw-marks-item { background-color: #cfe2ff; color: #0a58ca; }
         
-        .options-list.options-grid { display: grid; grid-template-columns: 1fr 1fr; }
-        @media (max-width: 480px) { .options-list.options-grid { grid-template-columns: 1fr; } }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
 
-        .options-list li { border: 1px solid var(--border-color); padding: 12px 15px; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
-        .options-list li:hover { border-color: var(--accent-color); background-color: var(--accent-light); }
-        .options-list li.correct, .options-list li.incorrect, .options-list li.special { font-weight: 500; }
-        .options-list li.correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-text); }
-        .options-list li.incorrect { background-color: var(--incorrect-bg); border-color: var(--incorrect-border); color: var(--incorrect-text); }
-        .options-list li.special { background-color: var(--special-bg); border-color: var(--special-border); color: var(--special-text); }
-        .correct-answer-display { margin-top: 15px; font-weight: 500; color: var(--text-color); background: #f8fafc; padding: 10px; border-radius: 8px; }
+        .controls-bar {
+            padding: 0.75rem; background-color: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: var(--border-radius); margin-bottom: 2rem;
+        }
+        .filter-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+        .filter-buttons button {
+            background: none; border: 1px solid var(--border-color); border-radius: 2rem;
+            padding: 0.5rem 1.25rem; cursor: pointer; transition: all 0.2s;
+            font-family: inherit; font-weight: 500;
+        }
+        .filter-buttons button.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+
+        .question-block {
+            background-color: var(--surface-color); margin-bottom: 1.5rem; border: 1px solid var(--border-color);
+            border-radius: var(--border-radius); transition: box-shadow 0.2s ease; overflow: hidden;
+        }
+        .question-block:hover { box-shadow: var(--shadow-sm); }
         
-        #print-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: center; justify-content: center; }
-        #print-modal, #error-modal { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 90%; max-width: 400px; text-align: center; }
-        #print-modal h2, #print-modal p, #print-modal label { margin: 0 0 15px 0; text-align: left; }
-        #print-modal input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; }
-        .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
-        .modal-buttons button { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 500; font-size: 0.9em; }
-        #cancel-print { background-color: #f1f5f9; color: var(--text-color); }
-        #confirm-print, #error-ok-btn { background-color: var(--accent-color); color: white; }
+        .question-info-bar { font-size: 0.8rem; color: var(--font-color-light); padding: 0.5rem 1.5rem; background-color: var(--subtle-bg); }
+        .question-content { padding: 1.5rem; }
+        .question-content h3 { margin: 0 0 1.25rem 0; font-size: 1.2rem; font-weight: 600; line-height: 1.5; }
+        .question-content img {
+            max-width: 100%; height: auto; display: block; margin: 1rem auto;
+            border-radius: var(--border-radius); border: 1px solid var(--border-color);
+        }
+
+        .options-container { background-color: var(--subtle-bg); padding: 1.5rem; }
+        .options-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .options-grid li:last-child:nth-child(5) { grid-column: 1 / -1; }
+
+        .options-list li {
+            border: 1px solid var(--border-color); background-color: var(--surface-color);
+            padding: 0.85rem 1.1rem; border-radius: 0.375rem; cursor: pointer;
+            transition: all 0.2s ease; position: relative;
+        }
+        .options-list li:hover { border-color: var(--primary-color); background-color: #f8fbff; }
+        .options-list li.correct { background-color: var(--success-bg); border-color: var(--success-color); }
+        .options-list li.incorrect { background-color: var(--danger-bg); border-color: var(--danger-color); }
+        .options-list li.special { background-color: var(--special-bg); border-color: var(--warning-color); }
         
-        #print-fallback-details { display: none; }
+        .correct-answer-display { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-color); font-weight: 600; }
+        
+        #print-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);
+            z-index: 2000; display: none; align-items: center; justify-content: center; padding: 1rem;
+        }
+        #print-modal {
+            background: white; padding: 2rem; border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px;
+        }
+        #print-modal h2 { margin-top: 0; }
+        #print-modal p { margin: 0 0 1.5rem 0; color: var(--font-color-light); }
+        #print-modal label { margin: 0 0 0.5rem 0; display: block; font-weight: 500;}
+        #print-modal input {
+            width: 100%; padding: 0.75rem; border: 1px solid var(--border-color);
+            border-radius: 0.375rem; font-size: 1rem; font-family: inherit; margin-bottom: 1rem;
+        }
+        .modal-buttons { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .modal-buttons button {
+            padding: 0.6rem 1.2rem; border-radius: 0.375rem; border: none;
+            cursor: pointer; font-weight: 600; font-size: 0.9rem;
+        }
+        #cancel-print { background-color: #e9ecef; color: var(--font-color); }
+        #confirm-print { background-color: var(--primary-color); color: white; }
+        #get-omr-btn { background-color: var(--success-color); color: white; }
+        #get-official-key-btn { background-color: #6f42c1; color: white; }
 
-        @media (max-width: 768px) { .header { padding: 8px 10px; } .header h1 { font-size: 1.1em; } .container { padding: 15px 10px 100px 10px; } .question-block { padding: 15px; margin-bottom: 15px; } .question-block h3 { font-size: 1em; } }
-        @media (max-width: 600px) { .app-content { padding: 20px 15px; } }
+        .print-only-container { display: none; }
 
-        @media print { /* प्रिंट स्टाइल में कोई बदलाव नहीं */ }
+        @media (max-width: 768px) {
+            .selector-container h2 { font-size: 1.8rem; }
+            .shift-selector { grid-template-columns: 1fr; gap: 1rem; }
+            
+            .header { padding: 0.5rem; gap: 0.5rem; justify-content: center; }
+            .header h1 { order: 1; width: 100%; font-size: 1.1rem; padding: 0.25rem 0; text-align: center; }
+            #toggle-info-bar-btn { position: absolute; left: 5px; top: 10px; margin: 0; }
+            .header-controls {
+                order: 2; width: 100%; justify-content: space-around;
+                gap: 0.5rem; padding: 0 0.5rem;
+            }
+            .header-controls label { display: none; }
+            .header-controls select, .header-controls button {
+                padding: 0.4rem 0.5rem; font-size: 0.75rem; flex-grow: 1; text-align: center;
+            }
+            #header-print-btn .print-text { display: none; }
+
+            .container { margin: 1.5rem auto; padding: 0 0.75rem; }
+            .controls-bar { margin-bottom: 1.5rem; padding: 0.5rem; }
+            .filter-buttons { gap: 0.25rem; justify-content: space-between; }
+            .filter-buttons button { padding: 0.4rem 0.6rem; font-size: 0.7rem; flex-grow: 1; }
+            
+            .summary-bar { padding: 0.75rem; gap: 0.5rem; grid-template-columns: repeat(4, 1fr); }
+            #right-que-item, #raw-marks-item { grid-column: span 2; }
+            .summary-item .count { font-size: 1.2rem; }
+            .summary-item .label { font-size: 0.6rem; }
+            
+            .question-info-bar { padding: 0.5rem 1rem; }
+            .question-content { padding: 1rem; }
+            .question-content h3 { font-size: 1rem; }
+            .options-container { padding: 1rem; }
+            .options-grid { grid-template-columns: 1fr; }
+            .options-grid li:last-child:nth-child(5) { grid-column: auto; }
+            
+            .modal-buttons { justify-content: center; gap: 0.25rem; }
+            .modal-buttons button { padding: 0.5rem; font-size: 0.7rem; flex-grow: 1; }
+        }
+
+        @media print {
+            body { font-size: 10pt; background-color: #fff !important; color: #000 !important; }
+            .question-block, .print-header-details, .official-key-print-container { page-break-inside: avoid; }
+            * { background-color: transparent !important; box-shadow: none !important; color: #000 !important; }
+            
+            .print-header-details { padding: 1cm 1cm 0; }
+            .print-header-details h2 { text-align: center; margin-top: 0; margin-bottom: 1rem; font-size: 1.5rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; }
+            .print-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem; margin-bottom: 1rem; padding: 0.75rem; border: 1px solid #ccc !important; border-radius: 8px; }
+            .print-info-grid p { margin: 2px 0; font-size: 1rem; }
+            .print-paper-code strong, .print-paper-code span { color: red !important; font-weight: bold !important; }
+            .print-summary-table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 1.5rem; }
+            .print-summary-table th, .print-summary-table td { border: 1px solid #999 !important; padding: 5px; font-size: 0.9rem; }
+            .print-summary-table th { background-color: #f2f2f2 !important; font-weight: bold; }
+            #print-correct-cell { color: var(--success-color) !important; font-weight: bold; }
+            #print-incorrect-cell { color: var(--danger-color) !important; font-weight: bold; }
+            
+            .question-block { margin-bottom: 0.5rem !important; border: none !important; border-bottom: 1px dashed #aaa !important; }
+            .question-block:last-of-type { border-bottom: none !important; }
+            /* .question-info-bar { display: none !important; } */
+            #question-paper-page.hide-q-info .question-info-bar { display: none !important; }
+            .question-content, .options-container { padding: 0.4rem 8px !important; }
+            .question-content h3 { font-size: 10.5pt; margin: 0 0 0.4rem 0 !important; font-weight: normal; }
+            .question-content h3 .print-q-num { font-weight: bold; }
+            .options-list { margin-top: 0.3rem !important; gap: 3px !important; }
+            .options-list li { padding: 4px 8px !important; font-size: 10pt !important; border: 1px solid #ccc !important; }
+            .correct-answer-display { font-size: 9pt; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid #ddd !important; }
+            .options-list li.correct, .options-list li.incorrect, .options-list li.special {
+                -webkit-print-color-adjust: exact !important; color-adjust: exact !important;
+            }
+            .options-list li.correct { background-color: var(--success-bg) !important; }
+            .options-list li.incorrect { background-color: var(--danger-bg) !important; }
+            .options-list li.special { background-color: var(--special-bg) !important; }
+            
+            body.omr-print-body .print-header-details { padding: 0.5cm 1cm 0 !important; }
+            body.omr-print-body .print-header-details h2 { font-size: 1.1rem; margin-bottom: 0.4rem; padding-bottom: 0.2rem; }
+            body.omr-print-body .print-info-grid { gap: 0 0.5rem; margin-bottom: 0.4rem; padding: 0.4rem; }
+            body.omr-print-body .print-info-grid p { font-size: 0.75rem; }
+            body.omr-print-body .print-summary-table { margin-bottom: 0.5rem; }
+            body.omr-print-body .print-summary-table th, body.omr-print-body .print-summary-table td { padding: 2px; font-size: 0.7rem; }
+            .omr-grid { display: flex; justify-content: space-between; gap: 10px; padding: 0 1cm 1cm; }
+            .omr-column { width: 24%; border: 1px solid #ccc !important; border-radius: 5px; padding: 10px 5px 5px 10px; }
+            .omr-row { display: flex; align-items: center; margin-bottom: 5.8px; }
+            .omr-q-num { font-weight: bold; width: 35px; }
+            .omr-options { display: flex; }
+            .omr-bubble { width: 18px; height: 18px; border: 1px solid #000 !important; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; margin-right: 5px; }
+            .omr-bubble.filled { background-color: #0d47a1 !important; border-color: #0d47a1 !important; color: white !important; -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
+            
+            .official-key-print-container { padding: 1cm; }
+            .official-key-header h1 { text-align: center; font-size: 1.5rem; margin: 0 0 0.5rem 0; }
+            .official-key-header p { text-align: center; font-size: 1.1rem; margin: 0 0 1.5rem 0; font-weight: bold; }
+            .official-key-grid { display: flex; justify-content: space-around; align-items: flex-start; gap: 1.5rem; }
+            .official-key-column { width: 45%; }
+            .official-key-table { width: 100%; border-collapse: collapse; }
+            .official-key-table th, .official-key-table td { border: 1px solid #333 !important; padding: 5px; text-align: center; font-size: 10pt; }
+            .official-key-table th { background-color: #f2f2f2 !important; }
+        }
     </style>
     
-    <script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 </head>
 <body>
     
-    <div id="print-fallback-details"> </div>
+    <div class="print-only-container">
+        <div id="print-fallback-details" class="print-header-details">
+            <h2 id="print-title"></h2>
+            <div class="print-info-grid">
+                <p><strong>नाम:</strong> <span id="print-name"></span></p>
+                <p class="print-paper-code"><strong>पेपर कोड:</strong> <span id="print-series"></span></p>
+                <p><strong>रोल नंबर:</strong> <span id="print-roll"></span></p>
+                <p><strong>RAW Marks:</strong> <span id="print-raw-marks-display"></span></p>
+            </div>
+            <table class="print-summary-table">
+                <thead>
+                    <tr>
+                        <th>कुल प्रश्न</th> <th>वैध प्रश्न</th> <th>हल किए</th> <th>सही</th> <th>गलत</th> <th>छोड़े (E)</th> <th>Delete</th> <th>अंतिम सही प्रश्न</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span id="print-full-total"></span></td>
+                        <td><span id="print-valid-total"></span></td>
+                        <td><span id="print-attempted"></span></td>
+                        <td id="print-correct-cell"></td>
+                        <td id="print-incorrect-cell"></td>
+                        <td><span id="print-skipped"></span></td>
+                        <td><span id="print-deleted"></span></td>
+                        <td id="print-final-rq-display"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="omr-print-container"></div>
+        <div id="official-key-print-container"></div>
+    </div>
 
     <div id="shift-selector-page">
-        <div class="app-container">
-            <header class="app-header"> <h1>4th Class Paper 2025</h1> </header>
-            <main class="app-content">
-                <div class="shift-selector">
-                    <div class="shift-btn" data-shift="shift1"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">1st Shift 19.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
-                    <div class="shift-btn" data-shift="shift2"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">2nd Shift 19.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
-                    <div class="shift-btn" data-shift="shift3"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">3rd Shift 20.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
-                    <div class="shift-btn" data-shift="shift4"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">4th Shift 20.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
-                    <div class="shift-btn" data-shift="shift5"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">5th Shift 21.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
-                    <div class="shift-btn" data-shift="shift6"> <div class="icon"><i class="fas fa-file-alt"></i></div> <div class="text">6th Shift 21.09.2025</div> <div class="arrow-icon"><i class="fas fa-chevron-right"></i></div> </div>
-                </div>
-            </main>
-            <footer class="app-footer">
-                <p>Last Update 24/09/2025 02:30 PM</p>
-                <p>सभी प्रश्नों के उत्तर संभावित उत्तर कुंजी के आधार पर है।</p>
-                <p><strong>MP Salodiya</strong></p>
-            </footer>
+        <div class="selector-container">
+            <h2>4th Class Paper 2025</h2>
+            <p class="subtitle">कृपया मूल्यांकन के लिए अपनी शिफ़्ट चुनें।</p>
+            <div class="shift-selector">
+                <a class="shift-btn" data-shift="shift1"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">1st Shift 19.09.2025</div></a>
+                <a class="shift-btn" data-shift="shift2"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">2nd Shift 19.09.2025</div></a>
+                <a class="shift-btn" data-shift="shift3"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">3rd Shift 20.09.2025</div></a>
+                <a class="shift-btn" data-shift="shift4"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">4th Shift 20.09.2025</div></a>
+                <a class="shift-btn" data-shift="shift5"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">5th Shift 21.09.2025</div></a>
+                <a class="shift-btn" data-shift="shift6"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">6th Shift 21.09.2025</div></a>
+            </div>
+            <div class="selector-footer">
+                <p>Last Update: 26/11/2025 18:30 PM</p>
+                <p>सभी प्रश्नों के उत्तर संभावित उत्तर कुंजी के आधार पर हैं, आधिकारिक कुंजी जारी होने पर UPDATE कर दी जाएगी।</p>
+                <p>मास्टर पेपर & विभिन्न सेट के प्रश्नों की मैपिंग के लिए Ai की सहायता ली गई है इसलिए स्वयं भी अपने पेपर से मिलाकर पुष्टि जरूर करे<p>
+                <p><strong>- MP Salodiya</strong></p>
+            </div>
         </div>
     </div>
 
     <div id="question-paper-page">
         <div class="top-sticky-bar">
             <div class="header">
-                 <h1 id="shift-title">Shift Title</h1>
+                <h1 id="shift-title">Shift Title</h1>
+                <button id="toggle-info-bar-btn" title="Toggle Question Info"><i class="fas fa-eye"></i></button>
                 <div class="header-controls">
-                    <label for="series-select" style="font-size: 0.8em; color: var(--light-text);">Code:</label>
-                    <select id="series-select" style="font-size: 0.8em; border-radius: 5px; border: 1px solid var(--border-color)"></select>
-                    <button id="toggle-summary-btn">Result</button>
+                    <label for="series-select">Paper Code:</label>
+                    <select id="series-select"></select>
+                    <button id="toggle-summary-btn">Show Result</button>
+                    <button id="header-print-btn"><i class="fas fa-print"></i><span class="print-text"> Print</span></button>
                 </div>
             </div>
             <div class="summary-bar hidden">
-                <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">Valid</div></div>
+                <div id="total-item" class="summary-item"><div id="total-count" class="count">0</div><div class="label">Valid Que.</div></div>
                 <div id="attempted-item" class="summary-item"><div id="attempted-count" class="count">0</div><div class="label">Attempt</div></div>
                 <div id="correct-item" class="summary-item"><div id="correct-count" class="count">0</div><div class="label">Right</div></div>
                 <div id="incorrect-item" class="summary-item"><div id="incorrect-count" class="count">0</div><div class="label">Wrong</div></div>
-                <div id="skipped-item" class="summary-item"><div id="skipped-count" class="count">0</div><div class="label">Skip</div></div>
+                <div id="skipped-item" class="summary-item"><div id="skipped-count" class="count">0</div><div class="label">Skip (E)</div></div>
                 <div id="deleted-item" class="summary-item"><div id="deleted-count" class="count">0</div><div class="label">Deleted</div></div>
                 <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Final R.Q.</div></div>
                 <div id="raw-marks-item" class="summary-item"><div id="raw-marks-value" class="count">0.00</div><div class="label">RAW Marks</div></div>
             </div>
         </div>
-        <div class="container"> <div id="questions-container"></div> </div>
-        <div class="controls-bar">
-            <div class="filter-buttons">
-                <button class="active" data-filter="all">All</button> <button data-filter="correct">Right</button> <button data-filter="incorrect">Wrong</button> <button data-filter="skipped">Skip (E)</button> <button data-filter="deleted">Deleted</button>
+        <div class="container">
+            <div class="controls-bar">
+                <div class="filter-buttons">
+                    <button class="active" data-filter="all">All</button>
+                    <button data-filter="correct">Right</button>
+                    <button data-filter="incorrect">Wrong</button>
+                    <button data-filter="skipped">Skip (E)</button>
+                    <button data-filter="deleted">Deleted</button>
+                </div>
             </div>
-            <button id="print-btn" title="Print"><i class="fas fa-print"></i></button>
+            <div id="questions-container"></div>
         </div>
-        <div id="print-modal-overlay">
-            <div id="print-modal">
-                <h2>Print info</h2>
-                <label for="student-name">Name:</label>
-                <input type="text" id="student-name" placeholder="Your Name">
-                <label for="student-roll">Roll No.:</label>
-                <input type="text" id="student-roll" placeholder="Your Roll No.">
-                <div class="modal-buttons"> <button id="cancel-print">Cancel</button> <button id="confirm-print">Print</button> </div>
+    </div>
+
+    <div id="print-modal-overlay">
+        <div id="print-modal">
+            <h2>Print Details</h2>
+            <p>कृपया प्रिंट करने से पहले अपना नाम और रोल नंबर दर्ज करें।</p>
+            <label for="student-name">Name:</label>
+            <input type="text" id="student-name" placeholder="Your Name">
+            <label for="student-roll">Roll No.:</label>
+            <input type="text" id="student-roll" placeholder="Your Roll No.">
+            <div class="modal-buttons">
+                <button id="cancel-print">Cancel</button>
+                <button id="get-official-key-btn">Official Answer Key</button>
+                <button id="get-omr-btn">Get OMR</button>
+                <button id="confirm-print">Confirm & Print</button>
             </div>
         </div>
     </div>
     
     <script src="questions-data.js"></script>
-
     <script>
-        // ⭐ प्रश्न लोड न होने की समस्या का समाधान और कोड सुधार ⭐
-        if (typeof allShiftData === 'undefined' || !allShiftData) {
-            console.error("CRITICAL: 'questions-data.js' is not loaded or the 'allShiftData' variable is missing.");
-            // उपयोगकर्ता को एक स्पष्ट त्रुटि संदेश दिखाएं
-            document.body.innerHTML = `
-                <div style="text-align: center; padding: 40px; font-family: sans-serif;">
-                    <h2 style="color: #b91c1c;">त्रुटि: प्रश्न डेटा लोड नहीं हो सका!</h2>
-                    <p>कृपया सुनिश्चित करें कि 'questions-data.js' फ़ाइल सर्वर पर मौजूद है और सही ढंग से लोड हो रही है।</p>
-                </div>`;
-        }
-
         let currentShiftId = null, allQuestions = [], userAnswers = {}, currentSeries = '', activeFilter = 'all', currentShiftData = {};
-        const shiftSelectorPage = document.getElementById('shift-selector-page');
-        const questionPaperPage = document.getElementById('question-paper-page');
-        const seriesSelect = document.getElementById('series-select');
 
-        function showHomePage() {
-            shiftSelectorPage.style.display = 'flex';
-            questionPaperPage.style.display = 'none';
-            currentShiftId = null;
-            history.pushState({page: 'home'}, 'Home', window.location.pathname);
-            window.location.hash = '';
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            if (typeof allShiftData === 'undefined') {
+                document.body.innerHTML = '<h1 style="text-align:center; padding: 2rem; color: red;">Error: Wait...Update किया जा रहा है...</h1>';
+                return;
+            }
 
-        window.addEventListener('popstate', (event) => {
-            if (!event.state || event.state.page === 'home') {
+            const shiftSelectorPage = document.getElementById('shift-selector-page');
+            const questionPaperPage = document.getElementById('question-paper-page');
+            const seriesSelect = document.getElementById('series-select');
+            const printBtn = document.getElementById('header-print-btn');
+            const pMO = document.getElementById('print-modal-overlay');
+            const toggleInfoBtn = document.getElementById('toggle-info-bar-btn');
+
+            function showHomePage() {
+                shiftSelectorPage.style.display = 'flex';
+                questionPaperPage.style.display = 'none';
+                currentShiftId = null;
+                history.pushState({page: 'home'}, 'Home', window.location.pathname);
+                window.location.hash = '';
+            }
+
+            window.addEventListener('popstate', (event) => {
+                if (!event.state || event.state.page === 'home') {
+                    showHomePage();
+                } else if (event.state.shift) {
+                    loadShift(event.state.shift, false);
+                }
+            });
+
+            document.querySelectorAll('.shift-btn').forEach(b => b.addEventListener('click', () => loadShift(b.dataset.shift, true)));
+
+            function loadShift(shiftId, shouldPushState = true) {
+                shiftSelectorPage.style.display = 'none';
+                questionPaperPage.style.display = 'flex';
+                currentShiftId = shiftId;
+                currentShiftData = allShiftData[shiftId];
+                allQuestions = currentShiftData.questions;
+                
+                document.getElementById('shift-title').textContent = currentShiftData.title;
+
+                seriesSelect.innerHTML = '';
+                const availableSeries = Object.keys(currentShiftData.seriesOrder || {});
+                if (availableSeries.length > 0) {
+                    availableSeries.forEach(seriesKey => {
+                        const option = document.createElement('option');
+                        option.value = seriesKey;
+                        option.textContent = seriesKey;
+                        seriesSelect.appendChild(option);
+                    });
+                }
+
+                userAnswers = JSON.parse(localStorage.getItem(`userAnswers_${shiftId}`)) || {};
+                
+                const savedSeries = localStorage.getItem(`currentSeries_${shiftId}`);
+                currentSeries = (savedSeries && availableSeries.includes(savedSeries)) ? savedSeries : availableSeries[0] || '';
+                seriesSelect.value = currentSeries;
+
+                activeFilter = 'all';
+                document.getElementById('toggle-summary-btn').textContent = 'Show Result';
+                document.querySelector('.summary-bar').classList.add('hidden');
+                
+                if (shouldPushState) {
+                   history.pushState({ shift: shiftId }, '', `#${shiftId}`);
+                }
+                displayQuestions(currentSeries, activeFilter);
+            }
+
+            function saveData() {
+                if (!currentShiftId) return;
+                localStorage.setItem(`userAnswers_${currentShiftId}`, JSON.stringify(userAnswers));
+                localStorage.setItem(`currentSeries_${currentShiftId}`, currentSeries);
+            }
+
+            function getQuestionStatus(qId) {
+                const uAnsText = userAnswers[qId];
+                if (!uAnsText) return 'unattempted';
+                if (uAnsText === "अनुत्तरित प्रश्न" || uAnsText === "Question not attempted") return 'skipped';
+                const qData = allQuestions.find(q => q.id === qId);
+                const correctAnswerText = qData.answer.substring(3);
+                return uAnsText === correctAnswerText ? 'correct' : 'incorrect';
+            }
+
+            function updateSummary() {
+                let c = 0, i = 0, s = 0, d = 0;
+                allQuestions.forEach(q => {
+                    if (q.deleted) { d++; return; }
+                    const st = getQuestionStatus(q.id);
+                    if (st === 'correct') c++;
+                    else if (st === 'incorrect') i++;
+                    else if (st === 'skipped') s++;
+                });
+                
+                const a = c + i; 
+                const totalValidQuestions = allQuestions.length - d;
+                
+                document.getElementById('total-count').textContent = totalValidQuestions;
+                document.getElementById('attempted-count').textContent = a;
+                document.getElementById('correct-count').textContent = c;
+                document.getElementById('incorrect-count').textContent = i;
+                document.getElementById('skipped-count').textContent = s;
+                document.getElementById('deleted-count').textContent = d;
+                
+                const rQ = c - (i / 3);
+                let rM = (totalValidQuestions > 0) ? rQ * (200 / totalValidQuestions) : 0;
+                
+                document.getElementById('right-que-value').textContent = (rQ % 1 === 0) ? rQ : rQ.toFixed(2);
+                document.getElementById('raw-marks-value').textContent = rM.toFixed(2);
+            }
+            
+            function findQuestionPositions(qId) {
+                const qIndex = allQuestions.findIndex(q => q.id === qId);
+                if (qIndex === -1 || !currentShiftData.seriesOrder) return `Q ID: ${qId}`;
+
+                const positions = [];
+                for (const series in currentShiftData.seriesOrder) {
+                    const pos = currentShiftData.seriesOrder[series].indexOf(qIndex + 1);
+                    if (pos !== -1) {
+                        positions.push(`<strong>${series}:</strong> #${pos + 1}`);
+                    }
+                }
+                return positions.length > 0 ? positions.join(' | ') : `Q ID: ${qId}`;
+            }
+
+            function displayQuestions(series, filter = 'all') {
+                const qC = document.getElementById('questions-container');
+                qC.innerHTML = '';
+                currentSeries = series;
+                updateSummary();
+                updateActiveFilterButton(filter);
+
+                const seriesOrder = currentShiftData.seriesOrder || {};
+                const qIndices = seriesOrder[series] || Array.from({length: allQuestions.length}, (_, i) => i + 1);
+                
+                const optionLabels = ['A)', 'B)', 'C)', 'D)', 'E)'];
+                const OPTION_LENGTH_THRESHOLD = 40; 
+
+                qIndices.forEach((qIndex, displayNum) => {
+                    const qData = allQuestions[qIndex - 1];
+                    if (!qData) return;
+
+                    const isDeleted = qData.deleted === true;
+                    const status = isDeleted ? 'deleted' : getQuestionStatus(qData.id);
+
+                    if (filter !== 'all' && filter !== status) return;
+                    
+                    const qB = document.createElement('div');
+                    qB.className = 'question-block';
+                    qB.dataset.questionId = qData.id;
+                    
+                    const iB = document.createElement('div');
+                    iB.className = 'question-info-bar';
+                    iB.innerHTML = findQuestionPositions(qData.id);
+                    qB.appendChild(iB);
+                    
+                    const qContent = document.createElement('div');
+                    qContent.className = 'question-content';
+
+                    const qT = document.createElement('h3');
+                    qT.innerHTML = `<span class="print-q-num">प्रश्न ${displayNum + 1}: </span> ${qData.question}`;
+                    qContent.appendChild(qT);
+                    
+                    if (qData.image) {
+                        const qImg = document.createElement('img');
+                        qImg.src = qData.image;
+                        qImg.alt = "प्रश्न चित्र";
+                        qContent.appendChild(qImg);
+                    }
+                    qB.appendChild(qContent);
+
+                    const oCont = document.createElement('div');
+                    oCont.className = 'options-container';
+                    
+                    const oL = document.createElement('ul');
+                    oL.className = 'options-list';
+
+                    const optionsAreShort = qData.options.slice(0, 4).every(opt => opt.length < OPTION_LENGTH_THRESHOLD);
+                    if (optionsAreShort && qData.options.length >= 4) {
+                        oL.classList.add('options-grid');
+                    }
+                    
+                    const optionTexts = qData.options.map(opt => opt.substring(3));
+                    let shuffledOptionTexts;
+                    const optionOrder = currentShiftData.seriesOptionOrder?.[series];
+
+                    if (optionOrder) {
+                        shuffledOptionTexts = optionOrder.map(index => optionTexts[index]);
+                    } else {
+                        shuffledOptionTexts = [...optionTexts];
+                    }
+                    const finalOptions = shuffledOptionTexts.map((text, index) => `${optionLabels[index]} ${text}`);
+
+                    finalOptions.forEach(oT => {
+                        const oI = document.createElement('li');
+                        oI.innerHTML = oT;
+                        oI.dataset.rawText = oT.substring(3).trim();
+                        const userAnswerText = userAnswers[qData.id];
+                        if (userAnswerText && userAnswerText === oI.dataset.rawText) {
+                            if (status === 'correct') oI.classList.add('correct');
+                            else if (status === 'incorrect') oI.classList.add('incorrect');
+                            else if (status === 'skipped') oI.classList.add('special');
+                        }
+                        oL.appendChild(oI);
+                    });
+                    oCont.appendChild(oL);
+
+                    if (isDeleted) {
+                        const deletedAnsDisplay = document.createElement('div');
+                        deletedAnsDisplay.className = 'correct-answer-display';
+                        deletedAnsDisplay.innerHTML = 'Status: <strong style="color: var(--danger-color);">Deleted</strong>';
+                        oCont.appendChild(deletedAnsDisplay);
+                    }
+                    else if (status !== 'unattempted') {
+                        const aD = document.createElement('div');
+                        aD.className = 'correct-answer-display';
+                        const correctAnswerText = qData.answer.substring(3);
+                        const newCorrectIndex = shuffledOptionTexts.indexOf(correctAnswerText);
+                        let dynamicCorrectAnswer = qData.answer;
+                        if (newCorrectIndex !== -1) {
+                            dynamicCorrectAnswer = `${optionLabels[newCorrectIndex]} ${correctAnswerText}`;
+                        }
+                        aD.innerHTML = `Correct Ans: <strong style="color: var(--success-color);">${dynamicCorrectAnswer}</strong>`;
+                        oCont.appendChild(aD);
+                    }
+                    qB.appendChild(oCont);
+
+                    qC.appendChild(qB);
+                    
+                    oL.addEventListener('click', (e) => {
+                        const clickedLi = e.target.closest('li');
+                        if (clickedLi && !isDeleted) {
+                            userAnswers[qData.id] = clickedLi.dataset.rawText;
+                            saveData();
+                            displayQuestions(currentSeries, activeFilter);
+                        }
+                    });
+                });
+
+                if (qC.innerHTML === '') {
+                    qC.innerHTML = `<p style="text-align:center; color: var(--font-color-light); padding: 2rem;">इस फ़िल्टर में कोई प्रश्न नहीं है।</p>`;
+                }
+                if (window.MathJax) { MathJax.typesetPromise(); }
+            }
+               
+            function updateActiveFilterButton(filter) {
+                document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active');
+            }
+
+            seriesSelect.addEventListener('change', (e) => {
+                displayQuestions(e.target.value, activeFilter);
+                saveData();
+            });
+
+            document.querySelectorAll('.filter-buttons button').forEach(b => b.addEventListener('click', () => {
+                activeFilter = b.dataset.filter;
+                displayQuestions(currentSeries, activeFilter);
+            }));
+
+            document.getElementById('toggle-summary-btn').addEventListener('click', (e) => {
+                const sB = document.querySelector('.summary-bar');
+                sB.classList.toggle('hidden');
+                e.target.textContent = sB.classList.contains('hidden') ? 'Show Result' : 'Hide Result';
+            });
+            
+            toggleInfoBtn.addEventListener('click', () => {
+                const icon = toggleInfoBtn.querySelector('i');
+                questionPaperPage.classList.toggle('hide-q-info');
+                if(questionPaperPage.classList.contains('hide-q-info')) {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+            
+            function populatePrintHeader(name, rollNo){
+                document.getElementById('print-title').textContent = document.getElementById('shift-title').textContent;
+                document.getElementById('print-name').textContent = name;
+                document.getElementById('print-roll').textContent = rollNo;
+                document.getElementById('print-series').textContent = seriesSelect.value;
+                document.getElementById('print-full-total').textContent = allQuestions.length;
+                document.getElementById('print-valid-total').textContent = document.getElementById('total-count').textContent;
+                document.getElementById('print-attempted').textContent = document.getElementById('attempted-count').textContent;
+                document.getElementById('print-correct-cell').textContent = document.getElementById('correct-count').textContent;
+                document.getElementById('print-incorrect-cell').textContent = document.getElementById('incorrect-count').textContent;
+                document.getElementById('print-skipped').textContent = document.getElementById('skipped-count').textContent;
+                document.getElementById('print-deleted').textContent = document.getElementById('deleted-count').textContent;
+                document.getElementById('print-final-rq-display').textContent = document.getElementById('right-que-value').textContent;
+                document.getElementById('print-raw-marks-display').textContent = document.getElementById('raw-marks-value').textContent;
+            }
+
+            function openPrintWindow(content, bodyClass = '') {
+                const printWindow = window.open('', '_blank');
+                if (!printWindow) {
+                    alert("Please allow popups for this site to print.");
+                    return;
+                }
+                const styles = document.getElementById('main-styles').innerHTML;
+                const fontLink = `<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">`;
+                const mathJaxScript = `<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"><\/script>`;
+                const mathJaxConfig = `<script>MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };<\/script>`;
+
+                const printLogic = `
+                    <script>
+                        function RENDER_AND_PRINT() {
+                            const triggerPrint = () => {
+                                try {
+                                    setTimeout(function() {
+                                        window.print();
+                                        setTimeout(function() { window.close(); }, 200);
+                                    }, 250);
+                                } catch (e) {
+                                    console.error("Print failed:", e);
+                                    window.close();
+                                }
+                            };
+
+                            if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                                MathJax.startup.promise.then(() => {
+                                    return MathJax.typesetPromise();
+                                }).then(() => {
+                                    triggerPrint();
+                                }).catch((err) => {
+                                    console.error('MathJax failed, printing anyway.', err);
+                                    triggerPrint();
+                                });
+                            } else {
+                                triggerPrint();
+                            }
+                        }
+                        
+                        const images = document.querySelectorAll('img');
+                        const promises = [];
+                        images.forEach(img => {
+                            if (!img.complete) {
+                                promises.push(new Promise(resolve => {
+                                    img.onload = resolve;
+                                    img.onerror = resolve;
+                                }));
+                            }
+                        });
+
+                        Promise.all(promises).then(RENDER_AND_PRINT);
+                        setTimeout(RENDER_AND_PRINT, 5000);
+                    <\/script>
+                `;
+
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Print</title>
+                            ${fontLink}
+                            <style>${styles}</style>
+                            ${mathJaxConfig}
+                            ${mathJaxScript}
+                        </head>
+                        <body class="${bodyClass} ${questionPaperPage.classList.contains('hide-q-info') ? 'hide-q-info' : ''}">
+                            ${content}
+                            ${printLogic}
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+            }
+
+            function getCorrectOptionForSeries(qData, series) {
+                if (qData.deleted) return 'Delete';
+                const optionLabels = ['A', 'B', 'C', 'D', 'E'];
+                const correctAnswerText = qData.answer.substring(3);
+                const optionTexts = qData.options.map(opt => opt.substring(3));
+                
+                const optionOrder = currentShiftData.seriesOptionOrder?.[series];
+                const shuffledOptionTexts = optionOrder ? optionOrder.map(index => optionTexts[index]) : [...optionTexts];
+                
+                const newCorrectIndex = shuffledOptionTexts.indexOf(correctAnswerText);
+                return (newCorrectIndex !== -1) ? optionLabels[newCorrectIndex] : '?';
+            }
+
+            function generateAndPrintOfficialKey() {
+                const container = document.getElementById('official-key-print-container');
+                let html = `
+                    <div class="official-key-header">
+                        <h1>चतुर्थ श्रेणी कर्मचारी संभावित उत्तर कुंजी</h1>
+                        <p>${currentShiftData.title} | पेपर कोड: ${currentSeries}</p>
+                    </div>
+                    <div class="official-key-grid">
+                `;
+
+                const seriesOrder = currentShiftData.seriesOrder[currentSeries] || Array.from({length: allQuestions.length}, (_, i) => i + 1);
+                const totalQuestions = seriesOrder.length;
+                const questionsPerColumn = 30;
+                const numColumns = Math.ceil(totalQuestions / questionsPerColumn);
+                
+                for (let c = 0; c < numColumns; c++) {
+                    html += `<div class="official-key-column"><table class="official-key-table"><thead><tr><th>प्रश्न</th><th>उत्तर</th></tr></thead><tbody>`;
+                    const start = c * questionsPerColumn;
+                    const end = Math.min(start + questionsPerColumn, totalQuestions);
+                    for (let i = start; i < end; i++) {
+                        const displayNum = i + 1;
+                        const qIndex = seriesOrder[i];
+                        const qData = allQuestions[qIndex - 1];
+                        if(qData) {
+                            const correctOpt = getCorrectOptionForSeries(qData, currentSeries);
+                            html += `<tr><td>${displayNum}</td><td>${correctOpt}</td></tr>`;
+                        }
+                    }
+                    html += `</tbody></table></div>`;
+                }
+
+                html += `</div>`;
+                container.innerHTML = html;
+                openPrintWindow(container.innerHTML);
+            }
+
+            function generateAndPrintOMR(name, rollNo) {
+                populatePrintHeader(name, rollNo); 
+                const container = document.getElementById('omr-print-container');
+                container.innerHTML = ''; 
+
+                const headerSource = document.getElementById('print-fallback-details');
+                container.appendChild(headerSource.cloneNode(true));
+                
+                const grid = document.createElement('div');
+                grid.className = 'omr-grid';
+                
+                const seriesOrder = currentShiftData.seriesOrder[currentSeries] || Array.from({length: allQuestions.length}, (_, i) => i + 1);
+                const totalQuestions = seriesOrder.length;
+                const questionsPerColumn = Math.ceil(totalQuestions / 4);
+                
+                const optionLabels = ['A', 'B', 'C', 'D', 'E'];
+
+                for (let c = 0; c < 4; c++) {
+                    const column = document.createElement('div');
+                    column.className = 'omr-column';
+                    const start = c * questionsPerColumn;
+                    const end = Math.min(start + questionsPerColumn, totalQuestions);
+
+                    for (let i = start; i < end; i++) {
+                        const displayNum = i + 1;
+                        const qIndex = seriesOrder[i];
+                        if (!allQuestions[qIndex - 1]) continue;
+                        const qData = allQuestions[qIndex - 1];
+                        
+                        const row = document.createElement('div');
+                        row.className = 'omr-row';
+                        row.innerHTML = `<div class="omr-q-num">${displayNum}.</div>`;
+                        
+                        const optionsDiv = document.createElement('div');
+                        optionsDiv.className = 'omr-options';
+                        
+                        const userAnswerText = userAnswers[qData.id];
+                        let filledOptionIndex = -1;
+
+                        if (userAnswerText) {
+                            const originalOptionTexts = qData.options.map(opt => opt.substring(3));
+                            const optionOrder = currentShiftData.seriesOptionOrder?.[currentSeries];
+                            let shuffledOptionTexts = optionOrder ? optionOrder.map(idx => originalOptionTexts[idx]) : [...originalOptionTexts];
+                            const userAnsIndex = shuffledOptionTexts.findIndex(txt => txt.trim() === userAnswerText.trim());
+                            if(userAnsIndex !== -1) filledOptionIndex = userAnsIndex;
+                        }
+
+                        optionLabels.forEach((label, index) => {
+                             const bubble = document.createElement('div');
+                             bubble.className = 'omr-bubble';
+                             bubble.textContent = label;
+                             if (index === filledOptionIndex) bubble.classList.add('filled');
+                             optionsDiv.appendChild(bubble);
+                        });
+
+                        row.appendChild(optionsDiv);
+                        column.appendChild(row);
+                    }
+                    grid.appendChild(column);
+                }
+                container.appendChild(grid);
+                
+                openPrintWindow(container.innerHTML, 'omr-print-body');
+            }
+
+            function triggerPaperPrint(name, rollNo) {
+                populatePrintHeader(name, rollNo); 
+                const headerHTML = document.getElementById('print-fallback-details').outerHTML;
+                const questionsHTML = document.getElementById('questions-container').outerHTML;
+                openPrintWindow(headerHTML + questionsHTML);
+            }
+
+            printBtn.addEventListener('click', () => { pMO.style.display = 'flex'; });
+            document.getElementById('cancel-print').addEventListener('click', () => { pMO.style.display = 'none'; });
+            
+            document.getElementById('confirm-print').addEventListener('click', () => {
+                const name = document.getElementById('student-name').value;
+                const rollNo = document.getElementById('student-roll').value;
+                if (!name || !rollNo) { alert("नाम और रोल नंबर दोनों आवश्यक हैं।"); return; }
+                pMO.style.display = 'none';
+                triggerPaperPrint(name, rollNo);
+            });
+
+            document.getElementById('get-omr-btn').addEventListener('click', () => {
+                const name = document.getElementById('student-name').value;
+                const rollNo = document.getElementById('student-roll').value;
+                if (!name || !rollNo) { alert("नाम और रोल नंबर दोनों आवश्यक हैं।"); return; }
+                pMO.style.display = 'none';
+                generateAndPrintOMR(name, rollNo);
+            });
+
+            document.getElementById('get-official-key-btn').addEventListener('click', () => {
+                 pMO.style.display = 'none';
+                 generateAndPrintOfficialKey();
+            });
+
+            const shiftIdFromUrl = window.location.hash.substring(1);
+            if (shiftIdFromUrl && allShiftData[shiftIdFromUrl]) {
+                loadShift(shiftIdFromUrl);
+            } else {
                 showHomePage();
-            } else if (event.state.shift) {
-                loadShift(event.state.shift, false);
             }
         });
 
-        document.querySelectorAll('.shift-btn').forEach(b => b.addEventListener('click', () => loadShift(b.dataset.shift, true)));
-
-        function loadShift(shiftId, shouldPushState = true) {
-            if (!allShiftData || !allShiftData[shiftId]) {
-                alert(`Error: Data for shift '${shiftId}' not found.`);
-                return;
-            }
-            shiftSelectorPage.style.display = 'none';
-            questionPaperPage.style.display = 'flex';
-            currentShiftId = shiftId;
-            currentShiftData = allShiftData[shiftId];
-            allQuestions = currentShiftData.questions;
-            document.getElementById('shift-title').textContent = currentShiftData.title;
-            seriesSelect.innerHTML = '';
-            const availableSeries = Object.keys(currentShiftData.seriesOrder || {});
-            if (availableSeries.length > 0) {
-                availableSeries.forEach(seriesKey => {
-                    const option = document.createElement('option');
-                    option.value = seriesKey; option.textContent = seriesKey;
-                    seriesSelect.appendChild(option);
-                });
-            }
-            userAnswers = JSON.parse(localStorage.getItem(`userAnswers_${shiftId}`)) || {};
-            const savedSeries = localStorage.getItem(`currentSeries_${shiftId}`);
-            currentSeries = (savedSeries && availableSeries.includes(savedSeries)) ? savedSeries : availableSeries[0] || '';
-            seriesSelect.value = currentSeries;
-            activeFilter = 'all';
-            document.getElementById('toggle-summary-btn').textContent = 'Result';
-            document.querySelector('.summary-bar').classList.add('hidden');
-            if (shouldPushState) { history.pushState({ shift: shiftId }, '', `#${shiftId}`); }
-            displayQuestions(currentSeries, activeFilter);
-        }
-
-        function saveData() {
-            if (!currentShiftId) return;
-            localStorage.setItem(`userAnswers_${currentShiftId}`, JSON.stringify(userAnswers));
-            localStorage.setItem(`currentSeries_${currentShiftId}`, currentSeries);
-        }
-
-        function getQuestionStatus(qId) {
-            const uAnsText = userAnswers[qId];
-            if (!uAnsText) return 'unattempted';
-            if (uAnsText === "अनुत्तरित प्रश्न" || uAnsText === "Question not attempted") return 'skipped';
-            const qData = allQuestions.find(q => q.id === qId);
-            const correctAnswerText = qData.answer.substring(3);
-            return uAnsText === correctAnswerText ? 'correct' : 'incorrect';
-        }
-
-        function updateSummary() {
-            let c = 0, i = 0, s = 0, d = 0;
-            allQuestions.forEach(q => {
-                if (q.deleted) { d++; return; }
-                const st = getQuestionStatus(q.id);
-                if (st === 'correct') c++; else if (st === 'incorrect') i++; else if (st === 'skipped') s++;
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => { console.log('ServiceWorker registration successful'); })
+                    .catch(error => { console.log('ServiceWorker registration failed: ', error); });
             });
-            const a = c + i; 
-            const totalValidQuestions = allQuestions.length - d;
-            document.getElementById('total-count').textContent = totalValidQuestions;
-            document.getElementById('attempted-count').textContent = a;
-            document.getElementById('correct-count').textContent = c;
-            document.getElementById('incorrect-count').textContent = i;
-            document.getElementById('skipped-count').textContent = s;
-            document.getElementById('deleted-count').textContent = d;
-            const rQ = c - (i / 3);
-            let rM = (totalValidQuestions > 0) ? rQ * (200 / totalValidQuestions) : 0;
-            document.getElementById('right-que-value').textContent = (rQ % 1 === 0) ? rQ : rQ.toFixed(2);
-            document.getElementById('raw-marks-value').textContent = rM.toFixed(2);
         }
-        
-        function findQuestionPositions(qId) {
-            const qIndex = allQuestions.findIndex(q => q.id === qId);
-            if (qIndex === -1 || !currentShiftData.seriesOrder) return `Q ID: ${qId}`;
-            const positions = [];
-            for (const series in currentShiftData.seriesOrder) {
-                const pos = currentShiftData.seriesOrder[series].indexOf(qIndex + 1);
-                if (pos !== -1) positions.push(`<strong>${series}:</strong> #${pos + 1}`);
-            }
-            return positions.length > 0 ? positions.join(' | ') : `Q ID: ${qId}`;
-        }
-
-        function displayQuestions(series, filter = 'all') {
-            const qC = document.getElementById('questions-container');
-            qC.innerHTML = ''; currentSeries = series; updateSummary(); updateActiveFilterButton(filter);
-            const seriesOrder = currentShiftData.seriesOrder?.[series] || Array.from({length: allQuestions.length}, (_, i) => i + 1);
-            const optionLabels = ['A)', 'B)', 'C)', 'D)', 'E)'];
-            qIndices.forEach((qIndex, displayNum) => {
-                const qData = allQuestions[qIndex - 1]; if (!qData) return;
-                const isDeleted = qData.deleted === true;
-                const status = isDeleted ? 'deleted' : getQuestionStatus(qData.id);
-                if (filter !== 'all' && filter !== status) return;
-                const qB = document.createElement('div'); qB.className = 'question-block'; qB.dataset.questionId = qData.id;
-                const iB = document.createElement('div'); iB.className = 'question-info-bar'; iB.innerHTML = findQuestionPositions(qData.id); qB.appendChild(iB);
-                const qT = document.createElement('h3'); qT.innerHTML = `प्रश्न ${displayNum + 1}: ${qData.question}`; qB.appendChild(qT);
-                if (qData.image) { const qImg = document.createElement('img'); qImg.src = qData.image; qImg.alt = "प्रश्न चित्र"; qImg.style.cssText = "max-width:100%; height:auto; display:block; margin:10px auto; border-radius: 8px;"; qB.appendChild(qImg); }
-                const oL = document.createElement('ul'); oL.className = 'options-list';
-                const maxCharsForGrid = 40; const useGrid = qData.options.every(opt => opt.substring(3).trim().length < maxCharsForGrid && !opt.includes('img'));
-                if(useGrid) oL.classList.add('options-grid');
-                const optionTexts = qData.options.map(opt => opt.substring(3));
-                const optionOrder = currentShiftData.seriesOptionOrder?.[series];
-                const shuffledOptionTexts = optionOrder ? optionOrder.map(index => optionTexts[index]) : [...optionTexts];
-                const finalOptions = shuffledOptionTexts.map((text, index) => `${optionLabels[index]} ${text}`);
-                finalOptions.forEach(oT => {
-                    const oI = document.createElement('li'); oI.innerHTML = oT; 
-                    const rawOptionText = oT.substring(3).trim(); oI.dataset.rawText = rawOptionText;
-                    const userAnswerText = userAnswers[qData.id];
-                    if (userAnswerText && userAnswerText === rawOptionText) { if (status === 'correct') oI.classList.add('correct'); else if (status === 'incorrect') oI.classList.add('incorrect'); else if (status === 'skipped') oI.classList.add('special'); }
-                    oL.appendChild(oI);
-                });
-                qB.appendChild(oL);
-                if (isDeleted) {
-                    qB.style.backgroundColor = '#f3f4f6'; qB.style.opacity = '0.8';
-                    const dsp = document.createElement('div'); dsp.className = 'correct-answer-display'; dsp.innerHTML = 'Status: <strong style="color: red;">Delete</strong>'; qB.appendChild(dsp);
-                } else if (status !== 'unattempted') {
-                    const aD = document.createElement('div'); aD.className = 'correct-answer-display';
-                    const correctAnswerText = qData.answer.substring(3);
-                    const newCorrectIndex = shuffledOptionTexts.indexOf(correctAnswerText);
-                    let dynamicCorrectAnswer = qData.answer;
-                    if (newCorrectIndex !== -1) dynamicCorrectAnswer = `${optionLabels[newCorrectIndex]} ${correctAnswerText}`;
-                    aD.innerHTML = `Correct Ans. is - <strong style="color: var(--correct-text);">${dynamicCorrectAnswer}</strong>`;
-                    qB.appendChild(aD);
-                }
-                qC.appendChild(qB);
-                oL.addEventListener('click', (e) => {
-                    const clickedLi = e.target.closest('li');
-                    if (clickedLi && !isDeleted) { userAnswers[qData.id] = clickedLi.dataset.rawText; saveData(); displayQuestions(currentSeries, activeFilter); }
-                });
-            });
-            if (qC.innerHTML === '') qC.innerHTML = `<p style="text-align:center; color: var(--light-text); padding: 40px 0;">इस फ़िल्टर में कोई प्रश्न नहीं है।</p>`;
-            if (window.MathJax) MathJax.typesetPromise();
-        }
-           
-        function updateActiveFilterButton(filter) { document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active')); document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active'); }
-        seriesSelect.addEventListener('change', (e) => { displayQuestions(e.target.value, activeFilter); saveData(); });
-        document.querySelectorAll('.filter-buttons button').forEach(b => b.addEventListener('click', () => { activeFilter = b.dataset.filter; displayQuestions(currentSeries, activeFilter); }));
-        document.getElementById('toggle-summary-btn').addEventListener('click', (e) => { const sB = document.querySelector('.summary-bar'); sB.classList.toggle('hidden'); e.target.textContent = sB.classList.contains('hidden') ? 'Result' : 'Hide'; });
-        function triggerPrint(name, rollNo) { /* प्रिंट फंक्शन में कोई बदलाव नहीं */ }
-        const printBtn = document.getElementById('print-btn'); const pMO = document.getElementById('print-modal-overlay');
-        printBtn.addEventListener('click', () => { pMO.style.display = 'flex'; });
-        document.getElementById('cancel-print').addEventListener('click', () => { pMO.style.display = 'none'; });
-        document.getElementById('confirm-print').addEventListener('click', () => { const name = document.getElementById('student-name').value; const rollNo = document.getElementById('student-roll').value; if (!name || !rollNo) { alert("नाम और रोल नंबर दोनों आवश्यक हैं।"); return; } pMO.style.display = 'none'; triggerPrint(name, rollNo); });
-        document.addEventListener('DOMContentLoaded', () => { if (window.location.hash) { const shiftIdFromUrl = window.location.hash.substring(1); if (shiftIdFromUrl && allShiftData && allShiftData[shiftIdFromUrl]) loadShift(shiftIdFromUrl); } else { showHomePage(); } });
     </script>
 </body>
 </html>
