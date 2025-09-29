@@ -284,7 +284,14 @@
         #get-official-key-btn { background-color: #6f42c1; color: white; }
 
         .print-only-container { display: none; }
-
+       .home-page-image {
+    max-width: 100%;   /* <-- बस इस लाइन को 200px से 100% कर दें */
+    height: auto;
+    display: block;
+    margin: 1.5rem auto 2.5rem; 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
         @media (max-width: 768px) {
             .selector-container h2 { font-size: 1.8rem; }
             .shift-selector { grid-template-columns: 1fr; gap: 1rem; }
@@ -579,6 +586,7 @@
     <div id="shift-selector-page">
         <div class="selector-container">
             <h2>चतुर्थ श्रेणी कर्मचारी</h2>
+           <img src="https://raw.githubusercontent.com/Dream-Link/4th-Grade-Paper-Anlysis/main/144%20set.png" alt="Paper Analysis Logo" class="home-page-image">
             <p class="subtitle">कृपया अपनी शिफ़्ट चुनें।</p>
             <div class="shift-selector">
                 <a class="shift-btn" data-shift="shift1"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">1st Shift 19.09.2025</div></a>
