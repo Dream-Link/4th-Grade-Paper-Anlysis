@@ -678,6 +678,23 @@
     
     <script src="questions-data.js"></script>
     <script>
+        // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCm3JQ_hvjhwpCZsHFYdgSr3Fudu-K1ezU",
+  authDomain: "myexamanalyzer.firebaseapp.com",
+  projectId: "myexamanalyzer",
+  storageBucket: "myexamanalyzer.firebasestorage.app",
+  messagingSenderId: "1001576173103",
+  appId: "1:1001576173103:web:55b5052cb8169370c400da"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
         let currentShiftId = null, allQuestions = [], userAnswers = {}, currentSeries = '', activeFilter = 'all', currentShiftData = {};
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -807,11 +824,36 @@
                 displayQuestions(currentSeries, activeFilter);
             }
 
-            function saveData() {
+            function saveData()
+                {
                 if (!currentShiftId) return;
                 localStorage.setItem(`userAnswers_${currentShiftId}`, JSON.stringify(userAnswers));
                 localStorage.setItem(`currentSeries_${currentShiftId}`, currentSeries);
             }
+            // Firebase पर डेटा भेजने के लिए नया फंक्शन
+function sendAnswerToFirebase(userId, questionId, answer) {
+    if (!currentShiftId) return;
+
+    // हम डेटा को इस तरह स्टोर करेंगे:
+    // Collection (userResponses) -> Document (shift1) -> Collection (users) -> Document (unique_user_id)
+    db.collection('userResponses')
+      .doc(currentShiftId)
+      .collection('users')
+      .doc(userId)
+      .set({
+          answers: userAnswers,       // यूजर के सभी उत्तरों का ऑब्जेक्ट
+          series: currentSeries,      // यूजर की पेपर सीरीज
+          rollNo: document.getElementById('student-roll').value || 'Not Provided', // रोल नंबर
+          name: document.getElementById('student-name').value || 'Not Provided', // नाम
+          lastUpdated: new Date()     // अपडेट का समय
+      }, { merge: true }) // 'merge: true' यह सुनिश्चित करता है कि पुराने उत्तर डिलीट न हों
+      .then(() => {
+          console.log(`User: ${userId}, Answer for Q-${questionId} saved to Firebase!`);
+      })
+      .catch((error) => {
+          console.error("Firebase Error: ", error);
+      });
+}
 
             function getQuestionStatus(qId) {
                 const qData = allQuestions.find(q => q.id === qId);
@@ -1040,20 +1082,35 @@
             }
 
             questionsContainer.addEventListener('click', (e) => {
-                const clickedLi = e.target.closest('li');
-                if (!clickedLi) return;
+    const clickedLi = e.target.closest('li');
+    if (!clickedLi) return;
 
-                const questionBlock = e.target.closest('.question-block');
-                if (!questionBlock) return;
+    const questionBlock = e.target.closest('.question-block');
+    if (!questionBlock) return;
 
-                const qId = parseInt(questionBlock.dataset.questionId);
-                const qData = allQuestions.find(q => q.id === qId);
-                if (!qData) return;
+    const qId = parseInt(questionBlock.dataset.questionId);
+    const qData = allQuestions.find(q => q.id === qId);
+    if (!qData) return;
 
-                userAnswers[qId] = clickedLi.dataset.rawText;
-                saveData();
-                updateQuestionUI(qId);
-                updateSummary();
+    userAnswers[qId] = clickedLi.dataset.rawText;
+
+    // 1. लोकल स्टोरेज में सेव करें (यह अच्छा बैकअप है)
+    saveData();
+
+    // 2. Firebase पर डेटा भेजें
+    // हर यूजर के लिए एक यूनिक ID बनाएँ और उसे लोकल स्टोरेज में सेव करें
+    let userId = localStorage.getItem(`userId_${currentShiftId}`);
+    if (!userId) {
+        userId = 'user_' + Date.now(); // एक सिंपल यूनिक ID
+        localStorage.setItem(`userId_${currentShiftId}`, userId);
+    }
+    sendAnswerToFirebase(userId, qId, userAnswers[qId]); // नया फंक्शन कॉल करें
+
+    updateQuestionUI(qId);
+    updateSummary();
+
+    // ... बाकी का कोड वैसे ही रहेगा ...
+});
                 
                 const isDeleted = qData.deleted === true;
                 const newStatus = getQuestionStatus(qId);
