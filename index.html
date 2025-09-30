@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="hi">
-<head>
+<head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>4th Grade Paper Analysis by MP SALODIYA</title>
@@ -283,14 +283,7 @@
         #get-official-key-btn { background-color: #6f42c1; color: white; }
 
         .print-only-container { display: none; }
-       .home-page-image {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 1.5rem auto 2.5rem; 
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+
         @media (max-width: 768px) {
             .selector-container h2 { font-size: 1.8rem; }
             .shift-selector { grid-template-columns: 1fr; gap: 1rem; }
@@ -393,6 +386,7 @@
             }
         }
         
+        /* ======================= START: THEME SELECTOR CSS ======================= */
         .theme-selector {
             position: absolute;
             top: 1.5rem;
@@ -400,13 +394,13 @@
             z-index: 100;
         }
         #theme-toggle-btn {
-            width: 45px;
-            height: 45px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             border: 1px solid var(--border-color);
             background-color: var(--surface-color);
             color: var(--font-color);
-            font-size: 1.2rem;
+            font-size: 0.6rem;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -452,13 +446,13 @@
             color: var(--primary-color);
         }
 
+        /* --- Theme Palettes Start --- */
         :root[data-theme='dark-blue'] {
             --primary-color: #3b82f6; --primary-dark: #2563eb; --primary-light: #1e3a8a;
             --bg-color: #111827; --surface-color: #1f2937; --font-color: #f3f4f6;
             --font-color-light: #9ca3af; --border-color: #374151; --success-bg: #064e3b;
             --danger-bg: #7f1d1d; --special-bg: #78350f; --subtle-bg: #374151;
         }
-
         :root[data-theme='light-green'] {
             --primary-color: #22c55e; --primary-dark: #16a34a; --primary-light: #dcfce7;
         }
@@ -468,7 +462,6 @@
             --font-color-light: #a1a1aa; --border-color: #3f3f46; --success-bg: #064e3b;
             --danger-bg: #7f1d1d; --special-bg: #78350f; --subtle-bg: #3f3f46;
         }
-
         :root[data-theme='light-purple'] {
             --primary-color: #8b5cf6; --primary-dark: #7c3aed; --primary-light: #ede9fe;
         }
@@ -478,7 +471,6 @@
             --font-color-light: #a9a2c1; --border-color: #403561; --success-bg: #064e3b;
             --danger-bg: #7f1d1d; --special-bg: #78350f; --subtle-bg: #403561;
         }
-
         :root[data-theme='light-orange'] {
             --primary-color: #f97316; --primary-dark: #ea580c; --primary-light: #ffedd5;
         }
@@ -488,7 +480,6 @@
             --font-color-light: #b0a8a4; --border-color: #514641; --success-bg: #064e3b;
             --danger-bg: #7f1d1d; --special-bg: #78350f; --subtle-bg: #514641;
         }
-
         :root[data-theme='light-teal'] {
             --primary-color: #14b8a6; --primary-dark: #0d9488; --primary-light: #ccfbf1;
         }
@@ -498,7 +489,6 @@
             --font-color-light: #94a3b8; --border-color: #334155; --success-bg: #064e3b;
             --danger-bg: #7f1d1d; --special-bg: #78350f; --subtle-bg: #334155;
         }
-
         :root[data-theme='solarized-light'] {
             --primary-color: #268bd2; --primary-dark: #002b36; --primary-light: #eee8d5;
             --bg-color: #fdf6e3; --surface-color: #eee8d5; --font-color: #657b83;
@@ -511,6 +501,24 @@
             --font-color-light: #586e75; --border-color: #586e75; --success-bg: #2d4f2d;
             --danger-bg: #6b3e3e; --special-bg: #635741; --subtle-bg: #0b4250;
         }
+        /* ======================== END: THEME SELECTOR CSS ========================= */
+
+        /* ======================== START: NEW WARNING BOX CSS (ADDED) ========================= */
+        #unattempted-warning-item {
+            grid-column: 1 / -1;
+            margin-top: 0.5rem;
+            text-align: center;
+            color: var(--danger-color);
+            background-color: var(--danger-bg);
+            border: 1px solid var(--danger-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none; /* Hide by default */
+        }
+        #unattempted-warning-item.visible {
+            display: block; /* Show with JS */
+        }
+        /* ======================== END: NEW WARNING BOX CSS (ADDED) ========================= */
     </style>
     
 </head>
@@ -529,7 +537,7 @@
             <li data-theme="light-purple">Purple Light</li>
             <li data-theme="dark-purple">Purple Dark</li>
             <li data-theme="light-orange">Orange Light</li>
-            <li data-theme="dark-orange">Orange Dark</li>
+            <li data-theme="dark-orange">Dark Dark</li>
             <li data-theme="light-teal">Teal Light</li>
             <li data-theme="dark-teal">Dark Teal</li>
             <li data-theme="solarized-light">Solarized Light</li>
@@ -572,7 +580,7 @@
     <div id="shift-selector-page">
         <div class="selector-container">
             <h2>चतुर्थ श्रेणी कर्मचारी</h2>
-           <img src="https://raw.githubusercontent.com/Dream-Link/4th-Grade-Paper-Anlysis/main/144%20set.png" alt="Paper Analysis Logo" class="home-page-image">
+            <img src="https://raw.githubusercontent.com/Dream-Link/4th-Grade-Papers/main/144%20set.png" alt="Paper Set Information" style="width: 100%; border-radius: var(--border-radius); margin-bottom: 2rem; box-shadow: var(--shadow-sm);">
             <p class="subtitle">कृपया अपनी शिफ़्ट चुनें।</p>
             <div class="shift-selector">
                 <a class="shift-btn" data-shift="shift1"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">1st Shift 19.09.2025</div></a>
@@ -583,8 +591,8 @@
                 <a class="shift-btn" data-shift="shift6"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">6th Shift 21.09.2025</div></a>
             </div>
             <div class="selector-footer">
-                <p>Last Update: 28.11.2025 14:30</p>
-                 <p style="text-align:center; color: red;"> सभी प्रश्नों के उत्तर संभावित उत्तर कुंजी के आधार पर हैं, आधिकारिक कुंजी जारी होने पर UPDATE कर दी जाएगी।</p>
+                <p>Last Update: 30.09.2025 10:30</p>
+                <p style="text-align:center; color: red;"> सभी प्रश्नों के उत्तर संभावित उत्तर कुंजी के आधार पर हैं, Official Answer Key जारी होने पर UPDATE कर दी जाएगी।</p>
                 
                 <div class="features-box">
                     <h4>इस वेबपेज की मुख्य सुविधाएं</h4>
@@ -600,9 +608,9 @@
                     </ul>
                 </div>
 
-                <p>मानवीय गलती होना स्वाभाविक है इसलिए स्वयं भी अपने वास्तविक पेपर को Official Answer key से मिलाकर पुष्टि जरूर करे।</p>
+                <p>मानवीय गलती होना स्वभाविक है इसलिए स्वयं भी अपने वास्तविक पेपर को Official Answer key से मिलाकर पुष्टि जरूर करे।</p>
                 <p>
-                    <a href="https://t.me/+ySNdbLImFRJmYWE1" target="_blank" class="creator-link">- MP Salodiya (Click for feedback)</a>
+                    <a href="https://t.me/Dreamlinkmp" target="_blank" class="creator-link" style="color: blue; text-decoration: underline;">MP Salodiya</a>
                 </p>
             </div>
         </div>
@@ -630,7 +638,10 @@
                 <div id="deleted-item" class="summary-item"><div id="deleted-count" class="count">0</div><div class="label">Deleted</div></div>
                 <div id="right-que-item" class="summary-item"><div id="right-que-value" class="count">0.00</div><div class="label">Final R.Q.</div></div>
                 <div id="raw-marks-item" class="summary-item"><div id="raw-marks-value" class="count">0.00</div><div class="label">RAW Marks</div></div>
-            </div>
+                <div id="unattempted-warning-item" class="summary-item">
+                    <span>अभी तक <strong id="unattempted-count">0</strong> प्रश्नों में कोई भी ऑप्शन टिक नहीं है।</span>
+                </div>
+                </div>
         </div>
         <div class="container">
             <div class="controls-bar">
@@ -662,39 +673,21 @@
         </div>
     </div>
     
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
     <script src="questions-data.js"></script>
     <script>
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-          apiKey: "AIzaSyCm3JQ_hvjhwpCZsHFYdgSr3Fudu-K1ezU",
-          authDomain: "myexamanalyzer.firebaseapp.com",
-          projectId: "myexamanalyzer",
-          storageBucket: "myexamanalyzer.firebasestorage.app",
-          messagingSenderId: "1001576173103",
-          appId: "1:1001576173103:web:55b5052cb8169370c400da"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        // Firestore को Initialize करें (यह लाइन ज़रूरी है)
-        const db = firebase.firestore();
-
-        // अब आपका बाकी का कोड यहाँ से शुरू होता है
         let currentShiftId = null, allQuestions = [], userAnswers = {}, currentSeries = '', activeFilter = 'all', currentShiftData = {};
 
         document.addEventListener('DOMContentLoaded', () => {
 
-            // ======================= START: THEME SELECTOR JAVASCRIPT (ADDED) =======================
+            // ======================= START: THEME SELECTOR JAVASCRIPT =======================
             const themeToggleBtn = document.getElementById('theme-toggle-btn');
             const themeDropdown = document.getElementById('theme-dropdown');
             const themeSelector = document.querySelector('.theme-selector');
             const root = document.documentElement;
             const THEME_KEY = 'selected_theme_mps';
 
-            if (themeToggleBtn) { 
+            if (themeToggleBtn) { // Run only if the theme button exists
+                // Function to apply a theme
                 const applyTheme = (theme) => {
                     if (theme === 'auto') {
                         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -705,17 +698,20 @@
                     localStorage.setItem(THEME_KEY, theme);
                 };
 
+                // Toggle dropdown visibility
                 themeToggleBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     themeDropdown.classList.toggle('hidden');
                 });
 
+                // Close dropdown if clicked outside
                 document.addEventListener('click', () => {
                     if (!themeDropdown.classList.contains('hidden')) {
                         themeDropdown.classList.add('hidden');
                     }
                 });
 
+                // Handle theme selection from dropdown
                 themeDropdown.addEventListener('click', (e) => {
                     if (e.target.tagName === 'LI') {
                         const selectedTheme = e.target.dataset.theme;
@@ -724,6 +720,7 @@
                     }
                 });
 
+                // Listen for changes in OS theme preference
                 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
                     const savedTheme = localStorage.getItem(THEME_KEY);
                     if (savedTheme === 'auto') {
@@ -731,13 +728,14 @@
                     }
                 });
 
+                // Apply saved or default theme on load
                 const savedTheme = localStorage.getItem(THEME_KEY) || 'auto';
                 applyTheme(savedTheme);
             }
-            // ======================== END: THEME SELECTOR JAVASCRIPT (ADDED) ========================
+            // ======================== END: THEME SELECTOR JAVASCRIPT ========================
             
             if (typeof allShiftData === 'undefined') {
-                document.body.innerHTML = '<h1 style="text-align:center; padding: 2rem; color: red;">Error: Wait...Update किया जा रहा है...</h1>';
+                document.body.innerHTML = '<h1 style="text-align:center; padding: 2rem; color: red;">Please Wait... Official उत्तर कुंजी अपडेट की जा रही है।</h1>';
                 return;
             }
 
@@ -811,29 +809,6 @@
                 localStorage.setItem(`userAnswers_${currentShiftId}`, JSON.stringify(userAnswers));
                 localStorage.setItem(`currentSeries_${currentShiftId}`, currentSeries);
             }
-            
-            // Firebase पर डेटा भेजने के लिए नया फंक्शन
-            function sendAnswerToFirebase(userId, questionId, answer) {
-                if (!currentShiftId) return;
-
-                db.collection('userResponses')
-                  .doc(currentShiftId)
-                  .collection('users')
-                  .doc(userId)
-                  .set({
-                      answers: userAnswers,
-                      series: currentSeries,
-                      rollNo: document.getElementById('student-roll').value || 'Not Provided',
-                      name: document.getElementById('student-name').value || 'Not Provided',
-                      lastUpdated: new Date()
-                  }, { merge: true })
-                  .then(() => {
-                      console.log(`User: ${userId}, Answer for Q-${questionId} saved to Firebase!`);
-                  })
-                  .catch((error) => {
-                      console.error("Firebase Error: ", error);
-                  });
-            }
 
             function getQuestionStatus(qId) {
                 const qData = allQuestions.find(q => q.id === qId);
@@ -865,6 +840,19 @@
                 const a = c + i + attemptedForDeleted;
                 const totalValidQuestions = allQuestions.length - d;
                 
+                // ======================= START: NEW WARNING BOX LOGIC (MODIFIED) =======================
+                const unattempted = totalValidQuestions - (c + i + s);
+                const warningBox = document.getElementById('unattempted-warning-item');
+                if (warningBox) {
+                    if (unattempted > 0) {
+                        document.getElementById('unattempted-count').textContent = unattempted;
+                        warningBox.classList.add('visible');
+                    } else {
+                        warningBox.classList.remove('visible');
+                    }
+                }
+                // ======================= END: NEW WARNING BOX LOGIC (MODIFIED) =======================
+
                 document.getElementById('total-count').textContent = totalValidQuestions;
                 document.getElementById('attempted-count').textContent = a;
                 document.getElementById('correct-count').textContent = c;
@@ -1061,7 +1049,6 @@
                 }
             }
 
-           // यह सही कोड है
             questionsContainer.addEventListener('click', (e) => {
                 const clickedLi = e.target.closest('li');
                 if (!clickedLi) return;
@@ -1073,35 +1060,17 @@
                 const qData = allQuestions.find(q => q.id === qId);
                 if (!qData) return;
 
-                // यूजर का उत्तर सेव करें
                 userAnswers[qId] = clickedLi.dataset.rawText;
-                
-                // लोकल स्टोरेज में सेव करें
                 saveData();
-
-                // Firebase पर डेटा भेजें
-                let userId = localStorage.getItem(`userId_${currentShiftId}`);
-                if (!userId) {
-                    userId = 'user_' + Date.now(); // एक सिंपल यूनिक ID
-                    localStorage.setItem(`userId_${currentShiftId}`, userId);
-                }
-                sendAnswerToFirebase(userId, qId, userAnswers[qId]);
-
-                // UI को अपडेट करें
                 updateQuestionUI(qId);
                 updateSummary();
                 
-                // फ़िल्टर के अनुसार प्रश्न को छिपाने का लॉजिक
                 const isDeleted = qData.deleted === true;
                 const newStatus = getQuestionStatus(qId);
                 const finalStatusForFilter = isDeleted ? (userAnswers[qId] ? 'deleted' : 'unattempted') : newStatus;
 
                 if (activeFilter !== 'all' && activeFilter !== finalStatusForFilter) {
-                    setTimeout(() => {
-                        if (questionBlock) {
-                            questionBlock.style.display = 'none';
-                        }
-                    }, 200);
+                    setTimeout(() => { questionBlock.style.display = 'none'; }, 200);
                 }
             });
                
@@ -1275,7 +1244,8 @@
                 }
 
                 html += `</div>`;
-                html += `<div class="official-key-footer"><p>बोर्ड द्वारा जारी उत्तर कुंजी को प्राथमिकता देवे</p></div>`;
+                // --- नया फुटर ---
+                html += `<div class="official-key-footer"><p>नोट - यह अभी संभावित उत्तर कुंजी है, बोर्ड द्वारा Official उत्तर कुंजी जारी होने पर UPDATE कर दी जाएगी </p></div>`;
 
                 container.innerHTML = html;
                 openPrintWindow(container.innerHTML);
@@ -1358,6 +1328,7 @@
                              bubble.className = 'omr-bubble';
                              bubble.textContent = label;
                              if (index === filledOptionIndex) {
+                                // --- डिलीट प्रश्न के लिए बदला हुआ लॉजिक ---
                                 if(isDeleted) {
                                     bubble.classList.add('filled-neutral');
                                 } else {
@@ -1378,7 +1349,7 @@
             }
 
             function triggerPaperPrint(name, rollNo) {
-                populatePrintHeader(name, rollNo); 
+                populatePrintHeader(name, rollно); 
                 const headerHTML = document.getElementById('print-fallback-details').outerHTML;
                 const questionsHTML = document.getElementById('questions-container').outerHTML;
                 openPrintWindow(headerHTML + questionsHTML);
@@ -1405,7 +1376,7 @@
 
             document.getElementById('get-official-key-btn').addEventListener('click', () => {
                  pMO.style.display = 'none';
-                 generateAndPrintOfficialKey(); 
+                 generateAndPrintOfficialKey();
             });
 
             const shiftIdFromUrl = window.location.hash.substring(1);
