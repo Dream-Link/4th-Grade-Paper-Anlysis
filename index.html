@@ -1061,6 +1061,7 @@
                 }
             }
 
+           // यह सही कोड है
             questionsContainer.addEventListener('click', (e) => {
                 const clickedLi = e.target.closest('li');
                 if (!clickedLi) return;
@@ -1072,19 +1073,25 @@
                 const qData = allQuestions.find(q => q.id === qId);
                 if (!qData) return;
 
+                // यूजर का उत्तर सेव करें
                 userAnswers[qId] = clickedLi.dataset.rawText;
+                
+                // लोकल स्टोरेज में सेव करें
                 saveData();
 
+                // Firebase पर डेटा भेजें
                 let userId = localStorage.getItem(`userId_${currentShiftId}`);
                 if (!userId) {
-                    userId = 'user_' + Date.now();
+                    userId = 'user_' + Date.now(); // एक सिंपल यूनिक ID
                     localStorage.setItem(`userId_${currentShiftId}`, userId);
                 }
                 sendAnswerToFirebase(userId, qId, userAnswers[qId]);
 
+                // UI को अपडेट करें
                 updateQuestionUI(qId);
                 updateSummary();
                 
+                // फ़िल्टर के अनुसार प्रश्न को छिपाने का लॉजिक
                 const isDeleted = qData.deleted === true;
                 const newStatus = getQuestionStatus(qId);
                 const finalStatusForFilter = isDeleted ? (userAnswers[qId] ? 'deleted' : 'unattempted') : newStatus;
