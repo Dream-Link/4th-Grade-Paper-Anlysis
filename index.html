@@ -249,7 +249,6 @@
         .options-list li.correct { background-color: var(--success-bg); border-color: var(--success-color); }
         .options-list li.incorrect { background-color: var(--danger-bg); border-color: var(--danger-color); }
         .options-list li.special { background-color: var(--special-bg); border-color: var(--warning-color); }
-        /* --- नया स्टाइल --- */
         .options-list li.selected-neutral {
             border-color: #333;
             background-color: #e9ecef;
@@ -285,13 +284,13 @@
 
         .print-only-container { display: none; }
        .home-page-image {
-    max-width: 100%;   /* <-- बस इस लाइन को 200px से 100% कर दें */
-    height: auto;
-    display: block;
-    margin: 1.5rem auto 2.5rem; 
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1.5rem auto 2.5rem; 
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
         @media (max-width: 768px) {
             .selector-container h2 { font-size: 1.8rem; }
             .shift-selector { grid-template-columns: 1fr; gap: 1rem; }
@@ -378,7 +377,6 @@
             .omr-options { display: flex; }
             .omr-bubble { width: 18px; height: 18px; border: 1px solid #000 !important; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; margin-right: 5px; }
             .omr-bubble.filled { background-color: #0d47a1 !important; border-color: #0d47a1 !important; color: white !important; -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
-            /* --- नया स्टाइल --- */
             .omr-bubble.filled-neutral { background-color: #555 !important; border-color: #333 !important; color: white !important; -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
 
             .official-key-print-container { padding: 1cm; }
@@ -389,14 +387,12 @@
             .official-key-table { width: 100%; border-collapse: collapse; }
             .official-key-table th, .official-key-table td { border: 1px solid #333 !important; padding: 5px; text-align: center; font-size: 10pt; }
             .official-key-table th { background-color: #f2f2f2 !important; }
-            /* --- नया स्टाइल --- */
             .official-key-footer {
                 margin-top: 1.5rem; padding-top: 0.75rem; border-top: 1px solid #ccc !important;
                 text-align: center; font-size: 9pt; color: #555 !important;
             }
         }
         
-        /* ======================= START: THEME SELECTOR CSS (ADDED) ======================= */
         .theme-selector {
             position: absolute;
             top: 1.5rem;
@@ -456,10 +452,6 @@
             color: var(--primary-color);
         }
 
-        /* --- Theme Palettes Start --- */
-        /* Light Blue (Default) is already defined in :root */
-
-        /* Dark Blue Theme */
         :root[data-theme='dark-blue'] {
             --primary-color: #3b82f6; --primary-dark: #2563eb; --primary-light: #1e3a8a;
             --bg-color: #111827; --surface-color: #1f2937; --font-color: #f3f4f6;
@@ -467,7 +459,6 @@
             --danger-bg: #7f1d1d; --special-bg: #78350f; --subtle-bg: #374151;
         }
 
-        /* Green Themes */
         :root[data-theme='light-green'] {
             --primary-color: #22c55e; --primary-dark: #16a34a; --primary-light: #dcfce7;
         }
@@ -478,7 +469,6 @@
             --danger-bg: #7f1d1d; --special-bg: #78350f; --subtle-bg: #3f3f46;
         }
 
-        /* Purple Themes */
         :root[data-theme='light-purple'] {
             --primary-color: #8b5cf6; --primary-dark: #7c3aed; --primary-light: #ede9fe;
         }
@@ -489,7 +479,6 @@
             --danger-bg: #7f1d1d; --special-bg: #78350f; --subtle-bg: #403561;
         }
 
-        /* Orange Themes */
         :root[data-theme='light-orange'] {
             --primary-color: #f97316; --primary-dark: #ea580c; --primary-light: #ffedd5;
         }
@@ -500,7 +489,6 @@
             --danger-bg: #7f1d1d; --special-bg: #78350f; --subtle-bg: #514641;
         }
 
-        /* Teal Themes */
         :root[data-theme='light-teal'] {
             --primary-color: #14b8a6; --primary-dark: #0d9488; --primary-light: #ccfbf1;
         }
@@ -511,7 +499,6 @@
             --danger-bg: #7f1d1d; --special-bg: #78350f; --subtle-bg: #334155;
         }
 
-        /* Solarized Themes */
         :root[data-theme='solarized-light'] {
             --primary-color: #268bd2; --primary-dark: #002b36; --primary-light: #eee8d5;
             --bg-color: #fdf6e3; --surface-color: #eee8d5; --font-color: #657b83;
@@ -524,7 +511,6 @@
             --font-color-light: #586e75; --border-color: #586e75; --success-bg: #2d4f2d;
             --danger-bg: #6b3e3e; --special-bg: #635741; --subtle-bg: #0b4250;
         }
-        /* ======================== END: THEME SELECTOR CSS (ADDED) ========================= */
     </style>
     
 </head>
@@ -676,25 +662,27 @@
         </div>
     </div>
     
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
     <script src="questions-data.js"></script>
     <script>
-        // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCm3JQ_hvjhwpCZsHFYdgSr3Fudu-K1ezU",
+          authDomain: "myexamanalyzer.firebaseapp.com",
+          projectId: "myexamanalyzer",
+          storageBucket: "myexamanalyzer.firebasestorage.app",
+          messagingSenderId: "1001576173103",
+          appId: "1:1001576173103:web:55b5052cb8169370c400da"
+        };
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCm3JQ_hvjhwpCZsHFYdgSr3Fudu-K1ezU",
-  authDomain: "myexamanalyzer.firebaseapp.com",
-  projectId: "myexamanalyzer",
-  storageBucket: "myexamanalyzer.firebasestorage.app",
-  messagingSenderId: "1001576173103",
-  appId: "1:1001576173103:web:55b5052cb8169370c400da"
-};
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        // Firestore को Initialize करें (यह लाइन ज़रूरी है)
+        const db = firebase.firestore();
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+        // अब आपका बाकी का कोड यहाँ से शुरू होता है
         let currentShiftId = null, allQuestions = [], userAnswers = {}, currentSeries = '', activeFilter = 'all', currentShiftData = {};
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -706,8 +694,7 @@ const app = initializeApp(firebaseConfig);
             const root = document.documentElement;
             const THEME_KEY = 'selected_theme_mps';
 
-            if (themeToggleBtn) { // Run only if the theme button exists
-                // Function to apply a theme
+            if (themeToggleBtn) { 
                 const applyTheme = (theme) => {
                     if (theme === 'auto') {
                         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -718,20 +705,17 @@ const app = initializeApp(firebaseConfig);
                     localStorage.setItem(THEME_KEY, theme);
                 };
 
-                // Toggle dropdown visibility
                 themeToggleBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     themeDropdown.classList.toggle('hidden');
                 });
 
-                // Close dropdown if clicked outside
                 document.addEventListener('click', () => {
                     if (!themeDropdown.classList.contains('hidden')) {
                         themeDropdown.classList.add('hidden');
                     }
                 });
 
-                // Handle theme selection from dropdown
                 themeDropdown.addEventListener('click', (e) => {
                     if (e.target.tagName === 'LI') {
                         const selectedTheme = e.target.dataset.theme;
@@ -740,7 +724,6 @@ const app = initializeApp(firebaseConfig);
                     }
                 });
 
-                // Listen for changes in OS theme preference
                 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
                     const savedTheme = localStorage.getItem(THEME_KEY);
                     if (savedTheme === 'auto') {
@@ -748,7 +731,6 @@ const app = initializeApp(firebaseConfig);
                     }
                 });
 
-                // Apply saved or default theme on load
                 const savedTheme = localStorage.getItem(THEME_KEY) || 'auto';
                 applyTheme(savedTheme);
             }
@@ -771,7 +753,7 @@ const app = initializeApp(firebaseConfig);
             function showHomePage() {
                 shiftSelectorPage.style.display = 'flex';
                 questionPaperPage.style.display = 'none';
-                if(themeSelector) themeSelector.style.display = 'block'; // <-- MODIFIED
+                if(themeSelector) themeSelector.style.display = 'block';
                 currentShiftId = null;
                 history.pushState({page: 'home'}, 'Home', window.location.pathname);
                 window.location.hash = '';
@@ -790,7 +772,7 @@ const app = initializeApp(firebaseConfig);
             function loadShift(shiftId, shouldPushState = true) {
                 shiftSelectorPage.style.display = 'none';
                 questionPaperPage.style.display = 'flex';
-                if(themeSelector) themeSelector.style.display = 'none'; // <-- MODIFIED
+                if(themeSelector) themeSelector.style.display = 'none';
                 currentShiftId = shiftId;
                 currentShiftData = allShiftData[shiftId];
                 allQuestions = currentShiftData.questions;
@@ -824,36 +806,34 @@ const app = initializeApp(firebaseConfig);
                 displayQuestions(currentSeries, activeFilter);
             }
 
-            function saveData()
-                {
+            function saveData() {
                 if (!currentShiftId) return;
                 localStorage.setItem(`userAnswers_${currentShiftId}`, JSON.stringify(userAnswers));
                 localStorage.setItem(`currentSeries_${currentShiftId}`, currentSeries);
             }
+            
             // Firebase पर डेटा भेजने के लिए नया फंक्शन
-function sendAnswerToFirebase(userId, questionId, answer) {
-    if (!currentShiftId) return;
+            function sendAnswerToFirebase(userId, questionId, answer) {
+                if (!currentShiftId) return;
 
-    // हम डेटा को इस तरह स्टोर करेंगे:
-    // Collection (userResponses) -> Document (shift1) -> Collection (users) -> Document (unique_user_id)
-    db.collection('userResponses')
-      .doc(currentShiftId)
-      .collection('users')
-      .doc(userId)
-      .set({
-          answers: userAnswers,       // यूजर के सभी उत्तरों का ऑब्जेक्ट
-          series: currentSeries,      // यूजर की पेपर सीरीज
-          rollNo: document.getElementById('student-roll').value || 'Not Provided', // रोल नंबर
-          name: document.getElementById('student-name').value || 'Not Provided', // नाम
-          lastUpdated: new Date()     // अपडेट का समय
-      }, { merge: true }) // 'merge: true' यह सुनिश्चित करता है कि पुराने उत्तर डिलीट न हों
-      .then(() => {
-          console.log(`User: ${userId}, Answer for Q-${questionId} saved to Firebase!`);
-      })
-      .catch((error) => {
-          console.error("Firebase Error: ", error);
-      });
-}
+                db.collection('userResponses')
+                  .doc(currentShiftId)
+                  .collection('users')
+                  .doc(userId)
+                  .set({
+                      answers: userAnswers,
+                      series: currentSeries,
+                      rollNo: document.getElementById('student-roll').value || 'Not Provided',
+                      name: document.getElementById('student-name').value || 'Not Provided',
+                      lastUpdated: new Date()
+                  }, { merge: true })
+                  .then(() => {
+                      console.log(`User: ${userId}, Answer for Q-${questionId} saved to Firebase!`);
+                  })
+                  .catch((error) => {
+                      console.error("Firebase Error: ", error);
+                  });
+            }
 
             function getQuestionStatus(qId) {
                 const qData = allQuestions.find(q => q.id === qId);
@@ -1082,42 +1062,39 @@ function sendAnswerToFirebase(userId, questionId, answer) {
             }
 
             questionsContainer.addEventListener('click', (e) => {
-    const clickedLi = e.target.closest('li');
-    if (!clickedLi) return;
+                const clickedLi = e.target.closest('li');
+                if (!clickedLi) return;
 
-    const questionBlock = e.target.closest('.question-block');
-    if (!questionBlock) return;
+                const questionBlock = e.target.closest('.question-block');
+                if (!questionBlock) return;
 
-    const qId = parseInt(questionBlock.dataset.questionId);
-    const qData = allQuestions.find(q => q.id === qId);
-    if (!qData) return;
+                const qId = parseInt(questionBlock.dataset.questionId);
+                const qData = allQuestions.find(q => q.id === qId);
+                if (!qData) return;
 
-    userAnswers[qId] = clickedLi.dataset.rawText;
+                userAnswers[qId] = clickedLi.dataset.rawText;
+                saveData();
 
-    // 1. लोकल स्टोरेज में सेव करें (यह अच्छा बैकअप है)
-    saveData();
+                let userId = localStorage.getItem(`userId_${currentShiftId}`);
+                if (!userId) {
+                    userId = 'user_' + Date.now();
+                    localStorage.setItem(`userId_${currentShiftId}`, userId);
+                }
+                sendAnswerToFirebase(userId, qId, userAnswers[qId]);
 
-    // 2. Firebase पर डेटा भेजें
-    // हर यूजर के लिए एक यूनिक ID बनाएँ और उसे लोकल स्टोरेज में सेव करें
-    let userId = localStorage.getItem(`userId_${currentShiftId}`);
-    if (!userId) {
-        userId = 'user_' + Date.now(); // एक सिंपल यूनिक ID
-        localStorage.setItem(`userId_${currentShiftId}`, userId);
-    }
-    sendAnswerToFirebase(userId, qId, userAnswers[qId]); // नया फंक्शन कॉल करें
-
-    updateQuestionUI(qId);
-    updateSummary();
-
-    // ... बाकी का कोड वैसे ही रहेगा ...
-});
+                updateQuestionUI(qId);
+                updateSummary();
                 
                 const isDeleted = qData.deleted === true;
                 const newStatus = getQuestionStatus(qId);
                 const finalStatusForFilter = isDeleted ? (userAnswers[qId] ? 'deleted' : 'unattempted') : newStatus;
 
                 if (activeFilter !== 'all' && activeFilter !== finalStatusForFilter) {
-                    setTimeout(() => { questionBlock.style.display = 'none'; }, 200);
+                    setTimeout(() => {
+                        if (questionBlock) {
+                            questionBlock.style.display = 'none';
+                        }
+                    }, 200);
                 }
             });
                
@@ -1291,7 +1268,6 @@ function sendAnswerToFirebase(userId, questionId, answer) {
                 }
 
                 html += `</div>`;
-                // --- नया फुटर ---
                 html += `<div class="official-key-footer"><p>बोर्ड द्वारा जारी उत्तर कुंजी को प्राथमिकता देवे</p></div>`;
 
                 container.innerHTML = html;
@@ -1375,7 +1351,6 @@ function sendAnswerToFirebase(userId, questionId, answer) {
                              bubble.className = 'omr-bubble';
                              bubble.textContent = label;
                              if (index === filledOptionIndex) {
-                                // --- डिलीट प्रश्न के लिए बदला हुआ लॉजिक ---
                                 if(isDeleted) {
                                     bubble.classList.add('filled-neutral');
                                 } else {
