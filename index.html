@@ -322,6 +322,74 @@
             .modal-buttons { justify-content: center; gap: 0.25rem; }
             .modal-buttons button { padding: 0.5rem; font-size: 0.7rem; flex-grow: 1; }
         }
+        #leaderboard-body .current-user-highlight {
+    background-color: var(--primary-light) !important;
+    border-left: 5px solid var(--primary-dark) !important;
+    font-weight: 700;
+}
+#leaderboard-body .current-user-highlight td {
+    color: var(--primary-dark) !important;
+}
+
+/* यूजर की रैंक दिखाने के लिए टॉप पर एक अलग बॉक्स */
+#user-leaderboard-summary {
+    display: none; /* JS द्वारा दिखाया जाएगा */
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    background-color: var(--surface-color);
+    border: 2px solid var(--primary-color);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    font-size: 1.1rem;
+}
+#user-leaderboard-summary strong {
+    color: var(--primary-dark);
+    font-size: 1.2rem;
+}
+
+/* मोबाइल पर टेबल को बेहतर दिखाने के लिए */
+@media (max-width: 768px) {
+    #leaderboard-table thead {
+        display: none; /* मोबाइल पर हेडर छिपाएं */
+    }
+    #leaderboard-table tbody, #leaderboard-table tr, #leaderboard-table td {
+        display: block;
+        width: 100%;
+    }
+    #leaderboard-table tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: 0.5rem;
+    }
+    #leaderboard-table td {
+        display: flex;
+        justify-content: space-between; /* लेबल और वैल्यू को अलग-अलग तरफ रखें */
+        padding: 0.6rem 0.5rem;
+        border-bottom: 1px dashed var(--border-color);
+        text-align: right; /* वैल्यू को दाईं ओर रखें */
+    }
+    #leaderboard-table tr td:last-child {
+        border-bottom: none;
+    }
+    #leaderboard-table td::before {
+        content: attr(data-label); /* डेटा-लेबल से हेडर का नाम दिखाएं */
+        font-weight: 600;
+        text-align: left;
+        color: var(--font-color);
+        margin-right: 1rem;
+    }
+    /* लंबे नामों को छोटा करने के लिए स्टाइल */
+    .truncate-name {
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block; /* text-overflow के लिए आवश्यक */
+        vertical-align: middle;
+    }
+}
 
         @media print {
             body { font-size: 10pt; background-color: #fff !important; color: #000 !important; }
@@ -629,6 +697,8 @@
     </select>
     <button id="view-leaderboard-btn" style="padding: 0.5rem 1rem; border-radius: 0.375rem; border: none; background-color: var(--primary-color); color: white; cursor: pointer;">लीडरबोर्ड देखें</button>
 </div>
+                <div id="user-leaderboard-summary">
+    </div>
 <div id="leaderboard-table-container" style="overflow-x: auto; display: none;">
                     <table id="leaderboard-table" style="width: 100%; border-collapse: collapse; text-align: left;">
                         <thead>
@@ -783,11 +853,20 @@
         const leaderboardBody = document.getElementById('leaderboard-body');
         const leaderboardLoading = document.getElementById('leaderboard-loading');
 
-        async function fetchAndDisplayLeaderboard(shiftFilter = 'all') {
+      async function fetchAndDisplayLeaderboard(shiftFilter = 'all') {
             if (!db) return;
 
             leaderboardLoading.style.display = 'block';
             leaderboardBody.innerHTML = '';
+            leaderboardTableContainer.style.display = 'block'; // टेबल कंटेनर दिखाएं
+            
+            // वर्तमान यूजर की जानकारी localStorage से प्राप्त करें
+            const studentName = document.getElementById('student-name').value || ' आपकी';
+            let userId = null;
+            if (currentShiftId) {
+                userId = localStorage.getItem(`userId_${currentShiftId}`);
+            }
+
             let allUsers = [];
 
             try {
@@ -801,6 +880,7 @@
                         const userData = doc.data();
                         if (userData.summary && userData.summary.rawMarks) {
                             allUsers.push({
+                                id: doc.id, // डॉक्यूमेंट ID (यूजर ID) को स्टोर करें
                                 name: userData.name || 'अज्ञात',
                                 rawMarks: parseFloat(userData.summary.rawMarks) || 0,
                                 correct: parseInt(userData.summary.correct) || 0,
@@ -814,17 +894,43 @@
 
                 allUsers.sort((a, b) => b.rawMarks - a.rawMarks);
 
-                leaderboardBody.innerHTML = allUsers.map((user, index) => `
-                    <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 0.75rem;">${index + 1}</td>
-                        <td style="padding: 0.75rem;">${user.name}</td>
-                        <td style="padding: 0.75rem; font-weight: bold;">${user.rawMarks.toFixed(2)}</td>
-                        <td style="padding: 0.75rem; color: var(--success-color);">${user.correct}</td>
-                        <td style="padding: 0.75rem; color: var(--danger-color);">${user.incorrect}</td>
-                        <td style="padding: 0.75rem;">${user.skipped}</td>
-                        <td style="padding: 0.75rem;">${user.shift.replace('shift', 'Shift ')}</td>
+                // यूजर का रैंक और डेटा ढूंढें
+                let currentUserData = null;
+                let currentUserRank = -1;
+                if (userId) {
+                    const userIndex = allUsers.findIndex(user => user.id === userId);
+                    if (userIndex !== -1) {
+                        currentUserRank = userIndex + 1;
+                        currentUserData = allUsers[userIndex];
+                    }
+                }
+                
+                // टॉप पर दिखने वाला समरी बॉक्स अपडेट करें
+                const summaryBox = document.getElementById('user-leaderboard-summary');
+                if (currentUserData) {
+                    summaryBox.innerHTML = `नमस्ते ${studentName}, ${allUsers.length} में से <strong>${currentUserRank}वीं रैंक</strong> है। (स्कोर: ${currentUserData.rawMarks.toFixed(2)})`;
+                    summaryBox.style.display = 'block';
+                } else {
+                    summaryBox.style.display = 'none';
+                }
+
+                // टेबल की पंक्तियाँ (rows) बनाएं
+                leaderboardBody.innerHTML = allUsers.map((user, index) => {
+                    const isCurrentUser = (user.id === userId);
+                    const highlightClass = isCurrentUser ? 'current-user-highlight' : '';
+                    
+                    return `
+                    <tr class="${highlightClass}">
+                        <td data-label="रैंक">${index + 1}</td>
+                        <td data-label="नाम"><span class="truncate-name" title="${user.name}">${user.name}</span></td>
+                        <td data-label="रॉ मार्क्स" style="font-weight: bold;">${user.rawMarks.toFixed(2)}</td>
+                        <td data-label="सही" style="color: var(--success-color);">${user.correct}</td>
+                        <td data-label="गलत" style="color: var(--danger-color);">${user.incorrect}</td>
+                        <td data-label="छोड़े गए">${user.skipped}</td>
+                        <td data-label="शिफ़्ट">${user.shift.replace('shift', 'Shift ')}</td>
                     </tr>
-                `).join('');
+                `;
+                }).join('');
 
             } catch (error) {
                 console.error("लीडरबोर्ड डेटा लाने में त्रुटि: ", error);
