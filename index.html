@@ -580,7 +580,6 @@
     <div id="shift-selector-page">
         <div class="selector-container">
             <h2>चतुर्थ श्रेणी कर्मचारी</h2>
-            <img src="https://raw.githubusercontent.com/Dream-Link/4th-Grade-Papers/main/144%20set.png" alt="Paper Set Information" style="width: 100%; border-radius: var(--border-radius); margin-bottom: 2rem; box-shadow: var(--shadow-sm);">
             <p class="subtitle">कृपया अपनी शिफ़्ट चुनें।</p>
             <div class="shift-selector">
                 <a class="shift-btn" data-shift="shift1"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="text">1st Shift 19.09.2025</div></a>
@@ -593,26 +592,9 @@
             <div class="selector-footer">
                 <p>Last Update: 02.10.2025 15:30</p>
                 <p style="text-align:center; color: red;"> सभी प्रश्नों के उत्तर संभावित उत्तर कुंजी के आधार पर हैं, Official Answer Key जारी होने पर UPDATE कर दी जाएगी।</p>
-                
-                <div class="features-box">
-                    <h4>इस वेबपेज की मुख्य सुविधाएं</h4>
-                    <ul>
-                        <li>अपने पेपर कोड (Series) के अनुसार सही प्रश्न-क्रम देखें।</li>
-                        <li>उत्तर देते ही तुरंत अपना लाइव स्कोर और विश्लेषण देखें।</li>
-                        <li>नकारात्मक अंकन (Negative Marking) के साथ ऑटोमैटिक स्कोर गणना।</li>
-                        <li>केवल सही, गलत, या छोड़े गए प्रश्नों को फ़िल्टर करके अपनी गलतियों को सुधारें।</li>
-                        <li>आपकी प्रगति (Progress) अपने आप ब्राउज़र में सेव हो जाती है।</li>
-                        <li>अपना नाम, रोल नंबर और रिजल्ट के साथ पूरा पेपर प्रिंट करें।</li>
-                        <li>दिए गए उत्तरों के साथ अपनी OMR शीट प्रिंट करें।</li>
-                        <li>किसी भी पेपर कोड के अनुसार ऑफिशियल उत्तर कुंजी (Answer Key) प्रिंट करें।</li>
-                    </ul>
-                </div>
-
-                <p>मानवीय गलती होना स्वभाविक है इसलिए स्वयं भी अपने वास्तविक पेपर को Official Answer key से मिलाकर पुष्टि जरूर करे।</p>
                 <p>
                     <a href="https://t.me/Dreamlinkmp" target="_blank" class="creator-link" style="color: blue; text-decoration: underline;">MP Salodiya</a>
                 </p>
-            </p> लीडरबोर्ड में नाम "Not Provided" की जगह तब दिखेगा जब आप प्रिंट बटन से Name & Roll number fill करके Get OMR या Paper Print पर क्लिक करते हो</p>
             </div>
             
             <div class="features-box" style="margin-top: 2rem;">
@@ -639,7 +621,7 @@
                                 <th style="padding: 0.75rem; border-bottom: 2px solid var(--border-color);">रॉ मार्क्स</th>
                                 <th style="padding: 0.75rem; border-bottom: 2px solid var(--border-color);">सही</th>
                                 <th style="padding: 0.75rem; border-bottom: 2px solid var(--border-color);">गलत</th>
-                                <th style="padding: 0.75rem; border-bottom: 2px solid var(--border-color);">छोड़े गए</th>
+                                <th style="padding: 0.75rem; border-bottom: 2px solid var(--border-color);">छोड़े गए (E)</th>
                                 <th style="padding: 0.75rem; border-bottom: 2px solid var(--border-color);">शिफ़्ट</th>
                             </tr>
                         </thead>
@@ -713,13 +695,13 @@
     <div id="user-info-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 2001; align-items: center; justify-content: center; padding: 1rem;">
         <div id="user-info-modal" style="background: var(--surface-color); color: var(--font-color); padding: 2rem; border-radius: var(--border-radius); box-shadow: var(--shadow-md); width: 100%; max-width: 400px;">
             <h2 style="margin-top: 0;">Welcome!</h2>
-            <p style="margin: 0 0 1.5rem 0; color: var(--font-color-light);">कृपया शुरू करने से पहले अपना नाम और रोल नंबर दर्ज करें।</p>
+            <p style="margin: 0 0 1.5rem 0; color: var(--font-color-light);">कृपया शुरू करने से पहले अपना नाम और रोल नंबर दर्ज करें। यह नाम लीडरबोर्ड & प्रिन्ट मे दिखाई देगा </p>
             <label for="initial-student-name" style="margin: 0 0 0.5rem 0; display: block; font-weight: 500;">Name:</label>
             <input type="text" id="initial-student-name" placeholder="Your Name" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem; font-size: 1rem; font-family: inherit; margin-bottom: 1rem; background-color: var(--bg-color); color: var(--font-color);">
             <label for="initial-student-roll" style="margin: 0 0 0.5rem 0; display: block; font-weight: 500;">Roll No.:</label>
             <input type="text" id="initial-student-roll" placeholder="Your Roll No." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem; font-size: 1rem; font-family: inherit; margin-bottom: 1rem; background-color: var(--bg-color); color: var(--font-color);">
             <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
-                <button id="start-test-btn" style="padding: 0.6rem 1.2rem; border-radius: 0.375rem; border: none; cursor: pointer; font-weight: 600; font-size: 0.9rem; background-color: var(--primary-color); color: white;">Start Test</button>
+                <button id="start-test-btn" style="padding: 0.6rem 1.2rem; border-radius: 0.375rem; border: none; cursor: pointer; font-weight: 600; font-size: 0.9rem; background-color: var(--primary-color); color: white;">चेक करना शुरू करे</button>
             </div>
         </div>
     </div>
@@ -815,7 +797,7 @@
                         const userData = doc.data();
                         if (userData.summary && userData.summary.rawMarks) {
                             allUsers.push({
-                                name: userData.name || 'अज्ञात',
+                                name: userData.name || 'Not Provided',
                                 rawMarks: parseFloat(userData.summary.rawMarks) || 0,
                                 correct: parseInt(userData.summary.correct) || 0,
                                 incorrect: parseInt(userData.summary.incorrect) || 0,
@@ -964,30 +946,11 @@
                 });
             }
 
-            // localStorage से पुराने उत्तर लोड किए जाते हैं
             userAnswers = JSON.parse(localStorage.getItem(`userAnswers_${shiftId}`)) || {};
             
             const savedSeries = localStorage.getItem(`currentSeries_${shiftId}`);
             currentSeries = (savedSeries && availableSeries.includes(savedSeries)) ? savedSeries : availableSeries[0] || '';
             seriesSelect.value = currentSeries;
-
-            // ==================== START: पिछला डेटा सिंक करने के लिए कोड ====================
-            // जाँच करें कि क्या सिंक करने के लिए पिछले सत्र के कोई उत्तर हैं
-            if (Object.keys(userAnswers).length > 0) {
-                console.log('पिछला डेटा मिला, Firebase के साथ सिंक किया जा रहा है...');
-
-                // सबसे पहले, लोड किए गए उत्तरों के आधार पर सारांश की गणना करें
-                // यह आवश्यक है क्योंकि sendAnswerToFirebase फ़ंक्शन स्क्रीन से मान पढ़ता है
-                updateSummary();
-
-                // उपयोगकर्ता आईडी प्राप्त करें
-                let userId = localStorage.getItem(`userId_${shiftId}`);
-                if (userId) {
-                    // अब, गणना किए गए सारांश को Firebase पर भेजें
-                    sendAnswerToFirebase(userId);
-                }
-            }
-            // ===================== END: सिंक कोड समाप्त ======================
 
             activeFilter = 'all';
             document.getElementById('toggle-summary-btn').textContent = 'Show Result';
@@ -1338,6 +1301,7 @@
         window.addEventListener('pagehide', finalSaveOnExit);
 
         // ================== END: EXIT SAVE CODE (NEW) ==================
+           
         function updateActiveFilterButton(filter) {
             document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.filter-buttons button[data-filter="${filter}"]`).classList.add('active');
