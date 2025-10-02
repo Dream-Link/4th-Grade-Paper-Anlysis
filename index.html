@@ -1606,7 +1606,15 @@
             pMO.style.display = 'flex'; 
         });
 
-        document.getElementById('cancel-print').addEventListener('click', () => { pMO.style.display = 'none'; });
+        document.getElementById('cancel-print').addEventListener('click', () => { pMO.style.display = 'none'; })
+            // START: Auto-save name/roll from print popup on input change
+        document.getElementById('student-name').addEventListener('input', (e) => {
+            localStorage.setItem('studentName_mps', e.target.value.trim());
+        });
+        document.getElementById('student-roll').addEventListener('input', (e) => {
+            localStorage.setItem('studentRoll_mps', e.target.value.trim());
+        });
+        // END: Auto-save logic
         
         document.getElementById('confirm-print').addEventListener('click', () => {
             const name = document.getElementById('student-name').value.trim();
