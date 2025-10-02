@@ -1532,13 +1532,32 @@
             openPrintWindow(headerHTML + questionsHTML);
         }
 
-        printBtn.addEventListener('click', () => { pMO.style.display = 'flex'; });
+        printBtn.addEventListener('click', () => { 
+            const savedName = localStorage.getItem('studentName_mps');
+            const savedRoll = localStorage.getItem('studentRoll_mps');
+            if (savedName) {
+                document.getElementById('student-name').value = savedName;
+            }
+            if (savedRoll) {
+                document.getElementById('student-roll').value = savedRoll;
+            }pMO.style.display = 'flex'; });
         document.getElementById('cancel-print').addEventListener('click', () => { pMO.style.display = 'none'; });
         
         document.getElementById('confirm-print').addEventListener('click', () => {
             const name = document.getElementById('student-name').value;
             const rollNo = document.getElementById('student-roll').value;
             if (!name || !rollNo) { alert("नाम और रोल नंबर दोनों आवश्यक हैं।"); return; }
+            
+            localStorage.setItem('studentName_mps', name);
+            localStorage.setItem('studentRoll_mps', rollNo);
+            
+            // --- फायरबेस भेजने के लिए नया कोड जोड़ें ---
+            let userId = localStorage.getItem(`userId_${currentShiftId}`);
+            if (userId) {
+                sendAnswerToFirebase(userId); // यह फंक्शन अब सही नाम और रोल नंबर भेजेगा
+            }
+            // --- नया कोड का अंत ---
+
             pMO.style.display = 'none';
             triggerPaperPrint(name, rollNo);
         });
@@ -1547,11 +1566,25 @@
             const name = document.getElementById('student-name').value;
             const rollNo = document.getElementById('student-roll').value;
             if (!name || !rollNo) { alert("नाम और रोल नंबर दोनों आवश्यक हैं।"); return; }
+
+            localStorage.setItem('studentName_mps', name);
+            localStorage.setItem('studentRoll_mps', rollNo);
+
+            // --- फायरबेस भेजने के लिए नया कोड जोड़ें ---
+            let userId = localStorage.getItem(`userId_${currentShiftId}`);
+            if (userId) {
+                sendAnswerToFirebase(userId); // यह फंक्शन अब सही नाम और रोल नंबर भेजेगा
+            }
+            // --- नया कोड का अंत ---
+
             pMO.style.display = 'none';
             generateAndPrintOMR(name, rollNo);
         });
-
         document.getElementById('get-official-key-btn').addEventListener('click', () => {
+            const name = document.getElementById('student-name').value;
+            const rollNo = document.getElementById('student-roll').value;
+            if(name) localStorage.setItem('studentName_mps', name);
+            if(rollNo) localStorage.setItem('studentRoll_mps', rollNo);
              pMO.style.display = 'none';
              generateAndPrintOfficialKey();
         });
