@@ -964,11 +964,30 @@
                 });
             }
 
+            // localStorage से पुराने उत्तर लोड किए जाते हैं
             userAnswers = JSON.parse(localStorage.getItem(`userAnswers_${shiftId}`)) || {};
             
             const savedSeries = localStorage.getItem(`currentSeries_${shiftId}`);
             currentSeries = (savedSeries && availableSeries.includes(savedSeries)) ? savedSeries : availableSeries[0] || '';
             seriesSelect.value = currentSeries;
+
+            // ==================== START: पिछला डेटा सिंक करने के लिए कोड ====================
+            // जाँच करें कि क्या सिंक करने के लिए पिछले सत्र के कोई उत्तर हैं
+            if (Object.keys(userAnswers).length > 0) {
+                console.log('पिछला डेटा मिला, Firebase के साथ सिंक किया जा रहा है...');
+
+                // सबसे पहले, लोड किए गए उत्तरों के आधार पर सारांश की गणना करें
+                // यह आवश्यक है क्योंकि sendAnswerToFirebase फ़ंक्शन स्क्रीन से मान पढ़ता है
+                updateSummary();
+
+                // उपयोगकर्ता आईडी प्राप्त करें
+                let userId = localStorage.getItem(`userId_${shiftId}`);
+                if (userId) {
+                    // अब, गणना किए गए सारांश को Firebase पर भेजें
+                    sendAnswerToFirebase(userId);
+                }
+            }
+            // ===================== END: सिंक कोड समाप्त ======================
 
             activeFilter = 'all';
             document.getElementById('toggle-summary-btn').textContent = 'Show Result';
