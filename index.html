@@ -1245,36 +1245,45 @@
         }
    
         questionsContainer.addEventListener('click', (e) => {
-            const clickedLi = e.target.closest('li');
-            if (!clickedLi) return;
+    // ... इस फंक्शन का मौजूदा कोड (qId ढूंढना, userAnswers अपडेट करना आदि) ...
+    const clickedLi = e.target.closest('li');
+    if (!clickedLi) return;
 
-            const questionBlock = e.target.closest('.question-block');
-            if (!questionBlock) return;
+    const questionBlock = e.target.closest('.question-block');
+    if (!questionBlock) return;
 
-            const qId = parseInt(questionBlock.dataset.questionId);
-            const qData = allQuestions.find(q => q.id === qId);
-            if (!qData) return;
+    const qId = parseInt(questionBlock.dataset.questionId);
+    const qData = allQuestions.find(q => q.id === qId);
+    if (!qData) return;
 
-            userAnswers[qId] = clickedLi.dataset.rawText;
-            
-            saveData(); 
-            updateQuestionUI(qId);
-            updateSummary(); 
+    userAnswers[qId] = clickedLi.dataset.rawText;
+    
+    saveData(); 
+    updateQuestionUI(qId);
+    updateSummary(); 
 
-            let userId = localStorage.getItem(`userId_${currentShiftId}`);
-            if (!userId) {
-                userId = 'user_' + Date.now() + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem(`userId_${currentShiftId}`, userId);
-            }
-        
-            const isDeleted = qData.deleted === true;
-            const newStatus = getQuestionStatus(qId);
-            const finalStatusForFilter = isDeleted ? (userAnswers[qId] ? 'deleted' : 'unattempted') : newStatus;
+    // ================= START: नया कोड यहाँ जोड़ा गया है =================
+    // जांचें कि क्या समरी बार (Result) दिख रहा है
+    const summaryBar = document.querySelector('.summary-bar');
+    if (summaryBar && !summaryBar.classList.contains('hidden')) {
+        let userId = localStorage.getItem(`userId_${currentShiftId}`);
+        if (!userId) {
+            userId = 'user_' + Date.now() + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem(`userId_${currentShiftId}`, userId);
+        }
+        console.log('रिजल्ट दिखने के दौरान उत्तर बदला गया: Firebase पर डेटा भेजा जा रहा है...');
+        sendAnswerToFirebase(userId);
+    }
+    // ================= END: नया कोड यहाँ समाप्त होता है =================
 
-            if (activeFilter !== 'all' && activeFilter !== finalStatusForFilter) {
-                setTimeout(() => { questionBlock.style.display = 'none'; }, 200);
-            }
-        });
+    const isDeleted = qData.deleted === true;
+    const newStatus = getQuestionStatus(qId);
+    const finalStatusForFilter = isDeleted ? (userAnswers[qId] ? 'deleted' : 'unattempted') : newStatus;
+
+    if (activeFilter !== 'all' && activeFilter !== finalStatusForFilter) {
+        setTimeout(() => { questionBlock.style.display = 'none'; }, 200);
+    }
+});
    
        // ================= START: EXIT SAVE CODE (NEW) =================
         // पेज बंद होने पर डेटा बचाने के लिए यह अंतिम और सबसे सरल कोड है।
@@ -1333,12 +1342,25 @@
             displayQuestions(currentSeries, activeFilter);
         }));
 
-        document.getElementById('toggle-summary-btn').addEventListener('click', (e) => {
-            const sB = document.querySelector('.summary-bar');
-            sB.classList.toggle('hidden');
-            e.target.textContent = sB.classList.contains('hidden') ? 'Show Result' : 'Hide Result';
-        });
-        
+       document.getElementById('toggle-summary-btn').addEventListener('click', (e) => {
+    const sB = document.querySelector('.summary-bar');
+    sB.classList.toggle('hidden');
+    e.target.textContent = sB.classList.contains('hidden') ? 'Show Result' : 'Hide Result';
+
+    // ================= START: नया कोड यहाँ जोड़ा गया है =================
+    // जब समरी (Result) दिखाई दे (यानी 'hidden' क्लास हट जाए), तो डेटा भेजें
+    if (!sB.classList.contains('hidden')) {
+        let userId = localStorage.getItem(`userId_${currentShiftId}`);
+        // सुनिश्चित करें कि userId मौजूद है
+        if (!userId) {
+            userId = 'user_' + Date.now() + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem(`userId_${currentShiftId}`, userId);
+        }
+        console.log('Show Result पर क्लिक हुआ: Firebase पर डेटा भेजा जा रहा है...');
+        sendAnswerToFirebase(userId);
+    }
+    // ================= END: नया कोड यहाँ समाप्त होता है =================
+});
         toggleInfoBtn.addEventListener('click', () => {
             const icon = toggleInfoBtn.querySelector('i');
             questionPaperPage.classList.toggle('hide-q-info');
