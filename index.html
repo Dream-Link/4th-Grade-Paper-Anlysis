@@ -818,16 +818,21 @@
 
                 // 3. फ़िल्टर किए गए यूजर्स का उपयोग करके टेबल बनाएं और सिंपल स्टाइलिंग रखें
                 leaderboardBody.innerHTML = filteredUsers.map((user, index) => `
-                    <tr style="border: 1px solid #ccc;">
-                        <td style="padding: 8px; border: 1px solid #ccc;">${index + 1}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${user.name}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${user.rawMarks.toFixed(2)}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${user.correct}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${user.incorrect}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${user.skipped}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${user.shift.replace('shift', 'Shift ')}</td>
-                    </tr>
-                `).join('');
+    <tr style="border-bottom: 1px solid var(--border-color);">
+        <td style="padding: 0.75rem;">${index + 1}</td>
+        <td style="padding: 0.75rem;">${user.name}</td>
+        
+        <td style="padding: 0.75rem; font-weight: bold; color: black;">${user.rawMarks.toFixed(2)}</td>
+        
+        <td style="padding: 0.75rem; color: var(--success-color); font-weight: 500;">${user.correct}</td>
+        
+        <td style="padding: 0.75rem; color: var(--danger-color); font-weight: 500;">${user.incorrect}</td>
+        
+        <td style="padding: 0.75rem; color: blue; font-weight: 500;">${user.skipped}</td>
+        
+        <td style="padding: 0.75rem;">${user.shift.replace('shift', 'Shift ')}</td>
+    </tr>
+`).join('');
                 
                 // END: REQUIRED CHANGES
 
