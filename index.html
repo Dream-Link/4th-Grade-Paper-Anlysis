@@ -78,10 +78,11 @@
         .selector-container h2 { font-size: 2.25rem; font-weight: 700; margin: 0 0 0.5rem; }
         .selector-container .subtitle { font-size: 1.1rem; color: var(--font-color-light); margin-bottom: 3rem; }
         .shift-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-        .shift-btn {
-            display: flex; align-items: center; gap: 1rem; padding: 1.25rem;
+      .shift-btn {
+            display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1.25rem; /* <-- बदला हुआ पैडिंग */
             background-color: var(--surface-color); border: 1px solid var(--border-color);
-            border-radius: var(--border-radius); text-decoration: none; cursor: pointer;
+            border-radius: 50px; /* <-- बदला हुआ बॉर्डर-रेडियस */
+            text-decoration: none; cursor: pointer;
             text-align: left; box-shadow: var(--shadow-sm);
             transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
         }
