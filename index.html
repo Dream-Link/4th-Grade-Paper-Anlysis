@@ -519,6 +519,42 @@
             display: block; /* Show with JS */
         }
         /* ======================== END: NEW WARNING BOX CSS (ADDED) ========================= */
+        /* ======================== START: LEADERBOARD MOBILE STYLES ========================= */
+@media (max-width: 768px) {
+    /* Step 1: स्क्रीन को फुल-विड्थ बनाने के लिए बाहरी पैडिंग कम करें */
+    #shift-selector-page, .selector-container {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    #leaderboard-section {
+        margin-top: 2rem;
+    }
+    
+    /* Step 2: टेबल के टेक्स्ट को छोटा और कॉम्पैक्ट करें */
+    #leaderboard-table th,
+    #leaderboard-table td {
+        padding: 0.5rem 0.25rem; /* ऊपर-नीचे और अगल-बगल की पैडिंग कम करें */
+        font-size: 0.7rem;      /* फ़ॉन्ट का साइज़ छोटा करें */
+        text-align: center;       /* टेक्स्ट को बीच में लाएं */
+        white-space: nowrap;      /* टेक्स्ट को एक लाइन में रखने की कोशिश करें */
+    }
+
+    /* नाम वाले कॉलम को लेफ्ट-अलाइंड रखें ताकि वह सही दिखे */
+    #leaderboard-table th:nth-child(2),
+    #leaderboard-table td:nth-child(2) {
+        text-align: left;
+        white-space: normal; /* नाम लंबा होने पर उसे अगली लाइन में भेजें */
+    }
+
+    /* Step 3: फिल्टर कंट्रोल को बेहतर बनाएं */
+    .leaderboard-controls {
+        flex-direction: column; /* कंट्रोल्स को एक के नीचे एक लाएं */
+        align-items: stretch;   /* कंट्रोल्स को पूरी चौड़ाई दें */
+        gap: 0.5rem;
+    }
+}
+/* ======================== END: LEADERBOARD MOBILE STYLES ========================= */
     </style>
     
 </head>
