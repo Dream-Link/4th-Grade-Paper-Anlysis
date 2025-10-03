@@ -78,13 +78,16 @@
         .selector-container h2 { font-size: 2.25rem; font-weight: 700; margin: 0 0 0.5rem; }
         .selector-container .subtitle { font-size: 1.1rem; color: var(--font-color-light); margin-bottom: 3rem; }
         .shift-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-      .shift-btn {
-            display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1.25rem; /* <-- बदला हुआ पैडिंग */
-            background-color: var(--surface-color); border: 1px solid var(--border-color);
-            border-radius: 50px; /* <-- बदला हुआ बॉर्डर-रेडियस */
-            text-decoration: none; cursor: pointer;
-            text-align: left; box-shadow: var(--shadow-sm);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+    .shift-btn {
+    display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1.25rem;
+    background-color: var(--surface-color); border: 1px solid var(--border-color);
+    border-radius: 50px;
+    text-decoration: none; cursor: pointer;
+    text-align: left; box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+    position: relative; /* <-- यह लाइन जोड़ें */
+    overflow: hidden;   /* <-- और यह लाइन जोड़ें */
+}
         }
         .shift-btn:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
         .shift-btn .icon {
@@ -556,6 +559,31 @@
     }
 }
 /* ======================== END: LEADERBOARD MOBILE STYLES ========================= */
+        /* ======================== START: SHIFT BUTTON BORDER ANIMATION ========================= */
+.shift-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%; /* बॉक्स से बड़ा ताकि घूम सके */
+    height: 300%; /* बॉक्स से बड़ा ताकि घूम सके */
+    z-index: -1; /* बटन के टेक्स्ट के पीछे रखने के लिए */
+    background: conic-gradient(
+        var(--primary-color) 20deg, 
+        transparent 120deg
+    );
+    animation: rotate-border 4s linear infinite;
+}
+
+@keyframes rotate-border {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+/* ======================== END: SHIFT BUTTON BORDER ANIMATION ========================= */
     </style>
     
 </head>
